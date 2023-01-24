@@ -10,6 +10,7 @@ import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { MdScreenSearchDesktop } from 'react-icons/md';
+import ConverteData from 'src/utils/convData2';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -58,7 +59,7 @@ export default function TabCelula({
             (val) =>
               val.Celula === Number(numeroCelula[i]) &&
               val.Distrito === Number(perfilUser.Distrito) &&
-              Number(val.Data.slice(6, 10)) === Number(Ano),
+              Number(val.Data.slice(0, 4)) === Number(Ano),
           );
 
           if (presCelula && presCelula[0]) {
@@ -272,7 +273,9 @@ export default function TabCelula({
                     borderRight: '1px solid #000',
                   }}
                 >
-                  {presSem1[index].Data ? presSem1[index].Data : '-'}
+                  {presSem1[index].Data
+                    ? ConverteData(presSem1[index].Data)
+                    : '-'}
                 </Box>
                 <Box
                   display="flex"
