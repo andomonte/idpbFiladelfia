@@ -1,6 +1,7 @@
 import { Box, Grid, Paper, Button } from '@material-ui/core';
 import React from 'react';
 import useSWR, { mutate } from 'swr';
+import ConverteData from 'src/utils/dataMMDDAAAA';
 // import { useRouter } from 'next/router';
 import corIgreja from 'src/utils/coresIgreja';
 import DateFnsUtils from '@date-io/date-fns';
@@ -526,7 +527,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
         Distrito: Number(perfilUser.Distrito),
         Supervisao: Number(perfilUser.Supervisao),
         Ano: Number(AnoAtual),
-        Pontuacao: pFinal,
+        Pontuacao: JSON.stringify(pFinal),
         Total: pTotalAtual,
         TotalRank: pTotalAtualRank,
         CriadoPor: perfilUser.Nome,
@@ -561,12 +562,12 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       createRelCelula(row.RolMembro, row.Nome, relPresentes[index].Presenca),
     );
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);
-
+    const novaData = new Date(ConverteData(inputValue));
     const RelDiscipuladoFinal = createEstatistico(
       Number(perfilUser.Celula),
       Number(perfilUser.Distrito),
       Number(semana),
-      inputValue,
+      novaData,
       nomesCelulaFinal,
       Number(contBiblia),
       String(observacoes),
