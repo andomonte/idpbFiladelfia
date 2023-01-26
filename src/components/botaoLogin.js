@@ -43,7 +43,7 @@ export default function BotaoLogin() {
       {!session ? (
         <IconButton
           onClick={() =>
-            signIn('google', {
+            signIn('', {
               callbackUrl: `${window.location.origin}/selectPerfil`,
             })
           }

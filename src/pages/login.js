@@ -236,7 +236,7 @@ export default function Login({ providers2, rolMembros }) {
               justifyContent="center"
               maxWidth={400}
             >
-              <img src={corIgreja.logo} alt="" width="60%" height="60%" />
+              <img src={corIgreja.logo} alt="" width="35%" height="40%" />
             </Box>
             <Box
               display="flex"
@@ -491,7 +491,7 @@ export default function Login({ providers2, rolMembros }) {
           minWidth={300}
           bgcolor={corIgreja.principal}
         >
-          <Box height="100%" width="100%">
+          <Box height="100%">
             <Box
               height="10%"
               minHeight={80}
@@ -501,7 +501,7 @@ export default function Login({ providers2, rolMembros }) {
               justifyContent="center"
               maxWidth={400}
             >
-              <img src={corIgreja.logo} alt="" width="60%" height="60%" />
+              <img src={corIgreja.logo} alt="" width="35%" height="40%" />
             </Box>
             {openErro && (
               <Erros
@@ -717,7 +717,7 @@ export default function Login({ providers2, rolMembros }) {
           minWidth={300}
           bgcolor={corIgreja.principal}
         >
-          <Box height="100%" width="100%">
+          <Box height="100%">
             <Box
               height="10%"
               minHeight={80}
@@ -727,7 +727,7 @@ export default function Login({ providers2, rolMembros }) {
               justifyContent="center"
               maxWidth={400}
             >
-              <img src={corIgreja.logo} alt="" width="60%" height="60%" />
+              <img src={corIgreja.logo} alt="" width="35%" height="40%" />
             </Box>
             <Box
               display="flex"

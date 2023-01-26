@@ -90,7 +90,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-073');
   let valorPerfil = {};
   let userMembro = {};
   if (session) {
@@ -386,7 +386,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
     <Box display="flex" align="center" justifyContent="center">
       {!start ? (
         <Cadastro
-          title="IDPB-CELULAS"
+          title="IDPB-LEÃO"
           lideranca={lideranca}
           rolMembros={rolMembros}
         />
@@ -398,7 +398,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             userIgrejas={dadosUser}
             celulas={celulas}
             perfilUser={perfilUser[0]}
-            title="IDPB-CELULAS"
+            title="IDPB-LEÃO"
           />
         </Box>
       )}

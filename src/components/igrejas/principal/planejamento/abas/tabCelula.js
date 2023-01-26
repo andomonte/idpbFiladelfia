@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import ConverteData2 from 'src/utils/convData2';
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
@@ -75,6 +76,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
   }, [semana]);
 
   React.useEffect(() => {
+    console.log('semans', sem1);
     if (sem1 && sem1.length) {
       const presCelula = sem1.filter(
         (val) =>
@@ -217,7 +219,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                     fontSize="14px"
                     fontFamily="arial black"
                   >
-                    <Box mt={0.5}>{dataSend.Data}</Box>
+                    <Box mt={0.5}>{ConverteData2(dataSend.Data)}</Box>
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
@@ -565,7 +567,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
               borderRight: '1px solid #000',
             }}
           >
-            {dataSem1 && dataSem1.Data ? dataSem1.Data : '-'}{' '}
+            {dataSem1 && dataSem1.Data ? ConverteData2(dataSem1.Data) : '-'}{' '}
           </Box>
         ) : (
           <Box
@@ -646,7 +648,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
               borderRight: '1px solid #000',
             }}
           >
-            {dataSem2 && dataSem2.Data ? dataSem2.Data : '-'}{' '}
+            {dataSem2 && dataSem2.Data ? ConverteData2(dataSem2.Data) : '-'}{' '}
           </Box>
         ) : (
           <Box
@@ -726,7 +728,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
               borderRight: '1px solid #000',
             }}
           >
-            {dataSem3 && dataSem3.Data ? dataSem3.Data : '-'}{' '}
+            {dataSem3 && dataSem3.Data ? ConverteData2(dataSem3.Data) : '-'}{' '}
           </Box>
         ) : (
           <Box
@@ -807,7 +809,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
               borderRight: '1px solid #000',
             }}
           >
-            {dataSem4 && dataSem4.Data ? dataSem4.Data : '-'}
+            {dataSem4 && dataSem4.Data ? ConverteData2(dataSem4.Data) : '-'}
           </Box>
         ) : (
           <Box
@@ -887,7 +889,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
               borderRight: '1px solid #000',
             }}
           >
-            {dataSem5 && dataSem5.Data ? dataSem5.Data : '-'}
+            {dataSem5 && dataSem5.Data ? ConverteData2(dataSem5.Data) : '-'}
           </Box>
         ) : (
           <Box

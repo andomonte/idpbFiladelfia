@@ -19,5 +19,14 @@ export default async function handle(req, res) {
       await prisma.$disconnect();
     });
 
-  res.json(result);
+  const newPosts = JSON.parse(
+    JSON.stringify(
+      result,
+      (key, value) => (typeof value === 'bigint' ? value.toString() : value), // return everything else unchanged
+    ),
+  );
+
+  res.statuCode = 200;
+  res.setHeader('Content-Type', 'aplication/json');
+  res.json(newPosts);
 }

@@ -8,6 +8,7 @@ import horarioMask from 'src/components/mascaras/horario';
 import corIgreja from 'src/utils/coresIgreja';
 import DateFnsUtils from '@date-io/date-fns';
 import Select from 'react-select';
+import ConverteData from 'src/utils/dataMMDDAAAA';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -539,7 +540,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       setCarregando(true);
 
       // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
-
+      const novaData = new Date(ConverteData(inputValue));
       api
         .post('/api/criarPlanejamentoCelula', {
           Encontro: String(Encontro),
@@ -548,7 +549,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
           Evangelismo,
           Lanche,
           Semana: semana,
-          Data: inputValue,
+          Data: novaData,
           Celula: Number(perfilUser.Celula),
           Supervisao: Number(perfilUser.Supervisao),
           Coordenacao: Number(perfilUser.Coordenacao),

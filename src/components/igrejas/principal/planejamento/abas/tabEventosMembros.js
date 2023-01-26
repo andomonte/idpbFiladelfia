@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import horarioMask from 'src/components/mascaras/horario';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import DateFnsUtils from '@date-io/date-fns';
+import ConverteData from 'src/utils/dataMMDDAAAA';
+import ConverteData2 from 'src/utils/convData2';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -245,10 +247,10 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       setOpenPlan(false);
       // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
       const CriadoEm = new Date();
-
+      const novaData = new Date(ConverteData(inputValue));
       api
         .post('/api/criarPlanejamentoEvento', {
-          Data: inputValue,
+          Data: novaData,
           Evento: nomeEvento,
           Local: valueAnfitriao,
           Objetivo: objetivo.label,
@@ -1076,7 +1078,9 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
             textAlign="center"
             width="30%"
           >
-            {dataSem1[0] && dataSem1[0].Data ? dataSem1[0].Data : '-'}
+            {dataSem1[0] && dataSem1[0].Data
+              ? ConverteData2(dataSem1[0].Data)
+              : '-'}
           </Box>
           {sem1 ? (
             <Box

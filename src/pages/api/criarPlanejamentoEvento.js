@@ -6,14 +6,17 @@ const handler = async (req, res) => {
 
   const dados = req.body;
 
+  // const action = `${rel}.findMany`
+
   if (dados) {
     try {
+      console.log('dadossss', dados);
       const eventosCelulas = await prisma.eventosCelulas
         .findMany({
           where: {
             AND: {
-              Evento: dados.Evento,
-              Data: dados.Data,
+              // Evento: dados.Evento,
+              Data: { lte: dados.Data, gte: dados.Data },
               Celula: Number(dados.Celula),
               Distrito: Number(dados.Distrito),
             },
@@ -24,6 +27,7 @@ const handler = async (req, res) => {
         });
 
       let id = 0;
+      console.log('dataSSSSSSSS', eventosCelulas);
       if (eventosCelulas.length) id = eventosCelulas[0].id;
       await prisma.eventosCelulas.upsert({
         where: {
@@ -39,6 +43,7 @@ const handler = async (req, res) => {
 
       res.status(200).send('OK');
     } catch (errors) {
+      console.log(errors);
       res.status(400).send('vou criar o banco');
     }
   }

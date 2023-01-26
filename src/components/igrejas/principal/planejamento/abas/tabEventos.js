@@ -5,6 +5,9 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import DateFnsUtils from '@date-io/date-fns';
 import Dialog from '@mui/material/Dialog';
 import List from '@mui/material/List';
+import ConverteData from 'src/utils/dataMMDDAAAA';
+import ConverteData2 from 'src/utils/convData2';
+
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -243,10 +246,10 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       setOpenPlan(false);
       // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
       const CriadoEm = new Date();
-
+      const novaData = new Date(ConverteData(inputValue));
       api
         .post('/api/criarPlanejamentoEvento', {
-          Data: inputValue,
+          Data: novaData,
           Evento: nomeEvento,
           Local: valueAnfitriao,
           Objetivo: objetivo.label,
@@ -336,7 +339,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           justifyContent="center"
           alignItems="center"
         >
-          <img src={corIgreja.logo} alt="Filadelfia" height="60%" width="50%" />
+          <img src={corIgreja.logo} alt="logo" height="60%" width="50%" />
         </Box>
         <form style={{ height: '85%' }}>
           <Box height="100%">
@@ -754,7 +757,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           justifyContent="center"
           alignItems="center"
         >
-          <img src={corIgreja.logo} alt="Filadelfia" height="60%" width="50%" />
+          <img src={corIgreja.logo} alt="Logo" height="60%" width="50%" />
         </Box>
         <form style={{ height: '85%' }}>
           <Box height="100%">
@@ -1150,7 +1153,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       label: dadosRecebidos.Objetivo,
       value: 0,
     };
-    setInputValue(dadosRecebidos.Data);
+    setInputValue(ConverteData2(dadosRecebidos.Data));
     setHorario(dadosRecebidos.Horario);
     setNomeEvento(dadosRecebidos.Evento);
     setValueAnfitriao(dadosRecebidos.Local);
@@ -1223,7 +1226,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           width="25%"
         >
           {dataSem1[0] && dataSem1[0].Data ? (
-            dataSem1[0].Data
+            ConverteData2(dataSem1[0].Data)
           ) : (
             <IconButton
               color="primary"
@@ -1316,7 +1319,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           width="25%"
         >
           {dataSem1[1] && dataSem1[1].Data ? (
-            dataSem1[1].Data
+            ConverteData2(dataSem1[1].Data)
           ) : (
             <IconButton
               color="primary"
@@ -1409,7 +1412,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           width="25%"
         >
           {dataSem1[2] && dataSem1[2].Data ? (
-            dataSem1[2].Data
+            ConverteData2(dataSem1[2].Data)
           ) : (
             <IconButton
               color="primary"
@@ -1503,7 +1506,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           width="25%"
         >
           {dataSem1[3] && dataSem1[3].Data ? (
-            dataSem1[3].Data
+            ConverteData2(dataSem1[3].Data)
           ) : (
             <IconButton
               color="primary"
@@ -1596,7 +1599,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           width="25%"
         >
           {dataSem1[4] && dataSem1[4].Data ? (
-            dataSem1[4].Data
+            ConverteData2(dataSem1[4].Data)
           ) : (
             <IconButton
               color="primary"

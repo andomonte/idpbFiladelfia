@@ -2,14 +2,8 @@ import React from 'react';
 import { useSession } from 'next-auth/client';
 import api from 'src/components/services/api';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Grid,
-  TextField,
-  Button,
-  Alert,
-  Typography,
-} from '@material-ui/core';
+import { Box, Grid, TextField, Button, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { MdVisibilityOff, MdVisibility } from 'react-icons/md';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -122,7 +116,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
     if (session) {
       const membro = rolMembros.filter(
         (val) =>
-          val.CPF.replace(/\D/g, '') === session.user.email.replace(/\D/g, ''),
+          val.CPF.replace(/\D/g, '') ===
+            session.user.email.replace(/\D/g, '') ||
+          val.Email === session.user.email,
       );
       if (membro) setRolMembro(membro[0].RolMembro);
     }
@@ -456,13 +452,13 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
                             <Button
                               style={{
                                 width: '100%',
-
                                 fontSize: '16px',
                                 height: 40,
                                 marginTop: 10,
                                 color: 'black',
                                 fontFamily: 'Fugaz One',
                               }}
+                              variant="outlined"
                               onClick={() => {
                                 setOpenPlan(true);
                               }}
@@ -498,7 +494,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
                   setOpenErro={(openErros) => setOpenErro(openErros)}
                 />
               )}
-              <Box height="100%" width="100%">
+              <Box height="100%">
                 <Box
                   height="10%"
                   minHeight={80}
@@ -508,7 +504,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
                   justifyContent="center"
                   maxWidth={400}
                 >
-                  <img src={corIgreja.logo} alt="" width="60%" height="60%" />
+                  <img src={corIgreja.logo} alt="" width="35%" height="40%" />
                 </Box>
                 <Box
                   display="flex"

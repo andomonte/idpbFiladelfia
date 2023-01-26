@@ -102,7 +102,9 @@ const options = {
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     }), */
   ],
-
+  pages: {
+    signIn: '/login',
+  },
   callbacks: {
     async signIn(user, account, profile) {
       //      const dados = await prisma.Usuarios({ loginUsuario: user });
