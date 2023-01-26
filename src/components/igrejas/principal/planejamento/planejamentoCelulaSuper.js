@@ -103,18 +103,29 @@ function PlanMembro({ perfilUser, lideranca }) {
     setContNumeroCelula(contCelulaAtual);
   };
   return (
-    <Box height="90vh" minHeight={500}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="100vw"
+      minHeight={570}
+      minWidth={300}
+      bgcolor={corIgreja.principal2}
+      height="calc(100vh - 56px)"
+    >
       <Box
-        height="100%"
-        minWidth={300}
-        width="100vw"
-        mt={0}
+        height="97%"
+        width="100%"
+        ml={1.2}
+        mr={1.2}
         display="flex"
         justifyContent="center"
         alignItems="center"
+        borderRadius={16}
+        bgcolor={corIgreja.principal}
       >
-        <Box height="100%" width="100vw" minWidth={300} border="4px solid #fff">
-          <Box height="100%">
+        <Box height="100%" width="100%" minWidth={300}>
+          <Box height="100%" width="100%">
             <Box
               height="20%"
               minHeight={100}
@@ -122,7 +133,6 @@ function PlanMembro({ perfilUser, lideranca }) {
               display="flex"
               justifyContent="center"
               alignItems="center"
-              bgcolor={corIgreja.principal}
               style={{
                 borderTopLeftRadius: '16px',
                 borderTopRightRadius: '16px',
@@ -262,11 +272,9 @@ function PlanMembro({ perfilUser, lideranca }) {
                   alignItems="center"
                   justifyContent="center"
                   sx={{
-                    bgcolor: corIgreja.principal,
                     color: '#ffff',
-                    fontFamily: 'Geneva',
-                    fontWeight: 'bold',
-                    fontSize: '14px',
+                    fontFamily: 'Fugaz One',
+                    fontSize: '16px',
                   }}
                 >
                   PLANEJAMENTO DAS CÉLULAS

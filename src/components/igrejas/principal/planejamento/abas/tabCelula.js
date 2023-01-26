@@ -219,7 +219,9 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                     fontSize="14px"
                     fontFamily="arial black"
                   >
-                    <Box mt={0.5}>{ConverteData2(dataSend.Data)}</Box>
+                    <Box mt={0.5}>
+                      {dataSend.Data && ConverteData2(dataSend.Data)}
+                    </Box>
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
