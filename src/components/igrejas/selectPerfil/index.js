@@ -70,10 +70,12 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
   const classes = useStyles();
 
   const [session] = useSession();
-
-  const ministroEncontrado = rolMembros.filter(
-    (val) => val.email === session.user.email,
-  );
+  console.log('rmbs', rolMembros, session);
+  let ministroEncontrado = '';
+  if (session)
+    ministroEncontrado = rolMembros.filter(
+      (val) => val.Email === session.user.email,
+    );
 
   const [open, setOpen] = React.useState(false);
   const [start, setStart] = React.useState(true);
@@ -88,7 +90,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
   const url = `/api/consultaMembros`;
   const { data, error } = useSWR(url, fetcher, { refreshInterval: 1000 });
   React.useEffect(() => {
-    if (data) {
+    if (data && session) {
       const ministroEncontrado2 = data.filter(
         (val) => val.Email === session.user.email,
       );

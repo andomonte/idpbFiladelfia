@@ -116,17 +116,20 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
     if (session) {
       const membro = rolMembros.filter(
         (val) =>
-          val.CPF.replace(/\D/g, '') ===
-            session.user.email.replace(/\D/g, '') ||
+          (val.CPF &&
+            val.CPF.replace(/\D/g, '') ===
+              session.user.email.replace(/\D/g, '')) ||
           val.Email === session.user.email,
       );
-      if (membro) setRolMembro(membro[0].RolMembro);
+
+      if (membro && membro.length) setRolMembro(membro[0].RolMembro);
+      else setRolMembro('');
     }
   }, [session]);
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-073');
   let valorPerfil = {};
   let userMembro = {};
   const handleClick = () => {
@@ -175,6 +178,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
   if (session) {
     const membro = rolMembros.filter(
       (val) =>
+        val.CPF &&
         val.CPF.replace(/\D/g, '') === session.user.email.replace(/\D/g, ''),
     );
     if (membro.length) {

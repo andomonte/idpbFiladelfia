@@ -3,7 +3,7 @@ import NextAuth from 'next-auth';
 // Configure one or more authentication providers
 const options = {
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn() {
       const isAllowedToSignIn = true;
       if (isAllowedToSignIn) {
         return true;
