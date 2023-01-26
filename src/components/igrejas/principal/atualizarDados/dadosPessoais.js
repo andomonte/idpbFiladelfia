@@ -283,14 +283,15 @@ function DadosPessoais({ rolMembros, perfilUser }) {
   const url = `/api/consultaRolMembros/${dadosUser[0].id}`;
   const { data, error } = useSWR(url, fetcher);
   React.useEffect(() => {
-    if (data) {
+    if (data && data[0]) {
+      console.log('data', data);
       const valorInicialSexo2 = {
-        label: data[0].Sexo,
-        value: data[0].Sexo,
+        label: data[0].Sexo ? data[0].Sexo : '',
+        value: data[0].Sexo ? data[0].Sexo : '',
       };
       const valorInicialECivil2 = {
-        label: data[0].EstadoCivil,
-        value: data[0].EstadoCivil,
+        label: data[0].EstadoCivil ? data[0].EstadoCivil : '',
+        value: data[0].EstadoCivil ? data[0].EstadoCivil : '',
       };
       setNome(data[0].Nome);
       setCelular(data[0].TelCelular);

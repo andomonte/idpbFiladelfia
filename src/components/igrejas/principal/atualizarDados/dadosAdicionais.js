@@ -239,7 +239,7 @@ function DadosGerais({ rolMembros, perfilUser }) {
   const url = `/api/consultaRolMembros/${dadosUser[0].id}`;
   const { data, error } = useSWR(url, fetcher);
   React.useEffect(() => {
-    if (data) {
+    if (data && data[0]) {
       setNomePai(data[0].Pai);
       setNomeMae(data[0].Mae);
       setFormacaoAcademica(data[0].FormacaoAcademica);

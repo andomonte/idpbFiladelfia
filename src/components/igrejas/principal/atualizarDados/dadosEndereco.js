@@ -241,7 +241,7 @@ function DadosEndereco({ rolMembros, perfilUser }) {
   const url = `/api/consultaRolMembros/${dadosUser[0].id}`;
   const { data, error } = useSWR(url, fetcher);
   React.useEffect(() => {
-    if (data) {
+    if (data && data[0]) {
       setCEP(data[0].CEP);
       setLogradouro(data[0].Logradouro);
       setNumero(data[0].Numero);
