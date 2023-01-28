@@ -1130,7 +1130,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                         display="block"
                                         gutterBottom
                                       >
-                                        Oração
+                                        Edificação
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>
@@ -1156,7 +1156,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                         display="block"
                                         gutterBottom
                                       >
-                                        Compartilhamento
+                                        Compartilhando a Visão
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>

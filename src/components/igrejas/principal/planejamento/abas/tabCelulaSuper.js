@@ -380,7 +380,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
               <Grid container spacing={2}>
                 <Grid container item xs={12}>
                   <Box ml={1} width="100%" color="white" fontSize="12px">
-                    Oração
+                    Edificação
                   </Box>
                 </Grid>
               </Grid>
@@ -413,7 +413,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
               <Grid container spacing={2}>
                 <Grid container item xs={12}>
                   <Box ml={1} width="100%" color="white" fontSize="12px">
-                    Compartilhamento
+                    Compartilhando a Visão
                   </Box>
                 </Grid>
               </Grid>
