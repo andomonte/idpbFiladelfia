@@ -19,7 +19,9 @@ import corIgreja from 'src/utils/coresIgreja';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import useSWR, { mutate } from 'swr';
-import moment from 'moment';
+import ConverteData from 'src/utils/convData2';
+import ValidaData from 'src/utils/validarData';
+import validator from 'validator';
 import FormartaData from 'src/utils/formatoData';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
@@ -259,8 +261,12 @@ function DadosPessoais({ rolMembros, perfilUser }) {
   const [validarCelular, setValidarCelular] = React.useState('sim');
   const [estadoCivil, setEstadoCivil] = React.useState(valorInicialECivil);
   const [dataNascimento, setDataNascimento] = React.useState(
-    moment(dadosUser[0].Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
+    dadosUser[0].Nascimento ? ConverteData(dadosUser[0].Nascimento) : '',
   );
+
+  const [email, setEmail] = React.useState(dadosUser[0].Email);
+  const [validarEmail, setValidarEmail] = React.useState('sim');
+  const emailRef = React.useRef();
 
   const [validarDataNascimento, setValidarDataNascimento] =
     React.useState('sim');
@@ -284,7 +290,6 @@ function DadosPessoais({ rolMembros, perfilUser }) {
   const { data, error } = useSWR(url, fetcher);
   React.useEffect(() => {
     if (data && data[0]) {
-      console.log('data', data);
       const valorInicialSexo2 = {
         label: data[0].Sexo ? data[0].Sexo : '',
         value: data[0].Sexo ? data[0].Sexo : '',
@@ -300,8 +305,9 @@ function DadosPessoais({ rolMembros, perfilUser }) {
       setRG(data[0].RG);
       setSexo(valorInicialSexo2);
       setEstadoCivil(valorInicialECivil2);
+      setEmail(data[0].Email);
       setDataNascimento(
-        moment(data[0].Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
+        data[0].Nascimento ? ConverteData(data[0].Nascimento) : '',
       );
       setNaturalidade(data[0].Naturalidade);
     }
@@ -316,37 +322,67 @@ function DadosPessoais({ rolMembros, perfilUser }) {
   // salvar dados pessoais
   //--------------------------------------------------------------------------
   const handleSalvar = () => {
-    setLoading(true);
+    let send = true;
 
     const novaData = FormartaData(dataNascimento);
-    api
-      .post('/api/atualizarRolMembros', {
-        RolMembro: dadosUser[0].RolMembro,
-        Nome: nome,
-        TelCelular: celular,
-        TelFixo: fone,
-        CPF: cpf,
-        RG: rg,
-        Sexo: sexo ? sexo.label : '',
-        Nascimento: novaData,
-        Naturalidade: naturalidade,
-        EstadoCivil: estadoCivil.label,
-      })
-      .then((response) => {
-        if (response) {
-          setLoading(false);
-          toast.info('Dados Atualizados !', {
+    const vData = ValidaData(dataNascimento);
+
+    if (!vData) {
+      setValidarDataNascimento('nao');
+
+      toast.error('Informe a Data de Nascimento!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      send = false;
+      nascimentoRef.current.focus();
+    } else {
+      setValidarDataNascimento('sim');
+    }
+
+    if (!validator.isEmail(email)) {
+      setValidarEmail('nao');
+      emailRef.current.focus();
+      toast.error('Informe o Email!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      send = false;
+      emailRef.current.focus();
+    } else {
+      setValidarEmail('sim');
+    }
+
+    if (send) {
+      setLoading(true);
+      api
+        .post('/api/atualizarRolMembros', {
+          RolMembro: dadosUser[0].RolMembro,
+          Nome: nome,
+          Email: email,
+          TelCelular: celular,
+          TelFixo: fone,
+          CPF: cpf,
+          RG: rg,
+          Sexo: sexo ? sexo.label : '',
+          Nascimento: novaData,
+          Naturalidade: naturalidade,
+          EstadoCivil: estadoCivil.label,
+        })
+        .then((response) => {
+          if (response) {
+            setLoading(false);
+            toast.info('Dados Atualizados !', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            mutate(url);
+          }
+        })
+        .catch(() => {
+          toast.error('Erro ao Atualizar Dados!', {
             position: toast.POSITION.TOP_CENTER,
           });
-          mutate(url);
-        }
-      })
-      .catch(() => {
-        toast.error('Erro ao Atualizar Dados!', {
-          position: toast.POSITION.TOP_CENTER,
+          setLoading(false);
         });
-        setLoading(false);
-      });
+    }
   };
   //--------------------------------------------------------------------------
 
@@ -645,6 +681,59 @@ function DadosPessoais({ rolMembros, perfilUser }) {
                     setEstadoCivil(e);
                   }}
                   options={currencies}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box
+                mt={0}
+                ml={2}
+                color="white"
+                sx={{
+                  fontSize: 'bold',
+                  color: validarEmail === 'nao' ? '#ff8a80' : 'white',
+                }}
+              >
+                <Typography variant="caption" display="block" gutterBottom>
+                  Email
+                </Typography>
+              </Box>
+
+              <Box mb="2vh" className={classes.novoBox} mt={-2}>
+                <TextField
+                  autoComplete="off"
+                  className={classes.tf_m}
+                  inputProps={{
+                    style: {
+                      color: validarEmail === 'nao' ? '#ff8a80' : 'black',
+                      //                            textAlign: 'center',
+                    },
+                  }}
+                  id="Email"
+                  type="text"
+                  InputLabelProps={{
+                    style: {
+                      textTransform: 'uppercase',
+                    },
+                    shrink: true,
+                  }}
+                  value={email || ''}
+                  variant="outlined"
+                  placeholder="qual o seu email?"
+                  size="small"
+                  onChange={(e) => {
+                    setValidarEmail('sim');
+                    const novoEmail = e.target.value;
+                    const emailSemEspaco = novoEmail.replace(/ /g, '');
+                    setEmail(emailSemEspaco.toLowerCase());
+                  }}
+                  onFocus={(e) => {
+                    const novoEmail = e.target.value;
+                    const emailSemEspaco = novoEmail.replace(/ /g, '');
+                    setEmail(emailSemEspaco.toLowerCase());
+                  }}
+                  onKeyDown={handleEnter}
+                  inputRef={emailRef}
                 />
               </Box>
             </Grid>

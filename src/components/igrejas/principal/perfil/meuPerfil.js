@@ -39,13 +39,7 @@ function getDados(email, nome) {
 
   return data;
 } */
-const nomeDistrito = [
-  'Filadelfia',
-  'União da Vitória',
-  'Campos Sales',
-  'Bairro da Paz',
-  'Calado',
-];
+const nomeDistrito = ['Filadelfia'];
 
 function meuPerfil({ secao, perfilUser }) {
   const urlImagem = perfilUser ? perfilUser.foto : '';
@@ -126,6 +120,16 @@ function meuPerfil({ secao, perfilUser }) {
                 })
                 .then((response2) => {
                   if (response2) {
+                    const valPerfil = {
+                      ...perfilUser,
+                      foto: `https://arquivofiladelfia.s3.amazonaws.com/${nomeFoto2}`,
+                    };
+
+                    sessionStorage.setItem(
+                      'perfilUser',
+                      JSON.stringify(valPerfil),
+                    );
+
                     // console.log(response2);
                   }
                 })
@@ -144,6 +148,7 @@ function meuPerfil({ secao, perfilUser }) {
       console.log(err);
     }
   };
+  console.log(perfilUser);
   const atualizarImagem = async () => {
     if (upLoadFile) {
       await process(fileImage);
@@ -272,6 +277,7 @@ function meuPerfil({ secao, perfilUser }) {
                                 : null
                             }
                           >
+                            {console.log('caminho imagem', fileImage)}
                             {fileImage === '' || fileImage === null ? (
                               <IconButton
                                 style={{ color: 'black' }}
