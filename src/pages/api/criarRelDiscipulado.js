@@ -22,19 +22,31 @@ const handler = async (req, res) => {
           await prisma.$disconnect();
         });
 
-      let id = 0;
-      if (relCelula.length) id = relCelula[0].id;
-      await prisma.relatorioDiscipulado.upsert({
-        where: {
-          id,
-        },
-        update: {
-          ...dados,
-        },
-        create: {
-          ...dados,
-        },
-      });
+      if (relCelula.length) {
+        const { id } = relCelula[0];
+        await prisma.relatorioDiscipulado
+          .update({
+            where: {
+              id,
+            },
+            data: {
+              ...dados,
+            },
+          })
+          .finally(async () => {
+            await prisma.$disconnect();
+          });
+      } else {
+        await prisma.relatorioDiscipulado
+          .create({
+            data: {
+              ...dados,
+            },
+          })
+          .finally(async () => {
+            await prisma.$disconnect();
+          });
+      }
 
       res.status(200).send('OK');
     } catch (errors) {
