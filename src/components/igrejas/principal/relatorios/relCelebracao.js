@@ -711,7 +711,11 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
 
     const criadoEm = new Date();
     const nomesCelulaParcial = nomesCelulas.map((row, index) =>
-      createRelCelula(row.RolMembro, row.Nome, relPresentes[index].Presenca),
+      createRelCelula(
+        row.RolMembro,
+        row.Nome,
+        relPresentes[index] ? relPresentes[index].Presenca : false,
+      ),
     );
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);
     const novaData = new Date(ConverteData2(inputValue));

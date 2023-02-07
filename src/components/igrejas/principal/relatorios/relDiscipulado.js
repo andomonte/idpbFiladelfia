@@ -559,10 +559,14 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const handleSalvar = () => {
     setCarregando(true);
     criarPontuacao();
-
+    console.log('RelDisFinal', nomesCelulas);
     const criadoEm = new Date();
     const nomesCelulaParcial = nomesCelulas.map((row, index) =>
-      createRelCelula(row.RolMembro, row.Nome, relPresentes[index].Presenca),
+      createRelCelula(
+        row.RolMembro,
+        row.Nome,
+        relPresentes[index] ? relPresentes[index].Presenca : false,
+      ),
     );
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);
     const novaData = new Date(ConverteData(inputValue));
@@ -588,10 +592,12 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       })
       .then((response) => {
         if (response) {
+          console.log(response);
           enviarPontuacao();
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         setOpenErro(true);
         setCarregando(false);
 
