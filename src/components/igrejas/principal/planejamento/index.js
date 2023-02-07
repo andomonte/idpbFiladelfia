@@ -34,9 +34,8 @@ const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
     justifyContent: 'space-around',
     backgroundColor: corIgreja.principal,
-    width: '80vw',
+    width: '70vw',
     minWidth: 80,
-    height: 56,
   },
   root: {
     backgroundColor: 'theme.palette.background.dark',
@@ -49,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: corIgreja.principal,
     boxShadow: 'none',
     zIndex: theme.zIndex.drawer + 1,
+    height: 56,
   },
   toolbar: {
     minHeight: 56,
@@ -59,11 +59,10 @@ const useStyles = makeStyles((theme) => ({
   hamburger: {
     cursor: 'pointer',
     height: 28,
-    color: '#fff',
   },
   logo: {
-    height: 25,
-    marginLeft: theme.spacing(2),
+    height: 35,
+    marginTop: 0,
   },
   avatar: {
     cursor: 'pointer',
@@ -82,12 +81,7 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
-  contentShiftMain: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
+
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
