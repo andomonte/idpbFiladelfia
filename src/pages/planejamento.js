@@ -7,11 +7,10 @@ import { useSession } from 'next-auth/client';
 function Planejar({ rolMembros, lideranca }) {
   const router = useRouter();
   const perfilUser = router.query;
-
+  const [session] = useSession();
   let mudaDados = 'sai';
   if (perfilUser.id) mudaDados = 'entra';
   const [perfilUserF, setPerfilUserF] = React.useState();
-  const [session] = useSession();
 
   React.useEffect(() => {
     if (mudaDados === 'entra') {
@@ -24,10 +23,10 @@ function Planejar({ rolMembros, lideranca }) {
           pathname: '/',
         });
       }
+      // resultado = result.id;
       setPerfilUserF(result);
     }
-    // resultado = result.id;
-  }, [perfilUser]);
+  }, []);
 
   if (typeof window !== 'undefined') {
     window.history.replaceState(null, '', '/planejamento');
