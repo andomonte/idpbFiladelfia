@@ -12,6 +12,7 @@ function Atualizar({ rolMembros }) {
   if (perfilUser.id) mudaDados = 'entra';
   const [perfilUserF, setPerfilUserF] = React.useState();
   const [session] = useSession();
+
   React.useEffect(() => {
     if (mudaDados === 'entra') {
       setPerfilUserF(perfilUser);

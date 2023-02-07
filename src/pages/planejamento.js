@@ -27,7 +27,7 @@ function Planejar({ rolMembros, lideranca }) {
       setPerfilUserF(result);
     }
     // resultado = result.id;
-  }, []);
+  }, [perfilUser]);
 
   if (typeof window !== 'undefined') {
     window.history.replaceState(null, '', '/planejamento');
