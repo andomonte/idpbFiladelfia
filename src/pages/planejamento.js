@@ -1,5 +1,5 @@
 import React from 'react';
-import Planejamento from 'src/components/igrejas/principal/planejamento';
+import Planejamento from 'src/components/igrejas/principal/contribuicoes';
 import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
