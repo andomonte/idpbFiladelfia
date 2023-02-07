@@ -259,60 +259,15 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
         <main>
           <div className={classes.drawerHeader} />
           {/* {children} */}
-          <Box bgcolor="white" color="black" height="100vh" width="100vw">
-            {value} e {perfilUser.Funcao}
-          </Box>
+
           <TabPanel value={value} index={0}>
             {session && (
               <Box>
-                {perfilUser.Funcao === 'Membro' ? (
-                  <PlanCelulaMembro
-                    perfilUser={perfilUser}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Lider' ? <Padrao /> : null}
-
-                {perfilUser.Funcao === 'Secretaria' ? (
-                  <PlanCelula
-                    perfilUser={perfilUser}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Supervisor' ? (
-                  <PlanCelulaSuper
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Coordenador' ? (
-                  <PlanCelulaCoord
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'PastorDistrito' ? (
-                  <PlanCelulaDistrito
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Presidente' ? (
-                  <PlanCelulaIgreja
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
+                <PlanCelulaMembro
+                  perfilUser={perfilUser}
+                  secao={session}
+                  rolMembros={rolMembros}
+                />
               </Box>
             )}
           </TabPanel>
