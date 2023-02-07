@@ -260,63 +260,13 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
           <div className={classes.drawerHeader} />
           {/* {children} */}
 
-          <TabPanel value={value} index={0}>
-            {session && (
-              <Box>
-                <PlanCelulaMembro
-                  perfilUser={perfilUser}
-                  secao={session}
-                  rolMembros={rolMembros}
-                />
-              </Box>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            {session && (
-              <Box>
-                {perfilUser.Funcao === 'Membro' ? (
-                  <PlanEventosMembros
-                    perfilUser={perfilUser}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Lider' ? (
-                  <PlanEventos
-                    perfilUser={perfilUser}
-                    secao={session}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
-                {perfilUser.Funcao === 'Supervisor' ||
-                perfilUser.Funcao === 'Coordenador' ? (
-                  <PlanEventosGeral
-                    perfilUser={perfilUser}
-                    secao={session}
-                    lideranca={lideranca}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'PastorDistrito' ? (
-                  <PlanEventosGeral
-                    perfilUser={perfilUser}
-                    secao={session}
-                    lideranca={lideranca}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Presidente' ? <Padrao /> : null}
-              </Box>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            {/*  <Eventos item={item} /> */}
-
-            <Calendario
+          <Box>
+            <PlanCelulaMembro
               perfilUser={perfilUser}
               secao={session}
               rolMembros={rolMembros}
             />
-          </TabPanel>
+          </Box>
         </main>
       </div>
     </div>
