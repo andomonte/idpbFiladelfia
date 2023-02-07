@@ -275,7 +275,16 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
                     secao={session}
                     rolMembros={rolMembros}
                   />
-                ) : null}
+                ) : (
+                  <Box
+                    bgcolor="white"
+                    color="black"
+                    height="100vh"
+                    width="100vw"
+                  >
+                    sem seção
+                  </Box>
+                )}
 
                 {perfilUser.Funcao === 'Secretaria' ? (
                   <PlanCelula
