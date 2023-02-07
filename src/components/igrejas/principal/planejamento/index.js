@@ -261,11 +261,27 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
           {/* {children} */}
 
           <Box>
-            <PlanCelulaMembro
-              perfilUser={perfilUser}
-              secao={session}
-              rolMembros={rolMembros}
-            />
+            <TabPanel value={value} index={0}>
+              <PlanCelulaMembro
+                perfilUser={perfilUser}
+                secao={session}
+                rolMembros={rolMembros}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <PlanEventosMembros
+                perfilUser={perfilUser}
+                secao={session}
+                rolMembros={rolMembros}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Calendario
+                perfilUser={perfilUser}
+                secao={session}
+                rolMembros={rolMembros}
+              />
+            </TabPanel>
           </Box>
         </main>
       </div>
