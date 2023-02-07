@@ -195,7 +195,12 @@ function PlanMembro({ perfilUser, rolMembros }) {
                   width="100%"
                   borderRadius={16}
                 >
-                  ola
+                  <TabEventosMembros
+                    perfilUser={perfilUser}
+                    Mes={contMes}
+                    Ano={contAno}
+                    rolMembros={rolMembros}
+                  />
                 </Box>
               </Box>
             </Box>
