@@ -3,7 +3,7 @@ function FormataStringData(data) {
   const mes = data.split('/')[1];
   const ano = data.split('/')[2];
 
-  return `${`0${mes}`.slice(-2)}-${`0${dia}`.slice(-2)}-${ano}`;
+  return `${ano},${`0${mes}`.slice(-2)},${`0${dia}`.slice(-2)}`;
   // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
 }
 export default FormataStringData;
