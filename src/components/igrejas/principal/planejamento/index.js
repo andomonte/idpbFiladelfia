@@ -269,7 +269,7 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
               />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <PlanCelulaMembro
+              <PlanEventosMembros
                 perfilUser={perfilUser}
                 secao={session}
                 rolMembros={rolMembros}
