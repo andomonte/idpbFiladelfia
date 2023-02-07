@@ -258,7 +258,9 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
         <main>
           <div className={classes.drawerHeader} />
           {/* {children} */}
-
+          <Box bgcolor="white" color="black" height="100vh" width="100vw">
+            {value} e {perfilUser.Funcao}
+          </Box>
           <TabPanel value={value} index={0}>
             {session && (
               <Box>
