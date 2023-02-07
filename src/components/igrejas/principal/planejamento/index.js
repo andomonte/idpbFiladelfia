@@ -115,6 +115,7 @@ const useStyles = makeStyles((theme) => ({
     borderRight: 'none',
   },
 }));
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -133,7 +134,7 @@ function TabPanel(props) {
 function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  console.log('dados', perfilUser, rolMembros, lideranca);
+
   const theme = useTheme();
   const [session] = useSession();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -258,10 +259,109 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
         <main>
           <div className={classes.drawerHeader} />
           {/* {children} */}
-
           <Box bgcolor="white" color="black" height="100vh" width="100vw">
             {value} e {perfilUser.Funcao}
           </Box>
+          <TabPanel value={value} index={0}>
+            {session && (
+              <Box>
+                {perfilUser.Funcao === 'Membro' ? (
+                  <PlanCelulaMembro
+                    perfilUser={perfilUser}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Lider' ? <Padrao /> : null}
+
+                {perfilUser.Funcao === 'Secretaria' ? (
+                  <PlanCelula
+                    perfilUser={perfilUser}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Supervisor' ? (
+                  <PlanCelulaSuper
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Coordenador' ? (
+                  <PlanCelulaCoord
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'PastorDistrito' ? (
+                  <PlanCelulaDistrito
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Presidente' ? (
+                  <PlanCelulaIgreja
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+              </Box>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            {session && (
+              <Box>
+                {perfilUser.Funcao === 'Membro' ? (
+                  <PlanEventosMembros
+                    perfilUser={perfilUser}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Lider' ? (
+                  <PlanEventos
+                    perfilUser={perfilUser}
+                    secao={session}
+                    rolMembros={rolMembros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
+                {perfilUser.Funcao === 'Supervisor' ||
+                perfilUser.Funcao === 'Coordenador' ? (
+                  <PlanEventosGeral
+                    perfilUser={perfilUser}
+                    secao={session}
+                    lideranca={lideranca}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'PastorDistrito' ? (
+                  <PlanEventosGeral
+                    perfilUser={perfilUser}
+                    secao={session}
+                    lideranca={lideranca}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Presidente' ? <Padrao /> : null}
+              </Box>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {/*  <Eventos item={item} /> */}
+
+            <Calendario
+              perfilUser={perfilUser}
+              secao={session}
+              rolMembros={rolMembros}
+            />
+          </TabPanel>
         </main>
       </div>
     </div>
