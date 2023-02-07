@@ -320,7 +320,10 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const handleTela2 = () => {
     if (nomesCelulas && nomesCelulas.length > 0) {
       const listaPresentes = nomesCelulas.filter(
-        (val, index) => val.Nome && relPresentes[index].Presenca === true,
+        (val, index) =>
+          val.Nome &&
+          relPresentes[index] &&
+          relPresentes[index].Presenca === true,
       );
       const idade = [];
       let contAdultos = 0;
