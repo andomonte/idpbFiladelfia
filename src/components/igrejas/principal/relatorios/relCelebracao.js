@@ -409,6 +409,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
       const listaPresentes = listaPresentes1.filter(
         (val, index) =>
           val.Nome &&
+          relPresentes[index] &&
           (relPresentes[index].Presenca === 'igreja' ||
             relPresentes[index].Presenca === 'live'),
       );
@@ -416,6 +417,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
       const idade = [];
       let contAdultos = 0;
       let contCriancas = 0;
+      console.log('listaPresentes', listaPresentes);
       for (let i = 0; i < listaPresentes.length; i += 1) {
         idade[i] = listaPresentes[i].Nascimento
           ? PegaIdade(ConverteData(listaPresentes[i].Nascimento))
