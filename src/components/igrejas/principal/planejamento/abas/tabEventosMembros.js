@@ -404,7 +404,34 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                     </Typography>
                   </Box>
                   <Box className={classes.novoBox} mt={-2}>
-                    OLA
+                    <TextField
+                      className={classes.tf_m}
+                      inputProps={{
+                        style: {
+                          textAlign: 'center',
+                          height: 28,
+                          borderRadius: 5,
+                          WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
+                        },
+                      }}
+                      id="Horario"
+                      // label="Matricula"
+                      type="tel"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={horario.replace(/(?<=^.{2})/, ':')}
+                      variant="standard"
+                      placeholder="hh:mm"
+                      onChange={(e) => {
+                        setHorario(e.target.value);
+                      }}
+                      onFocus={(e) => {
+                        setHorario(e.target.value);
+                      }}
+                      onKeyDown={handleEnter}
+                      inputRef={horarioRef}
+                    />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={12}>
