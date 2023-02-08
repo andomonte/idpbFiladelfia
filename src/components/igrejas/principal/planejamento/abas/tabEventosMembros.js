@@ -397,7 +397,16 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                       /> */}
                   </Box>
                 </Grid>
-
+                <Grid item xs={6} md={6}>
+                  <Box mt={-1} ml={2} color="white" sx={{ fontSize: 'bold' }}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Horário do Evento
+                    </Typography>
+                  </Box>
+                  <Box className={classes.novoBox} mt={-2}>
+                    OLA
+                  </Box>
+                </Grid>
                 <Grid item xs={12} md={12}>
                   <Box mt={1} ml={2} color="white" sx={{ fontSize: 'bold' }}>
                     <Typography variant="caption" display="block" gutterBottom>
