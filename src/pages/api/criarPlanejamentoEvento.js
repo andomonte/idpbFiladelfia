@@ -26,7 +26,7 @@ const handler = async (req, res) => {
         });
 
       let id = 0;
-
+      console.log(dados);
       if (eventosCelulas.length) id = eventosCelulas[0].id;
       await prisma.eventosCelulas.upsert({
         where: {

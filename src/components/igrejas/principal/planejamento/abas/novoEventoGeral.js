@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import horarioMask from 'src/components/mascaras/horario';
 import ConvData1 from 'src/utils/convData1';
 import DateFnsUtils from '@date-io/date-fns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -101,7 +105,10 @@ export default function TabCelula({
 
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
 
-  const [horario, setHorario] = React.useState('');
+  const horarioAtual = moment(new Date()).format('YYYY-MM-DD');
+  const [horario, setHorario] = React.useState(
+    dayjs(new Date(`${horarioAtual} 19:30:00`)),
+  );
   const [nomeEvento, setNomeEvento] = React.useState('');
 
   // para usar semanas
@@ -129,7 +136,7 @@ export default function TabCelula({
     setInputValue(moment(new Date()).format('DD/MM/YYYY'));
     setObjetivo(valorInicialOjetivo);
 
-    setHorario('');
+    setHorario(dayjs(new Date(`${horarioAtual} 19:30:00`)));
     setNomeEvento('');
     setValueAnfitriao('');
   };
@@ -196,72 +203,81 @@ export default function TabCelula({
       Dados.Numero = perfilUser.Distrito;
     }
 
-    if (
-      inputValue &&
-      horario.length &&
-      nomeEvento.length &&
-      valueAnfitriao.length &&
-      objetivo.label !== 'Qual o objetivo do evento?'
-    ) {
-      setCarregando(true);
-      // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
-      const newDate = new Date(ConvData1(inputValue));
-      api
-        .post('/api/criarEventoGeral', {
-          Data: newDate,
-          Evento: nomeEvento,
-          Local: valueAnfitriao,
-          Objetivo: objetivo.label,
-          Publico: Dados.Publico,
-          Numero: Number(Dados.Numero),
-          Funcao: perfilUser.Funcao,
-          Mes,
-          Ano,
-          Horario: horario,
-          Distrito: Number(perfilUser.Distrito),
-        })
-        .then((response) => {
-          if (response) {
-            // enviarPontuacao();
-            //  console.log(response);
+    if (horario)
+      if (
+        inputValue &&
+        String(horario.$H).length === 2 &&
+        String(horario.$m).length === 2 &&
+        nomeEvento.length &&
+        valueAnfitriao.length &&
+        objetivo.label !== 'Qual o objetivo do evento?'
+      ) {
+        setCarregando(true);
+        // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
+        const horaSalva = `${horario.$H}:${horario.$m}`;
+        const newDate = new Date(ConvData1(inputValue));
+        api
+          .post('/api/criarEventoGeral', {
+            Data: newDate,
+            Evento: nomeEvento,
+            Local: valueAnfitriao,
+            Objetivo: objetivo.label,
+            Publico: Dados.Publico,
+            Numero: Number(Dados.Numero),
+            Funcao: perfilUser.Funcao,
+            Mes,
+            Ano,
+            Horario: horaSalva,
+            Distrito: Number(perfilUser.Distrito),
+          })
+          .then((response) => {
+            if (response) {
+              // enviarPontuacao();
+              //  console.log(response);
+              setCarregando(false);
+              zerarValues();
+              setOpenNovoEventoGeral(false);
+            }
+          })
+          .catch(() => {
+            toast.error('Erro ao atualizar Dados !', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+
             setCarregando(false);
-            zerarValues();
-            setOpenNovoEventoGeral(false);
-          }
-        })
-        .catch(() => {
-          toast.error('Erro ao atualizar Dados !', {
+          });
+      } else {
+        if (objetivo.label === 'Qual o objetivo do evento?') {
+          toast.error('Escolha o Objetivo do Evento !', {
             position: toast.POSITION.TOP_CENTER,
           });
+          objetivoRef.current.focus();
+        }
+        if (!valueAnfitriao.length) {
+          toast.error('Escolha o local do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          anfitriaoRef.current.focus();
+        }
 
-          setCarregando(false);
-        });
-    } else {
-      if (objetivo.label === 'Qual o objetivo do evento?') {
-        toast.error('Escolha o Objetivo do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        objetivoRef.current.focus();
+        if (!nomeEvento.length) {
+          toast.error('Descreva o Nome do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          nomeEventoRef.current.focus();
+        }
+        if (String(horario.$H).length < 2 || String(horario.$m).length < 2) {
+          toast.error('Didige o Horário do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          horarioRef.current.focus();
+        }
       }
-      if (!valueAnfitriao.length) {
-        toast.error('Escolha o local do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        anfitriaoRef.current.focus();
-      }
-
-      if (!nomeEvento.length) {
-        toast.error('Descreva o Nome do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        nomeEventoRef.current.focus();
-      }
-      if (horario.length < 5) {
-        toast.error('Didige o Horário do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        horarioRef.current.focus();
-      }
+    else {
+      toast.error('Didige o Horário do Evento !', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      horarioRef.current.focus();
     }
   };
 
@@ -347,34 +363,36 @@ export default function TabCelula({
                       </Typography>
                     </Box>
                     <Box className={classes.novoBox} mt={-2}>
-                      <TextField
-                        className={classes.tf_m}
-                        inputProps={{
-                          style: {
-                            textAlign: 'center',
-                            height: 28,
-                            borderRadius: 5,
-                            WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
-                          },
+                      <Paper
+                        style={{
+                          background: '#fafafa',
+                          height: 40,
                         }}
-                        id="Horario"
-                        // label="Matricula"
-                        type="tel"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        value={horarioMask(horario.replace(/(?<=^.{2})/, ':'))}
-                        variant="standard"
-                        placeholder="hh:mm"
-                        onChange={(e) => {
-                          setHorario(e.target.value);
-                        }}
-                        onFocus={(e) => {
-                          setHorario(e.target.value);
-                        }}
-                        onKeyDown={handleEnter}
-                        inputRef={horarioRef}
-                      />
+                      >
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DesktopTimePicker
+                            ampm={false}
+                            inputRef={horarioRef}
+                            value={horario}
+                            variant="inline"
+                            onChange={(newValue) => {
+                              setHorario(newValue);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                style={{
+                                  marginLeft: 10,
+                                  marginRight: 10,
+                                  marginTop: 5,
+                                  height: 30,
+                                  background: '#fafafa',
+                                }}
+                              />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Paper>
                     </Box>
                   </Grid>
                   <Grid item xs={12} md={12}>
@@ -712,36 +730,36 @@ export default function TabCelula({
                         </Typography>
                       </Box>
                       <Box className={classes.novoBox} mt={-2}>
-                        <TextField
-                          className={classes.tf_m}
-                          inputProps={{
-                            style: {
-                              textAlign: 'center',
-                              height: 28,
-                              borderRadius: 5,
-                              WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
-                            },
+                        <Paper
+                          style={{
+                            background: '#fafafa',
+                            height: 40,
                           }}
-                          id="Horario"
-                          // label="Matricula"
-                          type="tel"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          value={horarioMask(
-                            horario.replace(/(?<=^.{2})/, ':'),
-                          )}
-                          variant="standard"
-                          placeholder="hh:mm"
-                          onChange={(e) => {
-                            setHorario(e.target.value);
-                          }}
-                          onFocus={(e) => {
-                            setHorario(e.target.value);
-                          }}
-                          onKeyDown={handleEnter}
-                          inputRef={horarioRef}
-                        />
+                        >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DesktopTimePicker
+                              ampm={false}
+                              inputRef={horarioRef}
+                              value={horario}
+                              variant="inline"
+                              onChange={(newValue) => {
+                                setHorario(newValue);
+                              }}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  style={{
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    marginTop: 5,
+                                    height: 30,
+                                    background: '#fafafa',
+                                  }}
+                                />
+                              )}
+                            />
+                          </LocalizationProvider>
+                        </Paper>
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={12}>

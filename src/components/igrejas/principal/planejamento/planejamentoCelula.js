@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import useSWR, { mutate } from 'swr';
 // import { useRouter } from 'next/router';
 import dataMask from 'src/components/mascaras/datas';
-import horarioMask from 'src/components/mascaras/horario';
 import corIgreja from 'src/utils/coresIgreja';
 import DateFnsUtils from '@date-io/date-fns';
 import Select from 'react-select';
@@ -24,7 +23,10 @@ import Erros from 'src/utils/erros';
 import { IoArrowUndoSharp, IoArrowRedoSharp } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import Typography from '@mui/material/Typography';
 import 'react-image-crop/dist/ReactCrop.css';
 
@@ -287,7 +289,11 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const [multiplicacao, setMultiplicacao] = React.useState('');
 
   const [objetivo, setObjetivo] = React.useState(valorInicialOjetivo);
-  const [horario, setHorario] = React.useState('');
+  const horarioAtual = moment(new Date()).format('YYYY-MM-DD');
+  const [horario, setHorario] = React.useState(
+    dayjs(new Date(`${horarioAtual} 19:30:00`)),
+  );
+
   const multiplicacaoRef = React.useRef();
   const anfitriaoRef = React.useRef();
   const horarioRef = React.useRef();
@@ -318,7 +324,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     setLanche('');
     setObjetivo(valorInicialOjetivo);
     setMultiplicacao('');
-    setHorario('');
+    setHorario(dayjs(new Date(`${horarioAtual} 19:30:00`)));
     setValueAnfitriao('');
   };
 
@@ -404,48 +410,54 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const { data: members, error: errorMembers } = useSWR(url, fetcher);
 
   const carregaResponsaveis = (relatorio) => {
-    const newValues = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Encontro,
-    );
-    setEncontro(relatorio[0].Encontro);
-    setValues(newValues[0]);
+    if (relatorio) {
+      const newValues = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Encontro,
+      );
+      setEncontro(relatorio[0].Encontro);
+      setValues(newValues[0]);
 
-    const newValues2 = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Exaltacao,
-    );
+      const newValues2 = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Exaltacao,
+      );
 
-    setExaltacao(relatorio[0].Exaltacao);
-    setValues2(newValues2[0]);
-    setMultiplicacao(relatorio[0].Multiplicacao);
-    setHorario(relatorio[0].Horario);
-    const newAnfitriao = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Anfitriao,
-    );
+      setExaltacao(relatorio[0].Exaltacao);
+      setValues2(newValues2[0]);
+      setMultiplicacao(relatorio[0].Multiplicacao);
+      const horarioNovo = dayjs(
+        new Date(`${horarioAtual} ${relatorio[0].Horario}:00`),
+      );
 
-    if (newAnfitriao.length) setValueAnfitriao(newAnfitriao[0].label);
+      setHorario(horarioNovo);
 
-    const newFase = fases.filter((val) => val.label === relatorio[0].Fase);
-    if (newFase.length) setObjetivo(newFase[0]);
+      const newAnfitriao = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Anfitriao,
+      );
 
-    const newValues3 = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Edificacao,
-    );
-    setEdificacao(relatorio[0].Edificacao);
-    setValues3(newValues3[0]);
+      if (newAnfitriao.length) setValueAnfitriao(newAnfitriao[0].label);
 
-    const newValues4 = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Evangelismo,
-    );
-    setEvangelismo(relatorio[0].Evangelismo);
-    setValues4(newValues4[0]);
+      const newFase = fases.filter((val) => val.label === relatorio[0].Fase);
+      if (newFase.length) setObjetivo(newFase[0]);
 
-    const newValues5 = nomesCelulaParcial.filter(
-      (val) => val.label === relatorio[0].Lanche,
-    );
-    setLanche(relatorio[0].Lanche);
-    setValues5(newValues5[0]);
+      const newValues3 = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Edificacao,
+      );
+      setEdificacao(relatorio[0].Edificacao);
+      setValues3(newValues3[0]);
+
+      const newValues4 = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Evangelismo,
+      );
+      setEvangelismo(relatorio[0].Evangelismo);
+      setValues4(newValues4[0]);
+
+      const newValues5 = nomesCelulaParcial.filter(
+        (val) => val.label === relatorio[0].Lanche,
+      );
+      setLanche(relatorio[0].Lanche);
+      setValues5(newValues5[0]);
+    }
   };
-
   const ajusteRelatorio = () => {
     setTela(1);
     setCarregando(false);
@@ -532,13 +544,12 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     objetivo,
     valueAnfitriao,
     multiplicacao,
-    horario,
   ]);
 
   const handleSalvar = () => {
     if (etapas === 'completo') {
       setCarregando(true);
-
+      const horaSalva = `${horario.$H}:${horario.$m}`;
       // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
       const novaData = new Date(ConverteData(inputValue));
       api
@@ -557,7 +568,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
           Fase: objetivo.label,
           Anfitriao: valueAnfitriao,
           Multiplicacao: multiplicacao,
-          Horario: horario,
+          Horario: horaSalva,
         })
         .then((response) => {
           if (response) {
@@ -925,37 +936,39 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                       </Typography>
                                     </Box>
                                     <Box width="100%" ml={1.4} mt={0}>
-                                      <Box width="99%">
-                                        <TextField
-                                          className={classes.tf_m}
-                                          inputProps={{
-                                            style: {
-                                              textAlign: 'center',
-
-                                              WebkitBoxShadow:
-                                                '0 0 0 1000px #fafafa  inset',
-                                            },
+                                      <Box width="90%">
+                                        <Paper
+                                          style={{
+                                            background: '#fafafa',
+                                            height: 32,
                                           }}
-                                          id="Horario"
-                                          // label="Matricula"
-                                          type="tel"
-                                          InputLabelProps={{
-                                            shrink: true,
-                                          }}
-                                          value={horarioMask(
-                                            horario.replace(/(?<=^.{2})/, ':'),
-                                          )}
-                                          variant="standard"
-                                          placeholder="hh:mm"
-                                          onChange={(e) => {
-                                            setHorario(e.target.value);
-                                          }}
-                                          onFocus={(e) => {
-                                            setHorario(e.target.value);
-                                          }}
-                                          onKeyDown={handleEnter}
-                                          inputRef={horarioRef}
-                                        />
+                                        >
+                                          <LocalizationProvider
+                                            dateAdapter={AdapterDayjs}
+                                          >
+                                            <DesktopTimePicker
+                                              ampm={false}
+                                              inputRef={horarioRef}
+                                              value={horario}
+                                              variant="inline"
+                                              onChange={(newValue) => {
+                                                setHorario(newValue);
+                                              }}
+                                              renderInput={(params) => (
+                                                <TextField
+                                                  {...params}
+                                                  style={{
+                                                    marginLeft: 10,
+                                                    marginRight: 10,
+                                                    marginTop: 0,
+                                                    height: 30,
+                                                    background: '#fafafa',
+                                                  }}
+                                                />
+                                              )}
+                                            />
+                                          </LocalizationProvider>
+                                        </Paper>
                                       </Box>
                                     </Box>
                                   </Grid>
@@ -1318,7 +1331,9 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                       }}
                                     >
                                       {multiplicacao.length > 9 &&
-                                      horario.length >= 5 &&
+                                      horario &&
+                                      String(horario.$H).length === 2 &&
+                                      String(horario.$m).length === 2 &&
                                       valueAnfitriao.length > 2 &&
                                       objetivo.label !==
                                         'Qual a fase atual da Célula?' ? (

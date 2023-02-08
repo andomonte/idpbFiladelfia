@@ -273,7 +273,9 @@ export default function TabCelula({ Mes, Ano }) {
                         color="white"
                       >
                         {mostrarEvento[index].Publico}{' '}
-                        {mostrarEvento[index].Numero}
+                        {mostrarEvento[index].Numero !== 0
+                          ? mostrarEvento[index].Numero
+                          : ''}
                       </Box>
                     </Box>
                   </Box>

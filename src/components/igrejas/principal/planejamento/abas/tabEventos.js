@@ -9,6 +9,7 @@ import ConverteData2 from 'src/utils/convData2';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 
 import {
   MuiPickersUtilsProvider,
@@ -114,8 +115,11 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
 
   const [dataSem1, setDataSem1] = React.useState([]);
+  const horarioAtual = moment(new Date()).format('YYYY-MM-DD');
 
-  const [horario, setHorario] = React.useState('19:30');
+  const [horario, setHorario] = React.useState(
+    dayjs(new Date(`${horarioAtual} 19:30:00`)),
+  );
   const [nomeEvento, setNomeEvento] = React.useState('');
   const semana = PegaSemana(Mes, Ano);
 
@@ -171,7 +175,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
     setInputValue(moment(new Date()).format('DD/MM/YYYY'));
     setObjetivo(valorInicialOjetivo);
 
-    setHorario('19:30');
+    setHorario(dayjs(new Date(`${horarioAtual} 19:30:00`)));
     setNomeEvento('');
     setValueAnfitriao('');
     setObservacoes('');
@@ -183,11 +187,13 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
 
       if (formId === 'DataEvento') horarioRef.current.focus();
       if (formId === 'Horario') {
-        if (horario.length < 5)
-          toast.error('Horário incompleto !', {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        else nomeEventoRef.current.focus();
+        if (horario)
+          if (String(horario.$H).length < 2 || String(horario.$m).length < 2)
+            toast.error('Horário incompleto !', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          else nomeEventoRef.current.focus();
+        else horarioRef.current.focus();
       }
 
       if (formId === 'NomeEvento') anfitriaoRef.current.focus();
@@ -236,82 +242,92 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   //= ========================================================================
 
   const handleSalvar = () => {
-    if (
-      inputValue &&
-      horario.length &&
-      nomeEvento.length &&
-      valueAnfitriao.length &&
-      objetivo.label !== 'Qual o objetivo do evento?' &&
-      observacoes
-    ) {
-      setCarregando(true);
-      setOpenPlan(false);
-      // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
-      const CriadoEm = new Date();
-      const novaData = new Date(ConverteData(inputValue));
-      api
-        .post('/api/criarPlanejamentoEvento', {
-          Data: novaData,
-          Evento: nomeEvento,
-          Local: valueAnfitriao,
-          Objetivo: objetivo.label,
-          Descricao: observacoes,
-          Mes,
-          Ano,
-          Horario: horario,
-          Celula: Number(perfilUser.Celula),
-          Distrito: Number(perfilUser.Distrito),
-          CriadoEm,
-        })
-        .then((response) => {
-          if (response) {
-            // enviarPontuacao();
+    if (horario)
+      if (
+        inputValue &&
+        String(horario.$H).length === 2 &&
+        String(horario.$m).length === 2 &&
+        nomeEvento.length &&
+        valueAnfitriao.length &&
+        objetivo.label !== 'Qual o objetivo do evento?' &&
+        observacoes
+      ) {
+        const horaSalva = `${horario.$H}:${horario.$m}`;
+        setCarregando(true);
+        setOpenPlan(false);
+        setOpenShowPlan(false);
+        // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
+        const CriadoEm = new Date();
+        const novaData = new Date(ConverteData(inputValue));
+        api
+          .post('/api/criarPlanejamentoEvento', {
+            Data: novaData,
+            Evento: nomeEvento,
+            Local: valueAnfitriao,
+            Objetivo: objetivo.label,
+            Descricao: observacoes,
+            Mes,
+            Ano,
+            Horario: horaSalva,
+            Celula: Number(perfilUser.Celula),
+            Distrito: Number(perfilUser.Distrito),
+            CriadoEm,
+          })
+          .then((response) => {
+            if (response) {
+              // enviarPontuacao();
+
+              setCarregando(false);
+              zerarValues();
+              mutate(url1);
+            }
+          })
+          .catch(() => {
+            toast.error('Erro ao atualizar Dados !', {
+              position: toast.POSITION.TOP_CENTER,
+            });
 
             setCarregando(false);
-            zerarValues();
-            mutate(url1);
-          }
-        })
-        .catch(() => {
-          toast.error('Erro ao atualizar Dados !', {
+          });
+      } else {
+        if (!observacoes) {
+          toast.error('Descreta algo sobre o Evento !', {
             position: toast.POSITION.TOP_CENTER,
           });
+          observacoesRef.current.focus();
+        }
 
-          setCarregando(false);
-        });
-    } else {
-      if (!observacoes) {
-        toast.error('Descreta algo sobre o Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        observacoesRef.current.focus();
-      }
+        if (objetivo.label === 'Qual o objetivo do evento?') {
+          toast.error('Escolha o Objetivo do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          objetivoRef.current.focus();
+        }
+        if (!valueAnfitriao.length) {
+          toast.error('Escolha o local do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          anfitriaoRef.current.focus();
+        }
 
-      if (objetivo.label === 'Qual o objetivo do evento?') {
-        toast.error('Escolha o Objetivo do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        objetivoRef.current.focus();
+        if (!nomeEvento.length) {
+          toast.error('Descreva o Nome do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          nomeEventoRef.current.focus();
+        }
+        if (String(horario.$H).length < 2 || String(horario.$m).length < 2) {
+          toast.error('Didige o Horário do Evento !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          horarioRef.current.focus();
+        }
       }
-      if (!valueAnfitriao.length) {
-        toast.error('Escolha o local do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        anfitriaoRef.current.focus();
-      }
-
-      if (!nomeEvento.length) {
-        toast.error('Descreva o Nome do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        nomeEventoRef.current.focus();
-      }
-      if (horario.length < 5) {
-        toast.error('Didige o Horário do Evento !', {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        horarioRef.current.focus();
-      }
+    else {
+      toast.error('Didige o Horário do Evento !', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      horarioRef.current.focus();
     }
   };
   const body = (
@@ -460,6 +476,8 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                           <Paper style={{ background: '#fafafa', height: 40 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DesktopTimePicker
+                                ampm={false}
+                                inputRef={horarioRef}
                                 value={horario}
                                 variant="inline"
                                 onChange={(newValue) => {
@@ -871,8 +889,10 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                           <Paper style={{ background: '#fafafa', height: 40 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DesktopTimePicker
+                                ampm={false}
                                 variant="inline"
                                 value={horario}
+                                inputRef={horarioRef}
                                 onChange={(newValue) => {
                                   setHorario(newValue);
                                 }}
@@ -1137,18 +1157,25 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   );
 
   const atualizaDados = (dadosRecebidos) => {
-    const atualObjetivo = {
-      label: dadosRecebidos.Objetivo,
-      value: 0,
-    };
-    setInputValue(ConverteData2(dadosRecebidos.Data));
-    setHorario(dadosRecebidos.Horario);
-    setNomeEvento(dadosRecebidos.Evento);
-    setValueAnfitriao(dadosRecebidos.Local);
-    setObjetivo(atualObjetivo);
-    setObservacoes(dadosRecebidos.Descricao);
+    if (dadosRecebidos) {
+      const atualObjetivo = {
+        label: dadosRecebidos.Objetivo,
+        value: 0,
+      };
+      dayjs(new Date(`${horarioAtual} 19:30:00`));
+      const horarioNovo = dayjs(
+        new Date(`${horarioAtual} ${dadosRecebidos.Horario}:00`),
+      );
 
-    setOpenShowPlan(true);
+      setInputValue(ConverteData2(dadosRecebidos.Data));
+      setHorario(horarioNovo);
+      setNomeEvento(dadosRecebidos.Evento);
+      setValueAnfitriao(dadosRecebidos.Local);
+      setObjetivo(atualObjetivo);
+      setObservacoes(dadosRecebidos.Descricao);
+
+      setOpenShowPlan(true);
+    }
   };
   return (
     <Box height="100%" fontSize="13px">

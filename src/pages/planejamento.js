@@ -48,9 +48,17 @@ function Planejar({ rolMembros, lideranca }) {
 
 export const getStaticProps = async () => {
   // pega o valor do banco de dados
-  const lideranca = await prisma.lideranca.findMany().finally(async () => {
-    await prisma.$disconnect();
-  });
+  const lideranca = await prisma.lideranca
+    .findMany({
+      orderBy: [
+        {
+          Celula: 'asc',
+        },
+      ],
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
   const rolMembros = await prisma.membros
     .findMany({
       where: {
