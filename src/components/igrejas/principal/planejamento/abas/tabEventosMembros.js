@@ -420,7 +420,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                       InputLabelProps={{
                         shrink: true,
                       }}
-                      value={horario.replace(/(?<=^.{2})/, ':')}
+                      value={horario}
                       variant="standard"
                       placeholder="hh:mm"
                       onChange={(e) => {
