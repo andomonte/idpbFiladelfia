@@ -403,7 +403,77 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                       /> */}
                   </Box>
                 </Grid>
+                <Grid item xs={6} md={6}>
+                  <Box mt={-1} ml={2} color="white" sx={{ fontSize: 'bold' }}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Horário do Evento
+                    </Typography>
+                  </Box>
+                  <Box className={classes.novoBox} mt={-2}>
+                    <TextField
+                      className={classes.tf_m}
+                      inputProps={{
+                        style: {
+                          textAlign: 'center',
+                          height: 28,
+                          borderRadius: 5,
+                          WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
+                        },
+                      }}
+                      id="Horario"
+                      // label="Matricula"
+                      type="tel"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={horarioMask(horario.replace(/(?<=^.{2})/, ':'))}
+                      variant="standard"
+                      placeholder="hh:mm"
+                      onChange={(e) => {
+                        setHorario(e.target.value);
+                      }}
+                      onKeyDown={handleEnter}
+                      inputRef={horarioRef}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <Box mt={1} ml={2} color="white" sx={{ fontSize: 'bold' }}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Nome do Evento
+                    </Typography>
+                  </Box>
+                  <Box className={classes.novoBox} mt={-2}>
+                    <TextField
+                      className={classes.tf_m}
+                      inputProps={{
+                        style: {
+                          height: 28,
+                          borderRadius: 5,
+                          textAlign: 'center',
+                          WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
+                        },
+                      }}
+                      id="NomeEvento"
+                      // label="Matricula"
 
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={nomeEvento}
+                      variant="standard"
+                      placeholder="Título do Evento"
+                      onChange={(e) => {
+                        setNomeEvento(e.target.value);
+                      }}
+                      onFocus={(e) => {
+                        setNomeEvento(e.target.value);
+                      }}
+                      onKeyDown={handleEnter}
+                      inputRef={nomeEventoRef}
+                    />
+                  </Box>
+                </Grid>
                 <Grid item xs={12} md={12}>
                   <Box mt={1} ml={2} color="white" sx={{ fontSize: 'bold' }}>
                     <Typography variant="caption" display="block" gutterBottom>
