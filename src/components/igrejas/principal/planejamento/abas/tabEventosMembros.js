@@ -491,7 +491,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                       }}
                     >
                       <Box display="flex" justifyContent="center">
-                        <Stack spacing={2} sx={{ width: 320 }}>
+                        <Box sx={{ width: 320 }}>
                           <Autocomplete
                             style={{
                               width: '99%',
@@ -529,7 +529,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                               />
                             )}
                           />
-                        </Stack>
+                        </Box>
                       </Box>
                     </Paper>
                   </Box>
