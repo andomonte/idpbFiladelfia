@@ -309,7 +309,6 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
         );
 
         if (relatorio && relatorio.length) {
-          console.log('ola relatorio', relatorio);
           const dataAgora = new Date();
           const semanaAgora = semanaExata(dataAgora);
 
@@ -331,7 +330,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
           const qtyPresentesLive = nomesMembros.filter(
             (val) => val.Presenca === 'live',
           );
-          console.log('nvisi', relatorio[0].NomesVisitantes);
+
           const qtyVisitants = Object.keys(nVisitantes).length
             ? nVisitantes.filter((val) => val.Presenca === true)
             : [];

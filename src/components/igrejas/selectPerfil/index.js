@@ -70,7 +70,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
   const classes = useStyles();
 
   const [session] = useSession();
-  console.log('rmbs', rolMembros, session);
+
   let ministroEncontrado = '';
   if (session)
     ministroEncontrado = rolMembros.filter(

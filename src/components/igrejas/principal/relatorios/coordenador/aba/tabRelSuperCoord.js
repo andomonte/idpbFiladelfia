@@ -167,7 +167,6 @@ export default function TabCelula({
                       {relEncontrado[index] ? (
                         <Box color="blue" display="flex">
                           <Box>
-                            {console.log(relEncontrado[index])}
                             {relEncontrado[index].Supervisao !== '' ? (
                               <Box> {relEncontrado[index].Supervisao}</Box>
                             ) : (

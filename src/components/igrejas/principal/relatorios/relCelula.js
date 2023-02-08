@@ -316,7 +316,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
           const qtyPresentes = nomesMembros.filter(
             (val) => val.Presenca === true,
           );
-          console.log('nvisi', nVisitantes);
+
           const qtyVisitants = JSON.parse(nVisitantes).filter(
             (val) => val.Presenca === true,
           );
@@ -419,7 +419,6 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
   }, [novoVisitante, nomesVisitanteTab]);
 
   React.useEffect(() => {
-    console.log('acionou mutate');
     ajusteRelatorio();
 
     return 0;
@@ -431,7 +430,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     setExisteRelatorio('inicio');
     if (selectedDate) {
       const checkAno = selectedDate.getFullYear();
-      console.log('checkAno', checkAno);
+
       setAnoAtual(checkAno);
       // selectedDate.setTime(selectedDate.getTime() + 1000 * 60);
       if (checkAno > 2020) {
@@ -483,7 +482,6 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
 
     setTela(2);
   };
-  console.log(ConverteData(inputValue), new Date(ConverteData(inputValue)));
 
   const handleVisitantes = () => {
     setOpenVisitantes(true);

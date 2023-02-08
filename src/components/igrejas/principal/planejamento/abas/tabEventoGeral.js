@@ -46,7 +46,7 @@ export default function TabCelula({
             val.Funcao === perfilUser.Funcao &&
             Number(val.Numero) === Number(perfilUser.Coordenacao),
         );
-        console.log(sem1, perfilUser);
+
         if (listaEveSuper && listaEveSuper.length) {
           const listaEventosSetor = listaEveSuper.sort((a, b) => {
             if (new Date(a.Data) > new Date(b.Data)) return 1;

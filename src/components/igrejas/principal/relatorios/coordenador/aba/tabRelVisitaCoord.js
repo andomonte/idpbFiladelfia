@@ -22,7 +22,7 @@ export default function TabCelula({
   Ano,
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
-  console.log('oi');
+
   const [relEncontrado, setRelEncontrado] = React.useState([]);
   const [rel, setRel] = React.useState('nada');
 
@@ -43,7 +43,7 @@ export default function TabCelula({
         const listaRelSuper = sem1.filter(
           (val) => Number(val.Coordenacao) === Number(numeroSuper),
         );
-        console.log('ola data', listaRelSuper, sem1);
+
         if (listaRelSuper && listaRelSuper.length) {
           const listaMinhaVisitas = listaRelSuper.sort((a, b) => {
             if (new Date(a.Data) > new Date(b.Data)) return 1;

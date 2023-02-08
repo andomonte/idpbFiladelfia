@@ -559,7 +559,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const handleSalvar = () => {
     setCarregando(true);
     criarPontuacao();
-    console.log('RelDisFinal', nomesCelulas);
+
     const criadoEm = new Date();
     const nomesCelulaParcial = nomesCelulas.map((row, index) =>
       createRelCelula(
@@ -592,7 +592,6 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       })
       .then((response) => {
         if (response) {
-          console.log(response);
           enviarPontuacao();
         }
       })

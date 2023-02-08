@@ -112,7 +112,7 @@ function RelSuper({ dadosRelVisita, setSendResumo }) {
   const selectedDate = dataAtual2;
   const open = false;
   const inputValue = ConvertData(dadosRelVisita.Data);
-  console.log('dadosRelVisita', dadosRelVisita);
+
   const [numeroSuper, setNumeroSuper] = React.useState(
     JSON.parse(dadosRelVisita.Presentes),
   );

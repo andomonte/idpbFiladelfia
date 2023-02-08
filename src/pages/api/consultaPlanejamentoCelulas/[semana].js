@@ -7,7 +7,7 @@ export default async function handle(req, res) {
   } = req;
   // //console.log('dados do api', codigoIgreja, mes, ano);
   // const action = `${rel}.findMany`
-  console.log('ola aqui');
+
   try {
     const posts = await prisma.plancelula
       .findMany({

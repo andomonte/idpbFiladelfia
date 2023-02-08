@@ -148,7 +148,7 @@ function meuPerfil({ secao, perfilUser }) {
       console.log(err);
     }
   };
-  console.log(perfilUser);
+
   const atualizarImagem = async () => {
     if (upLoadFile) {
       await process(fileImage);
@@ -277,7 +277,6 @@ function meuPerfil({ secao, perfilUser }) {
                                 : null
                             }
                           >
-                            {console.log('caminho imagem', fileImage)}
                             {fileImage === '' || fileImage === null ? (
                               <IconButton
                                 style={{ color: 'black' }}

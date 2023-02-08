@@ -144,7 +144,6 @@ export default function TabCelula({
                       height: 50,
                     }}
                   >
-                    {console.log('ola row.foto', row.foto.slice(0, 1))}
                     {row.foto.slice(0, 1) === 'h' ? (
                       <Image
                         src={row.foto}

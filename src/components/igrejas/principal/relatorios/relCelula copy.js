@@ -369,8 +369,6 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     if (deleteVis) {
       mutate('/api/consultaVisitantes');
 
-      console.log('oi mutate');
-
       setDeleteVis(false);
     }
     return 0;
@@ -379,7 +377,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
   React.useEffect(() => {
     if (errorVisitante) return <div>An error occured.</div>;
     if (!novoVisitante) return <div>Loading ...</div>;
-    console.log('oi novoVisitante ');
+
     if (novoVisitante) {
       // se teve relatório nomesVisitantes tras a lista
 
@@ -423,7 +421,6 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
   }, [novoVisitante, nomesVisitanteTab]);
 
   React.useEffect(() => {
-    console.log('acionou mutate');
     ajusteRelatorio();
 
     return 0;
@@ -435,7 +432,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     setExisteRelatorio('inicio');
     if (selectedDate) {
       const checkAno = selectedDate.getFullYear();
-      console.log('checkAno', checkAno);
+
       setAnoAtual(checkAno);
       // selectedDate.setTime(selectedDate.getTime() + 1000 * 60);
       if (checkAno > 2020) {
@@ -503,7 +500,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         setCarregando(true);
 
         const novaData = new Date(ConverteData(nascimentoVisitante));
-        console.log('nov data', nascimentoVisitante);
+
         api
           .post('/api/inserirVisitante', {
             Nome: nomeVistante,

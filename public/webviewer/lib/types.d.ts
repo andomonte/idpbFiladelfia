@@ -26312,7 +26312,7 @@ declare namespace Core {
          const button = this;
           const el = originalCreateInnerElement();
           el.addEventListener('click', () => {
-            console.log('check button clicked', annotation.fieldName);
+           
           });
           return el;
         })
@@ -33384,7 +33384,7 @@ declare namespace Core {
              const { Core } = instance;
              const tool = Core.documentViewer.getTool(Core.Tools.ToolNames.DISTANCE_MEASUREMENT);
              const defaultLeaderLineOptions = tool.getLeaderLineDefaultOptions();
-             console.log(defaultLeaderLineOptions);
+            
             });
              */
             getLeaderLineDefaultOptions(): Core.Tools.DistanceMeasurementCreateTool.LeaderLineOptions;
@@ -37906,7 +37906,7 @@ declare namespace UI {
      *   .then(function(instance) {
      *     instance.UI.addEventListener(instance.UI.Events.ANNOTATION_FILTER_CHANGED, e => {
      *       const { types, authors, colors } = e.detail;
-     *       console.log(types, authors, colors);
+     *       
      *     });
      *   });
      * @param eventName - UI event name.
@@ -37970,7 +37970,7 @@ declare namespace UI {
      * WebViewer(...)
      *   .then(function(instance) {
      *     function searchListener(searchValue, options, results) {
-     *       console.log(searchValue, options, results);
+     *      
      *     };
      *
      *     instance.UI.addSearchListener(searchListener);
@@ -38076,7 +38076,7 @@ declare namespace UI {
      *     docViewer.addEventListener('documentLoaded', function() {
      *       setTimeout(function() {
      *         instance.UI.closeDocument().then(function() {
-     *           console.log('Document is closed');
+     *         
      *         });
      *       }, 3000);
      *     });
@@ -38359,7 +38359,7 @@ declare namespace UI {
      *         includeAnnotations: false,
      *       });
      *
-     *       console.log('Downloaded the first time!')
+     *       
      *
      *       // download pdf with all annotations flattened
      *       await instance.UI.downloadPdf({

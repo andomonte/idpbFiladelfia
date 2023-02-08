@@ -170,7 +170,6 @@ function Player({ radioIdpb }) {
             <Box borderRadius={16} height={120} width="90%" bgcolor="#f1f3f4">
               {/* autoPlay */}
               <Box display="flex" justifyContent="center">
-                {console.log('musica', musica)}
                 <ReactAudioPlayer
                   src={musica && musica.url ? musica.url : ''}
                   loop={repeat}

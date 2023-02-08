@@ -10,7 +10,6 @@ const handler = async (req, res) => {
 
   if (dados) {
     try {
-      console.log('dadossss', dados);
       const eventosCelulas = await prisma.eventosCelulas
         .findMany({
           where: {
@@ -27,7 +26,7 @@ const handler = async (req, res) => {
         });
 
       let id = 0;
-      console.log('dataSSSSSSSS', eventosCelulas);
+
       if (eventosCelulas.length) id = eventosCelulas[0].id;
       await prisma.eventosCelulas.upsert({
         where: {

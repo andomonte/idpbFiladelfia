@@ -5,7 +5,7 @@ const handler = async (req, res) => {
   // res.status(200).send('OK');
 
   const dados = req.body.relatorio;
-  console.log('dados:', dados);
+
   if (dados) {
     try {
       const relCelula = await prisma.relatorioCelulas
@@ -23,8 +23,6 @@ const handler = async (req, res) => {
         });
 
       if (relCelula.length) {
-        console.log('relCelula:', relCelula);
-
         const { id } = relCelula[0];
         await prisma.relatorioCelulas
           .update({
@@ -39,8 +37,6 @@ const handler = async (req, res) => {
             await prisma.$disconnect();
           });
       } else {
-        console.log('criar:', dados);
-
         await prisma.relatorioCelulas
           .create({
             data: {
