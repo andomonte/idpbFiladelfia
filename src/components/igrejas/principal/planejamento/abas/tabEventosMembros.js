@@ -109,7 +109,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
 
   const [dataSem1, setDataSem1] = React.useState('inicio');
-  const horarioAtual = moment(new Date()).format('YYYY-MM-DD');
+  const horarioAtual = moment(new Date()).format('MM/DD/YYYY');
 
   const [horario, setHorario] = React.useState(
     dayjs(new Date(`${horarioAtual} 19:30:00`)),
@@ -607,6 +607,8 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                           height: 80,
                           borderRadius: 15,
                           border: '1px solid #000',
+                          resize: 'vertical',
+                          overflow: 'auto',
                         }}
                       />
                     </Box>
@@ -956,6 +958,8 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                           height: 80,
                           borderRadius: 15,
                           border: '1px solid #000',
+                          resize: 'vertical',
+                          overflow: 'auto',
                         }}
                       />
                     </Box>
@@ -998,6 +1002,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       value: 0,
     };
     setInputValue(dadosRecebidos.Data);
+
     setHorario(dadosRecebidos.Horario);
     setNomeEvento(dadosRecebidos.Evento);
     setValueAnfitriao(dadosRecebidos.Local);

@@ -18,7 +18,7 @@ import { IoIosPeople } from 'react-icons/io';
 import corIgreja from 'src/utils/coresIgreja';
 import { useRouter } from 'next/router';
 
-import PlanCelula from './planejamentoCelula';
+import PlanCelula from './planejamentoRelCelulas';
 import PlanCelulaSuper from './planejamentoCelulaSuper';
 import PlanCelulaCoord from './planejamentoCelulaCoord';
 import PlanCelulaDistrito from './planejamentoCelulaDistrito';

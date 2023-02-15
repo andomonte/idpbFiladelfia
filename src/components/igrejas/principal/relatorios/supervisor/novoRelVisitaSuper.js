@@ -450,6 +450,8 @@ function RelCelula({ perfilUser, setOpenNovoRelatorio, lideranca, Mes, Ano }) {
                         height: 80,
                         borderRadius: 15,
                         border: '1px solid #000',
+                        resize: 'vertical',
+                        overflow: 'auto',
                       }}
                     />
                   </Box>

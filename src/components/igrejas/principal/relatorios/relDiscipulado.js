@@ -329,7 +329,12 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       let contAdultos = 0;
       let contCriancas = 0;
       for (let i = 0; i < listaPresentes.length; i += 1) {
-        idade[i] = PegaIdade(listaPresentes[i].Nascimento);
+        /*  if (listaPresentes[i].Nascimento)
+          idade[i] = PegaIdade(listaPresentes[i].Nascimento);
+        else idade[i] = 'NaN'; */
+        idade[i] = listaPresentes[i].Nascimento
+          ? PegaIdade(ConverteData(listaPresentes[i].Nascimento))
+          : '';
         if (String(idade[i]) !== 'NaN')
           if (idade[i] > 11) {
             contAdultos += 1;
@@ -385,7 +390,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     let pontosTotalAtualRank = 0;
 
     if (pontosAtual.length) {
-      pontuacaoAtual = pontosAtual[0].Pontuacao;
+      pontuacaoAtual = JSON.parse(pontosAtual[0].Pontuacao);
 
       if (pontuacaoAtual !== '') {
         if (
@@ -1416,6 +1421,8 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                             height: 80,
                             borderRadius: 15,
                             border: '1px solid #000',
+                            resize: 'vertical',
+                            overflow: 'auto',
                           }}
                         />
                       </Box>

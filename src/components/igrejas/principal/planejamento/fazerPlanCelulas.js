@@ -8,6 +8,7 @@ import corIgreja from 'src/utils/coresIgreja';
 import DateFnsUtils from '@date-io/date-fns';
 import Select from 'react-select';
 import ConverteData from 'src/utils/dataMMDDAAAA';
+import PegaData from 'src/utils/getDataQuarta';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -24,9 +25,10 @@ import { IoArrowUndoSharp, IoArrowRedoSharp } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import Typography from '@mui/material/Typography';
 import 'react-image-crop/dist/ReactCrop.css';
 
@@ -238,7 +240,14 @@ function createListaMembros(value, label) {
   };
 }
 
-function RelatorioCelebracao({ rolMembros, perfilUser }) {
+function RelatorioCelebracao({
+  rolMembros,
+  perfilUser,
+  dadosSem,
+  semanaEnviada,
+  AnoPesquisado,
+  setOpenPlan,
+}) {
   //  const classes = useStyles();
   // const router = useRouter();
   const classes = useStyles();
@@ -299,16 +308,16 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   const horarioRef = React.useRef();
 
   const [openErro, setOpenErro] = React.useState(false);
-  const timeElapsed2 = Date.now();
-  const dataAtual2 = new Date(timeElapsed2);
-  const [checkRelatorio, setCheckRelatorio] = React.useState(false);
+
+  const dataAtual2 = PegaData(semanaEnviada, AnoPesquisado);
+  const [checkRelatorio, setCheckRelatorio] = React.useState(true);
   const [selectedDate, setSelectedDate] = React.useState(dataAtual2);
   const [open, setIsPickerOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [tela, setTela] = React.useState(1);
   const [carregando, setCarregando] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(
-    moment(new Date()).format('DD/MM/YYYY'),
+    moment(PegaData(semanaEnviada, AnoPesquisado)).format('DD/MM/YYYY'),
   );
   // zera as opções dos 5 Es
   const zerarValues = () => {
@@ -391,20 +400,11 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
   };
   //= =================================================================
 
-  const [semana, setSemana] = React.useState(0);
+  const [semana, setSemana] = React.useState(semanaEnviada);
   const [existeRelatorio, setExisteRelatorio] = React.useState('inicio');
   const [podeEditar, setPodeEditar] = React.useState(true);
   const [etapas, setEtapas] = React.useState('incompleto');
   const [inputValor, setInputValor] = React.useState('');
-
-  React.useEffect(() => {
-    const timeElapsed = Date.now();
-    const dataAtual = new Date(timeElapsed);
-
-    if (dataAtual) {
-      setSemana(semanaExata(dataAtual));
-    }
-  }, []);
 
   const url = `/api/consultaPlanejamentoCelulas/${semana}`;
   const { data: members, error: errorMembers } = useSWR(url, fetcher);
@@ -437,8 +437,10 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       if (newAnfitriao.length) setValueAnfitriao(newAnfitriao[0].label);
 
       const newFase = fases.filter((val) => val.label === relatorio[0].Fase);
-      if (newFase.length) setObjetivo(newFase[0]);
 
+      if (newFase.length) {
+        setObjetivo(newFase[0]);
+      }
       const newValues3 = nomesCelulaParcial.filter(
         (val) => val.label === relatorio[0].Edificacao,
       );
@@ -465,8 +467,8 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     if (members) relExiste = 'sem'; // setExisteRelatorio('sem');
 
     setExisteRelatorio(relExiste);
-    if (members && members.length > 0) {
-      const relatorio = members.filter(
+    if (dadosSem && dadosSem.length > 0) {
+      const relatorio = dadosSem.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Distrito === Number(perfilUser.Distrito) &&
@@ -495,42 +497,90 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     if (!members) return <div>Loading ...</div>;
     return 0;
   };
+  const ajusteRelatorioInicial = () => {
+    setTela(1);
+    setCarregando(false);
+    let relExiste = 'inicio';
+    if (dadosSem) relExiste = 'sem'; // setExisteRelatorio('sem');
 
-  React.useEffect(() => {
-    if (semana !== 0) {
-      ajusteRelatorio();
+    setExisteRelatorio(relExiste);
+    if (dadosSem && dadosSem.id) {
+      const relatorio = dadosSem;
+      if (relatorio && relatorio.id) {
+        relExiste = 'sim';
+        const dataAgora = new Date();
+        const semanaAgora = semanaExata(dataAgora);
+
+        if (semanaAgora - semana < 2) setPodeEditar(true);
+        else setPodeEditar(false);
+
+        const date1 = moment(dataAgora);
+        const date2 = moment(selectedDate);
+        const diff = date2.diff(date1, 'seconds') + 3600;
+        if (diff > -650637) setPodeEditar(true);
+        else setPodeEditar(false);
+        setExisteRelatorio(true); // avisa que tem relatório
+        setTela(1);
+        setCheckRelatorio(true);
+
+        const novoRel = [];
+        novoRel[0] = relatorio;
+
+        carregaResponsaveis(novoRel);
+      } else {
+        setExisteRelatorio('sem'); // avisa que tem relatório
+        // setCheckRelatorio(false);
+      }
     }
-    return 0;
-  }, [semana]);
-  React.useEffect(() => {
-    ajusteRelatorio();
 
+    if (errorMembers) return <div>An error occured.</div>;
+    if (!members) return <div>Loading ...</div>;
     return 0;
-  }, [members]);
+  };
+
+  // comparar datas
+  /*   const dataAgora = new Date();
+  const date1 = moment(dataAgora);
+  const date2 = moment(selectedDate);
+  const diff = date2.diff(date1, 'seconds') + 3600;
+ */
+
   React.useEffect(() => {
     ajusteRelatorio();
 
     return 0;
   }, [checkRelatorio]);
 
+  React.useEffect(() => {
+    if (dadosSem) {
+      const relatorio = [];
+      relatorio[0] = dadosSem;
+
+      ajusteRelatorioInicial();
+    }
+
+    return 0;
+  }, [dadosSem]);
+
   //= ========================calcular adulto e crianca========================
 
   React.useEffect(() => {
     //  contEffect += 1;
-    zerarValues();
-    setCheckRelatorio(false);
-
-    setExisteRelatorio('inicio');
     if (selectedDate) {
       const checkAno = selectedDate.getFullYear();
-
+      setCheckRelatorio(true);
       // selectedDate.setTime(selectedDate.getTime() + 1000 * 60);
       if (checkAno > 2020) {
-        setSemana(semanaExata(selectedDate));
+        const semanaNova = semanaExata(selectedDate);
+        if (semanaNova !== semanaEnviada || checkAno !== AnoPesquisado) {
+          zerarValues();
+          setCheckRelatorio(false);
+          setExisteRelatorio('inicio');
+          setSemana(semanaExata(selectedDate));
+        }
       }
     }
   }, [selectedDate]);
-
   React.useEffect(() => {
     if (Encontro && Exaltacao && Evangelismo && Edificacao && Lanche) {
       setEtapas('completo');
@@ -545,7 +595,6 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     valueAnfitriao,
     multiplicacao,
   ]);
-  console.log('semana', semana);
   const handleSalvar = () => {
     if (etapas === 'completo') {
       setCarregando(true);
@@ -573,7 +622,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
         .then((response) => {
           if (response) {
             // enviarPontuacao();
-            console.log('ola', response);
+            setOpenPlan(false);
             setCarregando(false);
             mutate(url);
           }
@@ -626,7 +675,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       minHeight={570}
       minWidth={300}
       bgcolor={corIgreja.principal2}
-      height="calc(100vh - 56px)"
+      height="100vh"
     >
       <Box
         width="96%"
@@ -861,7 +910,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                     <Box className={classes.novoBox2} mt={-2}>
                                       <Select
                                         id="Objetivo"
-                                        defaultValue={objetivo}
+                                        value={objetivo}
                                         onChange={(e) => {
                                           // setValues2(e);
                                           setObjetivo(e);
@@ -1267,59 +1316,33 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                               {tela === 1 && (
                                 <Grid container spacing={2}>
                                   <Grid item xs={6} md={6} lg={6} xl={6}>
-                                    {existeRelatorio !== true ? (
-                                      <Paper
-                                        style={{
-                                          borderRadius: 16,
-                                          textAlign: 'center',
-                                          background: '#ffffaa',
-                                          height: 40,
+                                    <Paper
+                                      style={{
+                                        borderRadius: 16,
+                                        textAlign: 'center',
+                                        background: '#ffffaa',
+                                        height: 40,
+                                      }}
+                                    >
+                                      <Button
+                                        onClick={() => {
+                                          setOpenPlan(false);
+                                          ajusteRelatorio();
                                         }}
+                                        startIcon={
+                                          <IoArrowUndoSharp color="blue" />
+                                        }
                                       >
-                                        <Button
-                                          onClick={() => {
-                                            setCheckRelatorio(false);
-                                            ajusteRelatorio();
-                                          }}
-                                          startIcon={
-                                            <IoArrowUndoSharp color="blue" />
-                                          }
+                                        <Box
+                                          mr={2}
+                                          ml={2}
+                                          mt={0.3}
+                                          sx={{ fontFamily: 'arial black' }}
                                         >
-                                          <Box
-                                            mr={2}
-                                            ml={2}
-                                            mt={0.3}
-                                            sx={{ fontFamily: 'arial black' }}
-                                          >
-                                            VOLTAR
-                                          </Box>
-                                        </Button>
-                                      </Paper>
-                                    ) : (
-                                      <Paper
-                                        style={{
-                                          borderRadius: 16,
-                                          textAlign: 'center',
-                                          background: 'gray',
-                                          height: 40,
-                                        }}
-                                      >
-                                        <Button
-                                          startIcon={
-                                            <IoArrowUndoSharp color="blue" />
-                                          }
-                                        >
-                                          <Box
-                                            mr={2}
-                                            ml={2}
-                                            mt={0.3}
-                                            sx={{ fontFamily: 'arial black' }}
-                                          >
-                                            VOLTAR
-                                          </Box>
-                                        </Button>
-                                      </Paper>
-                                    )}
+                                          VOLTAR
+                                        </Box>
+                                      </Button>
+                                    </Paper>
                                   </Grid>
                                   <Grid item xs={6} md={6} lg={6} xl={6}>
                                     <Paper

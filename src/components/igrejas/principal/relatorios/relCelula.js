@@ -269,7 +269,8 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     url3,
     fetcher,
   );
-
+  console.log('pontos', pontos);
+  console.log('pontosSemana', PontosSemana);
   const url4 = `/api/consultaVisitantes`;
   const { data: novoVisitante, error: errorVisitante } = useSWR(url4, fetcher);
 
@@ -600,7 +601,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     let pontosTotalAtualRank = 0;
 
     if (pontosAtual.length) {
-      pontuacaoAtual = pontosAtual[0].Pontuacao;
+      pontuacaoAtual = JSON.parse(pontosAtual[0].Pontuacao);
 
       if (pontuacaoAtual !== '') {
         if (
@@ -730,7 +731,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     contVisitas,
     pontos,
   ]);
-
+  console.log('pFinal', pFinal);
   const enviarPontuacao = () => {
     const CriadoEm = new Date();
 
@@ -2217,6 +2218,8 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
                               height: 80,
                               borderRadius: 15,
                               border: '1px solid #000',
+                              resize: 'vertical',
+                              overflow: 'auto',
                             }}
                           />
                         </Box>

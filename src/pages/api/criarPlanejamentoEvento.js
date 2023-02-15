@@ -10,33 +10,37 @@ const handler = async (req, res) => {
 
   if (dados) {
     try {
-      const eventosCelulas = await prisma.eventosCelulas
-        .findMany({
-          where: {
-            AND: {
-              // Evento: dados.Evento,
-              Data: { lte: dados.Data, gte: dados.Data },
-              Celula: Number(dados.Celula),
-              Distrito: Number(dados.Distrito),
-            },
-          },
-        })
-        .finally(async () => {
-          await prisma.$disconnect();
-        });
-
-      let id = 0;
-      console.log(dados);
-      if (eventosCelulas.length) id = eventosCelulas[0].id;
+      const { id } = dados;
+      const idFinal = id || 0;
       await prisma.eventosCelulas.upsert({
         where: {
-          id,
+          id: idFinal,
         },
         update: {
-          ...dados,
+          Data: dados.Data,
+          Evento: dados.Evento,
+          Local: dados.Local,
+          Objetivo: dados.Objetivo,
+          Descricao: dados.Descricao,
+          Mes: dados.Mes,
+          Ano: dados.Ano,
+          Horario: dados.Horario,
+          Celula: dados.Celula,
+          Distrito: dados.Distrito,
+          CriadoEm: dados.CriadoEm,
         },
         create: {
-          ...dados,
+          Data: dados.Data,
+          Evento: dados.Evento,
+          Local: dados.Local,
+          Objetivo: dados.Objetivo,
+          Descricao: dados.Descricao,
+          Mes: dados.Mes,
+          Ano: dados.Ano,
+          Horario: dados.Horario,
+          Celula: dados.Celula,
+          Distrito: dados.Distrito,
+          CriadoEm: dados.CriadoEm,
         },
       });
 

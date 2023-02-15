@@ -504,6 +504,8 @@ function RelCelula({
                         height: 80,
                         borderRadius: 15,
                         border: '1px solid #000',
+                        resize: 'vertical',
+                        overflow: 'auto',
                       }}
                     />
                   </Box>

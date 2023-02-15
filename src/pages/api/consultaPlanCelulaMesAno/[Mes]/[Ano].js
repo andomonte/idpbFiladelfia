@@ -6,9 +6,11 @@ export default async function handle(req, res) {
     query: { Mes, Ano },
   } = req;
 
-  const inicioAno = `${Ano}-${Mes}-01`;
-  const finalAno = `${Ano}-${Mes}-31`;
+  const mes =
+    Number(Mes) + 1 > 9 ? `${Number(Mes) + 1}` : `0${Number(Mes) + 1}`;
 
+  const inicioAno = `${Ano}-${mes}-01`;
+  const finalAno = `${Ano}-${mes}-31`;
   // const action = `${rel}.findMany`
   const posts = await prisma.plancelula
     .findMany({

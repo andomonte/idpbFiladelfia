@@ -105,7 +105,7 @@ export default function TabCelula({
 
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
 
-  const horarioAtual = moment(new Date()).format('YYYY-MM-DD');
+  const horarioAtual = moment(new Date()).format('MM/DD/YYYY');
   const [horario, setHorario] = React.useState(
     dayjs(new Date(`${horarioAtual} 19:30:00`)),
   );

@@ -39,6 +39,7 @@ export default function TabCelula({
     setRel('nada');
     setEventoEncontrado([]);
     let listaEveSuper = 0;
+    console.log('sem1 evento', sem1);
     if (sem1) {
       setRel(sem1);
       if (sem1 && sem1[0]) {
@@ -88,7 +89,7 @@ export default function TabCelula({
 
     if (!sem1) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [sem1, Mes]);
+  }, [sem1, Mes, setSendResumo]);
 
   //= ==================================================================
 

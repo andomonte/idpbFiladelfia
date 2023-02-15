@@ -5,14 +5,17 @@ export default async function handle(req, res) {
   const {
     query: { Mes, Ano },
   } = req;
-  const newMes = Number(Mes);
-  const newAno = Number(Ano);
+  const mes =
+    Number(Mes) + 1 > 9 ? `${Number(Mes) + 1}` : `0${Number(Mes) + 1}`;
 
+  const inicioAno = `${Ano}-${mes}-01`;
+  const finalAno = `${Ano}-${mes}-31`;
+  console.log(Mes, Ano, inicioAno, finalAno);
   // const action = `${rel}.findMany`
   const posts = await prisma.eventosCelulas
     .findMany({
       where: {
-        AND: [{ Mes: newMes }, { Ano: newAno }],
+        Data: { lte: new Date(finalAno), gte: new Date(inicioAno) },
       },
     })
     .finally(async () => {

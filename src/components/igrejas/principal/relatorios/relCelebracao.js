@@ -539,7 +539,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
     let pontosTotalAtualRank = 0;
 
     if (pontosAtual.length) {
-      pontuacaoAtual = pontosAtual[0].Pontuacao;
+      pontuacaoAtual = JSON.parse(pontosAtual[0].Pontuacao);
 
       if (pontuacaoAtual !== '') {
         if (
@@ -1802,6 +1802,8 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
                               height: 80,
                               borderRadius: 15,
                               border: '1px solid #000',
+                              resize: 'vertical',
+                              overflow: 'auto',
                             }}
                           />
                         </Box>
