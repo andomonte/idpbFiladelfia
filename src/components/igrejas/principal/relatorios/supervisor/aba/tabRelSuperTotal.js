@@ -1289,7 +1289,7 @@ export default function TabCelula({
                       borderRight: '1px solid #000',
                     }}
                   >
-                    VISITA DO LIDER
+                    VISITAS DO LIDER
                   </Box>
                   <Box
                     display="flex"

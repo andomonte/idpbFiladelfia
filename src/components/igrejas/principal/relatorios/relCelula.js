@@ -2149,7 +2149,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
                                   justifyContent="center"
                                   fontSize="14px"
                                 >
-                                  VISITAS
+                                  VISITAS DOS LIDER
                                 </Box>
                                 <Box
                                   width="40%"
