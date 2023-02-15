@@ -550,7 +550,6 @@ export default function TabCelula({
             }
           }
         }
-
         if (nomesParcial && nomeDisc[0].Adultos) {
           const listNomes3 = nomeDisc[0].NomesMembros;
           const object3 = JSON.parse(listNomes3);

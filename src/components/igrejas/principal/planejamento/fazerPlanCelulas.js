@@ -479,7 +479,7 @@ function RelatorioCelebracao({
         relExiste = 'sim';
         const dataAgora = new Date();
         const semanaAgora = semanaExata(dataAgora);
-        if (semanaAgora - semana < 2) setPodeEditar(true);
+        if (semanaAgora - semana < 3) setPodeEditar(true);
         else setPodeEditar(false);
 
         setExisteRelatorio(true); // avisa que tem relatório
@@ -511,7 +511,7 @@ function RelatorioCelebracao({
         const dataAgora = new Date();
         const semanaAgora = semanaExata(dataAgora);
 
-        if (semanaAgora - semana < 2) setPodeEditar(true);
+        if (semanaAgora - semana < 3) setPodeEditar(true);
         else setPodeEditar(false);
 
         const date1 = moment(dataAgora);

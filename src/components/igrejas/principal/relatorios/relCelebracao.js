@@ -23,6 +23,7 @@ import Espera from 'src/utils/espera';
 import Erros from 'src/utils/erros';
 import Emojis from 'src/components/icones/emojis';
 import ConverteData from 'src/utils/convData2';
+
 import TabCelebracao from './abas/tabCelebracao';
 import TabVisitantes from './abas/tabVisitantes2';
 
@@ -312,7 +313,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
           const dataAgora = new Date();
           const semanaAgora = semanaExata(dataAgora);
 
-          if (semanaAgora - semana < 2) setPodeEditar(true);
+          if (semanaAgora - semana < 3) setPodeEditar(true);
           else setPodeEditar(false);
           setExisteRelatorio(true); // avisa que tem relatório
           // setCheckRelatorio(true); // avisa que tem relatório nessa data

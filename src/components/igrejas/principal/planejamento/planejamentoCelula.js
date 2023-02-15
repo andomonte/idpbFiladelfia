@@ -477,7 +477,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
         relExiste = 'sim';
         const dataAgora = new Date();
         const semanaAgora = semanaExata(dataAgora);
-        if (semanaAgora - semana < 2) setPodeEditar(true);
+        if (semanaAgora - semana < 3) setPodeEditar(true);
         else setPodeEditar(false);
 
         setExisteRelatorio(true); // avisa que tem relatório

@@ -2,6 +2,7 @@ import { Box, Grid, Paper, Button } from '@material-ui/core';
 import React from 'react';
 import useSWR, { mutate } from 'swr';
 import ConverteData from 'src/utils/dataMMDDAAAA';
+import ConverteData2 from 'src/utils/convData2';
 // import { useRouter } from 'next/router';
 import corIgreja from 'src/utils/coresIgreja';
 import DateFnsUtils from '@date-io/date-fns';
@@ -259,7 +260,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
           const dataAgora = new Date();
           const semanaAgora = semanaExata(dataAgora);
 
-          if (semanaAgora - semana < 2) setPodeEditar(true);
+          if (semanaAgora - semana < 3) setPodeEditar(true);
           else setPodeEditar(false);
           setExisteRelatorio(true); // avisa que tem relatório
           // setCheckRelatorio(true); // avisa que tem relatório nessa data
@@ -333,7 +334,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
           idade[i] = PegaIdade(listaPresentes[i].Nascimento);
         else idade[i] = 'NaN'; */
         idade[i] = listaPresentes[i].Nascimento
-          ? PegaIdade(ConverteData(listaPresentes[i].Nascimento))
+          ? PegaIdade(ConverteData2(listaPresentes[i].Nascimento))
           : '';
         if (String(idade[i]) !== 'NaN')
           if (idade[i] > 11) {
@@ -469,6 +470,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
           Number(percLeituraBiblica),
       ).toFixed(2);
     const TotalPercentual = pontosTotalAtual;
+    console.log('TotalPercentual', TotalPercentual);
 
     const PontuacaoFinal = createPontuacao(
       Number(pontosRelCelula),

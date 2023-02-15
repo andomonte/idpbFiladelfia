@@ -10,7 +10,7 @@ export default async function handle(req, res) {
 
   const inicioAno = `${Ano}-${mes}-01`;
   const finalAno = `${Ano}-${mes}-31`;
-  console.log(Mes, Ano, inicioAno, finalAno);
+
   // const action = `${rel}.findMany`
   const posts = await prisma.eventosCelulas
     .findMany({

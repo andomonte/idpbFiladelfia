@@ -305,7 +305,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         if (relatorio && relatorio.length) {
           const dataAgora = new Date();
           const semanaAgora = semanaExata(dataAgora);
-          if (semanaAgora - semana < 2) setPodeEditar(true);
+          if (semanaAgora - semana < 3) setPodeEditar(true);
           else setPodeEditar(false);
 
           setExisteRelatorio(true); // avisa que tem relatório
@@ -879,12 +879,14 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     if (pontos && pontos.length > 0) {
       const semanas = [];
       const semanasTotal = [];
+
       for (let index = 0; index < 4; index += 1) {
+        console.log('semanas[index]', semanas[index]);
+
         semanas[index] = pontos.filter(
           (val) => val.Semana === Number(semana - index),
         );
       }
-
       let somaTotal = 0;
       let divisor = 0;
       for (let index = 0; index < semanas.length; index += 1) {
@@ -1734,6 +1736,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
                                   width="100%"
                                   height={50}
                                 >
+                                  {console.log('rankCelula', rankCelula)}
                                   {rankCelula && rankCelula} %
                                 </Box>
                               </Box>
