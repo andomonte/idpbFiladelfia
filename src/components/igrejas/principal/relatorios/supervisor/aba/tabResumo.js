@@ -974,7 +974,7 @@ export default function TabCelula({
                     {tipo[contTipo] === 'Relatório da Celebração' &&
                       'Visitantes:'}
                     {tipo[contTipo] === 'Relatório do Discipulado' &&
-                      'Visitas:'}
+                      'Visitas do Lider:'}
                   </Box>
 
                   <Box width={25} color="#ffffff">
@@ -1290,6 +1290,7 @@ export default function TabCelula({
                             )}
                           </Box>
                         )}
+                        {console.log(row.Nome, row.PresDisc)}
                         {tipo[contTipo] === 'Relatório do Discipulado' && (
                           <Box
                             mt={0}
@@ -1301,7 +1302,7 @@ export default function TabCelula({
                             minHeight={40}
                             color={row.PresDisc === 'live' ? 'blue' : 'black'}
                             bgcolor={
-                              row.PresCDisc === false ? '#fce4ec' : '#e8f5e9'
+                              row.PresDisc === false ? '#fce4ec' : '#e8f5e9'
                             }
                           >
                             {row.PresDisc !== '' ? (
