@@ -538,7 +538,11 @@ export default function TabCelula({
           }
         }
 
-        if (nomesParcial && nomeCelebracao[0].Adultos) {
+        if (
+          nomesParcial &&
+          nomeCelebracao[0].Adultos !== null &&
+          nomeCelebracao[0].Adultos !== undefined
+        ) {
           const listNomes2 = nomeCelebracao[0].NomesMembros;
           const object2 = JSON.parse(listNomes2);
           //          const object2 = JSON.parse(object3);
@@ -550,7 +554,12 @@ export default function TabCelula({
             }
           }
         }
-        if (nomesParcial && nomeDisc[0].Adultos) {
+
+        if (
+          nomesParcial &&
+          nomeDisc[0].Adultos !== null &&
+          nomeDisc[0].Adultos !== undefined
+        ) {
           const listNomes3 = nomeDisc[0].NomesMembros;
           const object3 = JSON.parse(listNomes3);
 
@@ -1290,7 +1299,7 @@ export default function TabCelula({
                             )}
                           </Box>
                         )}
-                        {console.log(row.Nome, row.PresDisc)}
+                        {console.log('quantidade', row.PresDisc)}
                         {tipo[contTipo] === 'Relatório do Discipulado' && (
                           <Box
                             mt={0}
