@@ -561,7 +561,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     if (!pontos) return <div>Loading ...</div>;
     if (pontos) {
       const pontosSemanaAtual = pontos.filter(
-        (val) => val.Semana === Number(semana),
+        (val) => Number(val.Semana) === Number(semana),
       );
       const pontosSemanaAnterior = pontos.filter(
         (val) => val.Semana === Number(semana - 1),
@@ -598,7 +598,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     let pontosTotalAtual = 0;
     let pontosTotalAnterior = 0;
     let pontosTotalAtualRank = 0;
-
+    console.log('ola pontosAtual', pontosAtual);
     if (pontosAtual.length) {
       pontuacaoAtual = JSON.parse(pontosAtual[0].Pontuacao);
 
@@ -716,9 +716,14 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
   }, [existeRelatorio]);
 
   React.useEffect(() => {
+    criarPontuacao();
+    return 0;
+  }, [pontosAtual]); // atualiza a pontuação
+
+  React.useEffect(() => {
     pegarPontuacao();
 
-    criarPontuacao();
+    // criarPontuacao();
 
     return 0;
   }, [
@@ -883,8 +888,8 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         const datanova = new Date();
         const Ano = datanova.getFullYear();
         let novoAno = Ano;
-        //        console.log('ANO', novoAno);
-        //        console.log('semanaNOVA', novaSemana);
+        //  console.log('ANO', novoAno);
+        //  console.log('semanaNOVA', novaSemana);
 
         if (novaSemana < 1) {
           novaSemana = 53 - index;
@@ -896,10 +901,10 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
       }
       let somaTotal = 0;
       let divisor = 0;
-      //    console.log('semanas', semanas, semanas.length);
+      // console.log('semanas', semanas, semanas.length);
 
       for (let index = 0; index < semanas.length; index += 1) {
-        //      console.log('somaTotal', somaTotal, index);
+        //   console.log('somaTotal', somaTotal, index);
 
         if (semanas[index] && semanas[index].length > 0) {
           semanasTotal[index] = semanas[index][0].Total;
@@ -915,10 +920,10 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         let mediaCrescimento = parseFloat(
           (100 * (pTotalAtual - somaTotal)) / somaTotal,
         ).toFixed(2);
-        //    console.log('somaTotal', somaTotal);
-        //    console.log('divisor', divisor);
-        //    console.log('pTotalAtual', pTotalAtual);
-        //    console.log('mediaCrescimento', mediaCrescimento);
+        //   console.log('somaTotal', somaTotal);
+        //   console.log('divisor', divisor);
+        //   console.log('pTotalAtual', pTotalAtual);
+        //   console.log('mediaCrescimento', mediaCrescimento);
         if (mediaCrescimento === Number(0).toFixed(2)) setRankCelula(0);
         else {
           if (pTotalAtual === somaTotal) {

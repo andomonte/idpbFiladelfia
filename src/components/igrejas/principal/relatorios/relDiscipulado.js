@@ -494,11 +494,15 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
     setPTotalAtual(TotalPercentual);
     setPTotalAtualRank(pontosTotalAtualRank);
   };
+  React.useEffect(() => {
+    criarPontuacao();
+    return 0;
+  }, [pontosAtual]); // atualiza a pontuação
 
   React.useEffect(() => {
     pegarPontuacao();
 
-    criarPontuacao();
+    //   criarPontuacao();
 
     return 0;
   }, [semana, presentes, contBiblia, pontos]);

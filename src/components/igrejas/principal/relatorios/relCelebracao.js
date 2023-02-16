@@ -647,11 +647,14 @@ function RelatorioCelebracao({ rolMembros, perfilUser, visitantes }) {
     /*
      */
   };
-
+  React.useEffect(() => {
+    criarPontuacao();
+    return 0;
+  }, [pontosAtual]); // atualiza a pontuação
   React.useEffect(() => {
     pegarPontuacao();
 
-    criarPontuacao();
+    // criarPontuacao();
 
     return 0;
   }, [semana, presentes, qtyVisitante, contConversoes, pontos]);
