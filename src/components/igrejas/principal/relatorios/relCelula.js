@@ -883,8 +883,8 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         const datanova = new Date();
         const Ano = datanova.getFullYear();
         let novoAno = Ano;
-        console.log('ANO', novoAno);
-        console.log('semanaNOVA', novaSemana);
+        //        console.log('ANO', novoAno);
+        //        console.log('semanaNOVA', novaSemana);
 
         if (novaSemana < 1) {
           novaSemana = 53 - index;
@@ -896,10 +896,10 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
       }
       let somaTotal = 0;
       let divisor = 0;
-      console.log('semanas', semanas, semanas.length);
+      //    console.log('semanas', semanas, semanas.length);
 
       for (let index = 0; index < semanas.length; index += 1) {
-        console.log('somaTotal', somaTotal, index);
+        //      console.log('somaTotal', somaTotal, index);
 
         if (semanas[index] && semanas[index].length > 0) {
           semanasTotal[index] = semanas[index][0].Total;
@@ -915,10 +915,10 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         let mediaCrescimento = parseFloat(
           (100 * (pTotalAtual - somaTotal)) / somaTotal,
         ).toFixed(2);
-        console.log('somaTotal', somaTotal);
-        console.log('divisor', divisor);
-        console.log('pTotalAtual', pTotalAtual);
-        console.log('mediaCrescimento', mediaCrescimento);
+        //    console.log('somaTotal', somaTotal);
+        //    console.log('divisor', divisor);
+        //    console.log('pTotalAtual', pTotalAtual);
+        //    console.log('mediaCrescimento', mediaCrescimento);
         if (mediaCrescimento === Number(0).toFixed(2)) setRankCelula(0);
         else {
           if (pTotalAtual === somaTotal) {
