@@ -286,7 +286,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
       setPerfilUser(() => [valorPerfil[indexPerfil]]);
     };
     if (Object.keys(userMembro).length === 0 && start) setStart(false);
-    console.log('quei', Object.keys(userMembro).length);
+
     const body = (
       <Box width="100vw">
         <Box

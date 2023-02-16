@@ -269,8 +269,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     url3,
     fetcher,
   );
-  console.log('pontos', pontos);
-  console.log('pontosSemana', PontosSemana);
+
   const url4 = `/api/consultaVisitantes`;
   const { data: novoVisitante, error: errorVisitante } = useSWR(url4, fetcher);
 
@@ -731,7 +730,7 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     contVisitas,
     pontos,
   ]);
-  console.log('pFinal', pFinal);
+
   const enviarPontuacao = () => {
     const CriadoEm = new Date();
 
@@ -879,17 +878,29 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
     if (pontos && pontos.length > 0) {
       const semanas = [];
       const semanasTotal = [];
-
       for (let index = 0; index < 4; index += 1) {
-        console.log('semanas[index]', semanas[index]);
+        let novaSemana = Number(Number(semana) - index);
+        const datanova = new Date();
+        const Ano = datanova.getFullYear();
+        let novoAno = Ano;
+        console.log('ANO', novoAno);
+        console.log('semanaNOVA', novaSemana);
 
+        if (novaSemana < 1) {
+          novaSemana = 53 - index;
+          novoAno = Ano - 1;
+        }
         semanas[index] = pontos.filter(
-          (val) => val.Semana === Number(semana - index),
+          (val) => Number(val.Semana) === novaSemana && val.Ano === novoAno,
         );
       }
       let somaTotal = 0;
       let divisor = 0;
+      console.log('semanas', semanas, semanas.length);
+
       for (let index = 0; index < semanas.length; index += 1) {
+        console.log('somaTotal', somaTotal, index);
+
         if (semanas[index] && semanas[index].length > 0) {
           semanasTotal[index] = semanas[index][0].Total;
           somaTotal += Number(semanasTotal[index]);
@@ -904,7 +915,10 @@ function RelCelula({ rolMembros, perfilUser, visitantes }) {
         let mediaCrescimento = parseFloat(
           (100 * (pTotalAtual - somaTotal)) / somaTotal,
         ).toFixed(2);
-
+        console.log('somaTotal', somaTotal);
+        console.log('divisor', divisor);
+        console.log('pTotalAtual', pTotalAtual);
+        console.log('mediaCrescimento', mediaCrescimento);
         if (mediaCrescimento === Number(0).toFixed(2)) setRankCelula(0);
         else {
           if (pTotalAtual === somaTotal) {
