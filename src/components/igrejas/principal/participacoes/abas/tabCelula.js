@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ConverteData2 from 'src/utils/convData2';
 import { Box } from '@material-ui/core';
 import PegaSemana from 'src/utils/getSemana';
 import Espera from 'src/utils/espera';
@@ -65,13 +66,15 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
       const presCelula = sem1.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
+
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem1(presCelula[0].Data);
+        setDataSem1(ConverteData2(presCelula[0].Data));
         const pSem1 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -89,7 +92,8 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
       const presCelula = sem2.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
 
       if (presCelula.length) {
@@ -97,7 +101,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
 
-        setDataSem2(presCelula[0].Data);
+        setDataSem2(ConverteData2(presCelula[0].Data));
         const pSem2 = nomes[0].filter(
           (val) =>
             val.Rol === Number(perfilUser.RolMembro) ||
@@ -116,13 +120,14 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
       const presCelula = sem3.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem3(presCelula[0].Data);
+        setDataSem3(ConverteData2(presCelula[0].Data));
         const pSem3 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -139,13 +144,14 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
       const presCelula = sem4.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem4(presCelula[0].Data);
+        setDataSem4(ConverteData2(presCelula[0].Data));
         const pSem4 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -161,13 +167,14 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
       const presCelula = sem5.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem5(presCelula[0].Data);
+        setDataSem5(ConverteData2(presCelula[0].Data));
         const pSem5 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );

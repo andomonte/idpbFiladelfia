@@ -3,6 +3,7 @@ import Providers from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from 'src/lib/prisma';
 import CryptoJS from 'crypto-js';
+import moment from 'moment';
 // import useSWR from 'swr';
 // import fetch from 'unfetch';
 
@@ -13,13 +14,11 @@ import CryptoJS from 'crypto-js';
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data } = useSWR('/api/getUser', fetcher);
   valorUsuario = 'JSON.parse(JSON.stringify(data))';
- // console.log(valorUsuario);
   return data;
 } */
 
 // const fetcher = (url) => fetch(url).then((r) => r.json());
 // const { data } => //useSWR('/api/getUser', fetcher);
-// console.log(data);
 const options = {
   providers: [
     // ...add more providers here
@@ -38,7 +37,15 @@ const options = {
           const user = await prisma.membros
             .findMany({
               where: {
-                CPF: credentials.cpf,
+                OR: [
+                  {
+                    CPF: credentials.cpf,
+                  },
+
+                  {
+                    CPF: credentials.cpf.replace(/\D/g, ''),
+                  },
+                ],
               },
             })
             .finally(async () => {
@@ -47,18 +54,29 @@ const options = {
 
           if (user && user.length) {
             let getSenha = user[0].senha;
-            const ano = user[0].Nascimento.getFullYear();
-            const mes =
+            const nascimento = moment
+              .utc(user[0].Nascimento)
+              .format('DD/MM/YYYY');
+
+            const ano = nascimento.substring(6, 10);
+
+            const mes = nascimento.substring(3, 5);
+            const dia = nascimento.substring(0, 2);
+
+            /* const ano = user[0].Nascimento.getFullYear();
+           const mes =
               user[0].Nascimento.getMonth() + 1 > 9
                 ? user[0].Nascimento.getMonth() + 1
                 : `0${user[0].Nascimento.getMonth() + 1}`;
             const dia =
               user[0].Nascimento.getDate() + 1 > 9
                 ? user[0].Nascimento.getDate() + 1
-                : `0${user[0].Nascimento.getDate() + 1}`;
+                : `0${user[0].Nascimento.getDate() + 1}`; */
+
             if (getSenha === undefined || getSenha === null) {
               getSenha = `${dia}${mes}${ano}`;
-              if (getSenha === credentials.password) {
+
+              if (String(getSenha) === String(credentials.password)) {
                 return {
                   // retorna para JWS os dados do usuario do banco
                   name: user[0].Nome,
@@ -117,8 +135,6 @@ const options = {
       ); */
       //   const verifiedEmail = dados[0].email;
 
-      // console.log(profile.email, dados[0], valorUsuario);
-
       if (user && account.type === 'credentials') {
         return true;
       }
@@ -132,11 +148,9 @@ const options = {
       return false;
     },
   },
-
   session: {
     jwt: true,
   },
-
   jwt: {
     secret: process.env.JWT_SECRET,
   },

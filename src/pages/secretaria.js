@@ -1,17 +1,54 @@
 import React from 'react';
-import Secretaria from 'src/components/igrejas/normal/secretaria';
+import Secretaria from 'src/components/igrejas/principal/secretaria';
 import prisma from 'src/lib/prisma';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/client';
 
-function Sec({ userIgrejas, celulas, LiderancaCelulas }) {
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-049');
+function Sec({
+  parametros,
+  userIgrejas,
+  celulas,
+  rolMembros,
+  LiderancaCelulas,
+}) {
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const router = useRouter();
+  const perfilUser = router.query;
+  const [session] = useSession();
+  let mudaDados = 'sai';
+  if (perfilUser.id) mudaDados = 'entra';
+  const [perfilUserF, setPerfilUserF] = React.useState();
+
+  React.useEffect(() => {
+    if (mudaDados === 'entra') {
+      setPerfilUserF(perfilUser);
+      sessionStorage.setItem('perfilUser', JSON.stringify(perfilUser));
+    } else {
+      const result = JSON.parse(sessionStorage.getItem('perfilUser'));
+      if (session === null || !result) {
+        router.push({
+          pathname: '/',
+        });
+      }
+      // resultado = result.id;
+      setPerfilUserF(result);
+    }
+  }, []);
 
   return (
-    <Secretaria
-      celulas={celulas}
-      lideranca={LiderancaCelulas}
-      userIgrejas={dadosUser}
-      title="IDPB-CELULAS"
-    />
+    <div>
+      {perfilUserF && (
+        <Secretaria
+          celulas={celulas}
+          lideranca={LiderancaCelulas}
+          userIgrejas={dadosUser}
+          title="IDPB-CELULAS"
+          perfilUser={perfilUserF}
+          rolMembros={rolMembros}
+          parametros={parametros}
+        />
+      )}
+    </div>
   );
 }
 
@@ -25,15 +62,45 @@ export const getStaticProps = async () => {
   const celulas = await prisma.celulas.findMany().finally(async () => {
     await prisma.$disconnect();
   });
-
+  const rolMembros = await prisma.membros
+    .findMany({
+      where: {
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
+      },
+      orderBy: [
+        {
+          Nome: 'asc',
+        },
+      ],
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
   const lideranca = await prisma.lideranca.findMany().finally(async () => {
     await prisma.$disconnect();
   });
-
+  const parametros = await prisma.desempenho.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
   return {
     props: {
       userIgrejas: JSON.parse(JSON.stringify(userIgrejas)),
       celulas: JSON.parse(JSON.stringify(celulas)),
+      parametros: JSON.parse(JSON.stringify(parametros)),
+      rolMembros: JSON.parse(
+        JSON.stringify(
+          rolMembros,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
       lideranca: JSON.parse(
         JSON.stringify(
           lideranca,

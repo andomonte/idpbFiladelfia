@@ -4,15 +4,24 @@ import prisma from 'src/lib/prisma';
 import Espera from 'src/utils/espera';
 import axios from 'axios';
 import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/client';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
-function selectPerfil({ userIgrejas, celulas }) {
+function selectPerfil({ userIgrejas, celulas, distritos }) {
   const [rolMembros, setRolMembros] = React.useState([]);
   const [lideranca, setLideranca] = React.useState([]);
   const url1 = `/api/consultaMembros`;
   const url2 = `/api/consultaLideranca`;
   const { data: members, errorMembers } = useSWR(url1, fetcher);
   const { data: liders, errorLiders } = useSWR(url2, fetcher);
+  const router = useRouter();
+  const [session] = useSession();
+  if (session === null) {
+    router.push({
+      pathname: '/',
+    });
+  }
 
   React.useEffect(() => {
     if (members) {
@@ -47,6 +56,7 @@ function selectPerfil({ userIgrejas, celulas }) {
           celulas={celulas}
           lideranca={lideranca}
           rolMembros={rolMembros}
+          distritos={distritos}
         />
       ) : (
         <Espera descricao="Buscando Perfil" />
@@ -62,10 +72,13 @@ export const getStaticProps = async () => {
   const celulas = await prisma.celulas.findMany().finally(async () => {
     await prisma.$disconnect();
   });
+  const distritos = await prisma.distrito.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
   return {
     props: {
       celulas: JSON.parse(JSON.stringify(celulas)),
-
+      distritos: JSON.parse(JSON.stringify(distritos)),
       userIgrejas: JSON.parse(JSON.stringify(userIgrejas)),
     }, // will be passed to the pperfilUser component as props
     revalidate: 15, // faz atualizar a pagina de 15 em 15 segundo sem fazer build

@@ -27,7 +27,6 @@ function meuCadastro({ rolMembros, lideranca }) {
     window.history.replaceState(null, '', '/cadastro');
   }
 
-  // //console.log('valor dentro do meu perfil', perfilCPF, rolMembros);
   return (
     <div>
       <Cadastro
@@ -48,7 +47,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

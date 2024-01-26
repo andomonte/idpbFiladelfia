@@ -134,7 +134,7 @@ function TabPanel(props) {
   );
 }
 
-function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
+function AtualizarDados({ title, celulas, rolMembros, perfilUser, lideranca }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -192,7 +192,7 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
                       ? { color: corIgreja.iconeOn, fontSize: '18px' }
                       : { color: '#eeeeee', fontSize: '18px' }
                   }
-                  label="Reunião"
+                  label="Células"
                   icon={
                     value === 0 ? (
                       <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -336,6 +336,7 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
                     perfilUser={perfilUser}
                     secao={session}
                     lideranca={lideranca}
+                    celulas={celulas}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'PastorDistrito' ? (
@@ -343,6 +344,7 @@ function AtualizarDados({ title, rolMembros, perfilUser, lideranca }) {
                     perfilUser={perfilUser}
                     secao={session}
                     lideranca={lideranca}
+                    celulas={celulas}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'Presidente' ? <Padrao /> : null}

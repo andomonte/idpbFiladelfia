@@ -6,13 +6,13 @@ export default async function handle(req, res) {
     query: { semana },
   } = req;
 
-  // //console.log('dados do api', codigoIgreja, mes, ano);
   // const action = `${rel}.findMany`
   const semana1 = Number(semana) + 1;
   const semana2 = Number(semana) + 2;
   const semana3 = Number(semana) + 3;
   const semana4 = Number(semana) + 4;
   const posts = await prisma.relatorioCelulas
+
     .findMany({
       where: {
         OR: [

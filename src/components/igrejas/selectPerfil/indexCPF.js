@@ -73,10 +73,17 @@ const useStyles = makeStyles((theme) => ({
     //   border: '0px solid #b91a30',
   },
 }));
-function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
+function SelectPerfil({
+  lideranca,
+  distritos,
+  rolMembros,
+  celulas,
+  userIgrejas,
+}) {
   const classes = useStyles();
 
   const [session] = useSession();
+  const [mudouPerfil, setMudouPerfil] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [start, setStart] = React.useState(true);
   const [rolMembro, setRolMembro] = React.useState(true);
@@ -122,14 +129,19 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
           val.Email === session.user.email,
       );
 
-      if (membro && membro.length) setRolMembro(membro[0].RolMembro);
-      else setRolMembro('');
+      if (membro && membro.length) {
+        setStart(true);
+        setRolMembro(membro[0].RolMembro);
+      } else {
+        setRolMembro('');
+        setStart(false);
+      }
     }
   }, [session]);
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-073');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
   let valorPerfil = {};
   let userMembro = {};
   const handleClick = () => {
@@ -182,6 +194,10 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
         val.CPF.replace(/\D/g, '') === session.user.email.replace(/\D/g, ''),
     );
     if (membro.length) {
+      const newDistrito = distritos.filter(
+        (val) => Number(val.Distrito) === Number(membro[0].Distrito),
+      );
+
       if (lideranca.length) {
         secao = lideranca.filter(
           (val) => val.RolMembro === membro[0].RolMembro,
@@ -203,8 +219,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
           if (items.Funcao === 'Presidente')
             return {
@@ -221,8 +238,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
           if (items.Funcao === 'PastorDistrito')
             return {
@@ -239,8 +257,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
 
           if (items.Funcao === 'Coordenador')
@@ -258,8 +277,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
           if (items.Funcao === 'Supervisor')
             return {
@@ -276,8 +296,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
 
           if (items.Funcao === 'Lider')
@@ -295,8 +316,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
               Nome: items.Nome,
               RolMembro: items.RolMembro,
               Supervisao: items.Supervisao,
-              foto: items.foto,
+              foto: membro[0].foto,
               login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
             };
 
           return 0;
@@ -305,20 +327,22 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
 
       if (membro.length > 0) {
         userMembro = {
+          Funcao: `Membro`,
+          Descricao: `Membro (Célula ${membro[0].Celula})`,
+          id: secao.length + 1,
+          numero: membro[0].Celula,
           Celula: membro[0].Celula,
           Coordenacao: membro[0].Coordenacao,
-          Descricao: `Membro (Célula ${membro[0].Celula})`,
           Distrito: membro[0].Distrito,
           Email: membro[0].Email,
-          Funcao: `Membro`,
           Igreja: membro[0].Igreja,
           Nascimento: membro[0].Nascimento,
           Nome: membro[0].Nome,
           RolMembro: membro[0].RolMembro,
-          id: secao.length + 1,
           Supervisao: membro[0].Supervisao,
-          numero: membro[0].Celula,
+          foto: membro[0].foto,
           login: 'credencial',
+          nomeDistrito: newDistrito[0].Distrito_Nome,
         };
       }
       valorPerfil.push(userMembro); // para objeto -> Object.assign(secao, userMembro);
@@ -328,6 +352,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
 
       const handleChange = (event) => {
         setContagem(true);
+        setMudouPerfil(true);
         const indexPerfil = Number(event.target.value - 1);
         setPerfilUser(() => [valorPerfil[indexPerfil]]);
       };
@@ -880,9 +905,9 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
       if (start) {
         if (valorPerfil.length === 1 && perfilUser === '')
           setPerfilUser(valorPerfil);
-        if (valorPerfil.length > 1 && !open && perfilUser === '') setOpen(true);
+        if (valorPerfil.length > 0 && !open && perfilUser === '') setOpen(true);
 
-        if (perfilUser !== '') {
+        if (perfilUser !== '' && mudouPerfil) {
           router.push(
             {
               pathname: '/principal',

@@ -4,7 +4,7 @@ import { Icon } from '@material-ui/core';
 function Logo() {
   return (
     <Icon>
-      <img src="/images/filadelfia.ico" height={25} width={20} alt="brasil" />
+      <img src="/images/castelo.ico" height={25} width={20} alt="brasil" />
     </Icon>
   );
 }

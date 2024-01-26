@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PlanMembro({ perfilUser, lideranca }) {
+function PlanMembro({ perfilUser, lideranca, celulas }) {
   const classes = useStyles();
   //= ================================================================
   const mes = Meses();
@@ -104,7 +104,7 @@ function PlanMembro({ perfilUser, lideranca }) {
     >
       {!openNovoEventoGeral ? (
         <Box
-          width="96%"
+          width="94%"
           height="97%"
           minHeight={550}
           display="flex"
@@ -170,7 +170,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                                 alignItems="center"
                                 color="black"
                                 sx={{
-                                  fontSize: '16px',
+                                  fontSize: '14px',
                                   fontFamily: 'Fugaz One',
                                 }}
                               >
@@ -206,7 +206,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                               background: '#f0f0f0',
                               width: '100%',
                               height: '100%',
-                              fontSize: '14px',
+                              fontSize: '12px',
                               fontFamily: 'arial black',
                             }}
                             onClick={() => setOpenNovoEventoGeral(true)}
@@ -248,7 +248,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                           bgcolor: corIgreja.principal,
                           color: '#ffff',
                           fontFamily: 'Fugaz One',
-                          fontSize: '14px',
+                          fontSize: '16px',
                         }}
                       >
                         {perfilUser.Funcao === 'Supervisor' && (
@@ -281,6 +281,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                           lideranca={lideranca}
                           setSendResumo={setSendResumo}
                           setDadosEvento={setDadosEvento}
+                          celulas={celulas}
                         />
                       </Box>
                     </Box>
@@ -296,6 +297,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                 Mes={contMes}
                 Ano={contAno}
                 setSendResumo={setSendResumo}
+                celulas={celulas}
               />
             </Box>
           )}

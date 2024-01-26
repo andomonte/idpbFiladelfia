@@ -121,8 +121,6 @@ function Pagina({ title }) {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }

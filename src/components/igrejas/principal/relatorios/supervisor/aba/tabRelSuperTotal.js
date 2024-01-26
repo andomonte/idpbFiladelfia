@@ -44,9 +44,9 @@ export default function TabCelula({
   ]);
   const [mediaAtualDiscipulado, setMediaAtualDiscipulado] = React.useState([]);
 
-  const url1 = `/api/consultaRelatorioCelulasAno/${contSemana2}/${Ano}`;
-  const url2 = `/api/consultaRelatorioCelebracaoAno/${contSemana2}/${Ano}`;
-  const url3 = `/api/consultaRelatorioDiscipuladoAno/${contSemana2}/${Ano}`;
+  const url1 = `/api/consultaRelatorioCelulasAno2/${contSemana2}/${Ano}`;
+  const url2 = `/api/consultaRelatorioCelebracaoAno2/${contSemana2}/${Ano}`;
+  const url3 = `/api/consultaRelatorioDiscipuladoAno2/${contSemana2}/${Ano}`;
 
   const { data: sem1, errorSem1 } = useSWR(url1, fetcher);
 

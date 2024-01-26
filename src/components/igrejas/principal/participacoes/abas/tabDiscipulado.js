@@ -1,14 +1,16 @@
 import * as React from 'react';
+import ConverteData2 from 'src/utils/convData2';
 import { Box } from '@material-ui/core';
 import PegaSemana from 'src/utils/getSemana';
-import { Oval } from 'react-loading-icons';
+import Espera from 'src/utils/espera';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import { BsFillEmojiSmileFill, BsFillEmojiFrownFill } from 'react-icons/bs';
+import { Oval } from 'react-loading-icons';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-export default function TabCelebracao({ Mes, Ano, perfilUser }) {
+export default function TabCelula({ Mes, Ano, perfilUser }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
 
   const [presSem1, setPresSem1] = React.useState(false);
@@ -40,6 +42,7 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
   const { data: sem3, errorSem3 } = useSWR(url3, fetcher);
   const { data: sem4, errorSem4 } = useSWR(url4, fetcher);
   const { data: sem5, errorSem5 } = useSWR(url5, fetcher);
+
   React.useEffect(() => {
     mutate(url1);
     mutate(url2);
@@ -57,18 +60,21 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
     setDataSem5([]);
     setPresSem5([]);
   }, [semana]);
+
   React.useEffect(() => {
     if (sem1 && sem1.length) {
       const presCelula = sem1.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
+
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem1(presCelula[0].Data);
+        setDataSem1(ConverteData2(presCelula[0].Data));
         const pSem1 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -76,7 +82,8 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       }
     }
     if (errorSem1) return <div>An error occured.</div>;
-    if (!sem1) return <div>Loading ...</div>;
+
+    if (!sem1) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem1]);
 
@@ -85,7 +92,8 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       const presCelula = sem2.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
 
       if (presCelula.length) {
@@ -93,15 +101,17 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
 
-        setDataSem2(presCelula[0].Data);
+        setDataSem2(ConverteData2(presCelula[0].Data));
         const pSem2 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) =>
+            val.Rol === Number(perfilUser.RolMembro) ||
+            val.Nome === perfilUser.Nome,
         );
         setPresSem2(pSem2);
       }
     }
     if (errorSem2) return <div>An error occured.</div>;
-    if (!sem2) return <div>Loading ...</div>;
+    if (!sem2) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem2]);
 
@@ -110,13 +120,14 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       const presCelula = sem3.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem3(presCelula[0].Data);
+        setDataSem3(ConverteData2(presCelula[0].Data));
         const pSem3 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -124,7 +135,7 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       }
     }
     if (errorSem3) return <div>An error occured.</div>;
-    if (!sem3) return <div>Loading ...</div>;
+    if (!sem3) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem3]);
 
@@ -133,14 +144,14 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       const presCelula = sem4.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
-
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem4(presCelula[0].Data);
+        setDataSem4(ConverteData2(presCelula[0].Data));
         const pSem4 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -148,22 +159,22 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       }
     }
     if (errorSem4) return <div>An error occured.</div>;
-    if (!sem4) return <div>Loading ...</div>;
+    if (!sem4) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem4]);
-
   React.useEffect(() => {
     if (sem5 && sem5.length) {
       const presCelula = sem5.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
-          val.Distrito === Number(perfilUser.Distrito),
+          val.Distrito === Number(perfilUser.Distrito) &&
+          Number(val.Data.slice(0, 4)) === Number(Ano),
       );
       if (presCelula.length) {
         const nomes = Object.keys(presCelula).map((i) =>
           JSON.parse(presCelula[Number(i)].NomesMembros),
         );
-        setDataSem5(presCelula[0].Data);
+        setDataSem5(ConverteData2(presCelula[0].Data));
         const pSem5 = nomes[0].filter(
           (val) => val.Rol === Number(perfilUser.RolMembro),
         );
@@ -171,7 +182,7 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
       }
     }
     if (errorSem5) return <div>An error occured.</div>;
-    if (!sem5) return <div>Loading ...</div>;
+    if (!sem5) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem5]);
 
@@ -445,7 +456,7 @@ export default function TabCelebracao({ Mes, Ano, perfilUser }) {
           textAlign="center"
           width="33%"
         >
-          {semana4}
+          {semana3}
         </Box>
         {sem4 ? (
           <Box

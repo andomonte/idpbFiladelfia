@@ -1,5 +1,5 @@
 // CONVERTE DATA NO FORMATO DD/MM/AAAA para AAAA-MES-DIA
-export default function FormartaData(data) {
+export default function DFormartaata(data) {
   const dia = data.substring(0, 2);
   const mes = data.substring(3, 5);
   const ano = data.substring(6, 10);

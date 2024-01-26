@@ -1,5 +1,5 @@
 import React from 'react';
-import Head from 'next/head';
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Oval } from 'react-loading-icons';
 import AppBar from '@material-ui/core/AppBar';
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Eventos({ title, perfilUser, rolMembros }) {
+function Eventos({ perfilUser, rolMembros }) {
   const classes = useStyles();
 
   const theme = useTheme();
@@ -109,8 +109,6 @@ function Eventos({ title, perfilUser, rolMembros }) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }
@@ -132,14 +130,6 @@ function Eventos({ title, perfilUser, rolMembros }) {
       }}
       onLoad={handleDrawerClose}
     >
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="content-language" content="pt-Br" />
-        <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <div>
         <AppBar className={classes.root2}>
           <Toolbar className={classes.toolbar}>

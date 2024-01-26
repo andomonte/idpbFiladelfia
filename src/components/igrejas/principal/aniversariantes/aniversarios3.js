@@ -57,7 +57,7 @@ function nextSunday(date) {
   );
   return nextweek;
 }
-function BuscarAniversariantes({ rolMembros, perfilUser }) {
+function BuscarAniversariantes({ distritos, rolMembros }) {
   // const mes = Meses();
 
   //= ========================================================================
@@ -86,10 +86,12 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
         moment(results.Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
       ) <= dataFinal,
   );
+  const [niverSetorOrdenado, setNiverSetorOrdenado] = React.useState(
+    niverGeral.sort(compare),
+  );
 
   const handleIncSemana = () => {
     const contSemanaAtual = contSemana + 7;
-
     setContSemana(contSemanaAtual);
   };
   const handleDecSemana = () => {
@@ -97,15 +99,40 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
 
     setContSemana(contSemanaAtual);
   };
-  const niverSetorOrdenado = niverGeral.sort(compare);
+  React.useEffect(() => {
+    const semanaAtual2b = getPreviousMonday2(contSemana);
+    const semanaAtualb = moment(getPreviousMonday(semanaAtual2b)).format(
+      'DD/MM/YYYY',
+    );
+    const semanaSegunteb = moment(nextSunday(semanaAtual2b)).format(
+      'DD/MM/YYYY',
+    );
 
+    const dataInicialb = converteData(semanaAtualb);
+    const dataFinalb = converteData(semanaSegunteb);
+
+    const niverGeralValidob = rolMembros.filter(
+      (results) => results.Nascimento !== null && results.Nascimento.length > 8,
+    );
+
+    const niverGeralb = niverGeralValidob.filter(
+      (results) =>
+        converteData(
+          moment(results.Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
+        ) >= dataInicialb &&
+        converteData(
+          moment(results.Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
+        ) <= dataFinalb,
+    );
+    setNiverSetorOrdenado(niverGeralb.sort(compare));
+  }, [contSemana]);
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
       width="100vw"
-      minHeight={570}
+      minHeight={500}
       minWidth={300}
       bgcolor={corIgreja.principal2}
       height="calc(100vh - 56px)"
@@ -144,7 +171,7 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
-              fontSize="20px"
+              fontSize="16px"
               color="white"
               sx={{ fontFamily: 'Fugaz One' }}
             >
@@ -186,7 +213,7 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                fontSize="16px"
+                fontSize="14px"
                 sx={{ fontFamily: 'Fugaz One' }}
               >
                 <Box>SEMANA:</Box> <Box ml={2}> {semanaAtual}</Box>
@@ -235,13 +262,13 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
                   subheader={<li />}
                 >
                   {niverSetorOrdenado.map((itens) => (
-                    <Box ml={0} key={itens.id}>
+                    <Box ml={0} key={itens.RolMembro}>
                       <Box>
                         <Grid>
                           <SearchListMes
                             semanaAtual={semanaAtual}
                             rolMembros={itens}
-                            perfilUser={perfilUser}
+                            distritos={distritos}
                           />
                         </Grid>
                       </Box>

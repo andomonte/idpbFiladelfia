@@ -109,7 +109,7 @@
     "react-flip-move": "^3.0.4",
     "react-gallery-carousel": "^0.2.9",
     "react-i18next": "^11.18.3",
-    "react-icons": "^4.2.0",
+    "react-icons": "^4.12.0",
     "react-iframe": "^1.8.0",
     "react-image-crop": "^9.0.4",
     "react-image-file-resizer": "^0.4.7",
@@ -140,7 +140,8 @@
     "unfetch": "^4.2.0",
     "util": "^0.12.4",
     "validate-date": "^2.0.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "weeknumber": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

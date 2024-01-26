@@ -23,7 +23,7 @@ function userPerfil({ celulas, rolMembros, lideranca }) {
     if (secao.length === 0) {
       return (
         <Cadastro
-          title="IDPB-FILADELFIA"
+          title="IDPB-CASTELO"
           rolMembros={rolMembros}
           lideranca={lideranca}
         />
@@ -32,7 +32,7 @@ function userPerfil({ celulas, rolMembros, lideranca }) {
     return (
       <Perfil
         celulas={celulas}
-        title="IDPB-FILADELFIA"
+        title="IDPB-CASTELO"
         rolMembros={rolMembros}
         lideranca={lideranca}
         perfilUser={perfilUser}
@@ -62,7 +62,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

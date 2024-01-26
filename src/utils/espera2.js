@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import corIgreja from 'src/utils/coresIgreja';
-import { Oval } from 'react-loading-icons';
 
 const style = {
   position: 'absolute',
@@ -33,7 +32,7 @@ export default function Espere({ descricao }) {
         >
           <Box mt={-5}>
             <Box textAlign="center" mt={3} mb={2}>
-              <img src="/images/filadelfia.png" alt="Filadelfia" width={80} />
+              <img src={corIgreja.logo} alt="Filadelfia" width={80} />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Box

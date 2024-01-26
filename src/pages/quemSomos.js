@@ -3,7 +3,7 @@ import QuemSomos from 'src/components/igrejas/normal/quemSomos';
 import prisma from 'src/lib/prisma';
 
 function Sec({ userIgrejas }) {
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-049');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
 
   return <QuemSomos userIgrejas={dadosUser} title="IDPB-CELULAS" />;
 }

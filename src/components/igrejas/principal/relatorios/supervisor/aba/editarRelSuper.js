@@ -206,7 +206,6 @@ function RelSuper({
   const enviarRelatorio = () => {
     setLoading(true);
     const Data = new Date(DataMMDDAAA(inputValue));
-    //    console.log(createData(`${row}`, index),)
 
     const Avaliacoes = createAvaliacoes(
       avaliacaoRelatorio.label,

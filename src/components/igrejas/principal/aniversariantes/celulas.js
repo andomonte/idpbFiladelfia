@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Grid, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FuzzySearch from 'fuzzy-search'; // Or: var FuzzySearch = require('fuzzy-search');
-
+import corIgreja from 'src/utils/coresIgreja';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip'; // dica ao passar o mouse
 import SearchList from './searchList';
@@ -123,7 +123,7 @@ function BuscarCelulas({ celulas }) {
       <Box display="flex" justifyContent="center">
         <Box className={classes.search2}>
           <Box textAlign="center" mt={5} mb={2}>
-            <img src="/images/filadelfia.png" alt="filadelfia" width={100} />
+            <img src={corIgreja.logo} alt="filadelfia" width={100} />
           </Box>
           <TextField
             InputProps={{

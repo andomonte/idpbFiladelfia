@@ -8,7 +8,8 @@ import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
 
 import Meses from 'src/utils/mesesAbrev';
 
-import TabCelulaSuper from './abas/tabCelulaSuper';
+import TabCelulaSuper from './abas/tabBuscaCelulaSuper';
+import TabEventosCelulaSuper from './abas/tabBuscaEventosCelulaSuper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,9 +57,10 @@ function PlanMembro({ perfilUser, lideranca }) {
   );
   const numberCelulas = celulaSetor.map((itens) => itens.Celula);
   const uniqueArr = [...new Set(numberCelulas)];
-
+  const tipo = ['Planejamento das Células', 'Eventos das Células'];
+  const [contTipo, setContTipo] = React.useState(0);
   const [numeroCelulas] = React.useState(uniqueArr);
-  console.log('NCELULAS', numeroCelulas);
+
   const handleIncAno = () => {
     let contAnoAtual = contAno + 1;
 
@@ -102,6 +104,24 @@ function PlanMembro({ perfilUser, lideranca }) {
     if (contCelulaAtual < 0) contCelulaAtual = numeroCelulas.length - 1;
     setContNumeroCelula(contCelulaAtual);
   };
+
+  const handleIncTipo = () => {
+    let contTipoAtual = contTipo + 1;
+
+    if (contTipoAtual > 1) {
+      contTipoAtual = 0;
+    }
+    setContTipo(contTipoAtual);
+  };
+  const handleDecTipo = () => {
+    let contTipoAtual = contTipo - 1;
+
+    if (contTipoAtual < 0) {
+      contTipoAtual = 1;
+    }
+    setContTipo(contTipoAtual);
+  };
+
   return (
     <Box
       display="flex"
@@ -265,19 +285,68 @@ function PlanMembro({ perfilUser, lideranca }) {
               borderTop="2px solid #fff"
             >
               <Box width="95%" height="100%">
-                <Box
-                  height="10%"
-                  minHeight={50}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{
-                    color: '#ffff',
-                    fontFamily: 'Fugaz One',
-                    fontSize: '16px',
-                  }}
-                >
-                  PLANEJAMENTO DAS CÉLULAS
+                <Box mt={1} mb={2} width="96%" ml={1}>
+                  <Grid container item xs={12} spacing={1}>
+                    <Grid item xs={12}>
+                      <Box
+                        borderRadius={5}
+                        height={40}
+                        bgcolor="white"
+                        width="100%"
+                        display="flex"
+                      >
+                        <Box
+                          width="20%"
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleDecTipo();
+                            }}
+                          >
+                            <BiCaretLeft
+                              size={35}
+                              color={corIgreja.principal2}
+                            />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          width="100%"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          sx={{ fontSize: '14px', fontFamily: 'arial black' }}
+                        >
+                          {tipo[contTipo]}
+                        </Box>
+                        <Box
+                          width="10%"
+                          display="flex"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleIncTipo();
+                            }}
+                          >
+                            <BiCaretRight
+                              size={35}
+                              color={corIgreja.principal2}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </Box>
                 <Box
                   height="85%"
@@ -286,12 +355,21 @@ function PlanMembro({ perfilUser, lideranca }) {
                   width="100%"
                   borderRadius={16}
                 >
-                  <TabCelulaSuper
-                    perfilUser={perfilUser}
-                    Mes={contMes}
-                    Ano={contAno}
-                    numeroCelulas={numeroCelulas[contNumeroCelula]}
-                  />
+                  {contTipo === 0 ? (
+                    <TabCelulaSuper
+                      perfilUser={perfilUser}
+                      Mes={contMes}
+                      Ano={contAno}
+                      numeroCelulas={numeroCelulas[contNumeroCelula]}
+                    />
+                  ) : (
+                    <TabEventosCelulaSuper
+                      perfilUser={perfilUser}
+                      Mes={contMes}
+                      Ano={contAno}
+                      numeroCelulas={numeroCelulas[contNumeroCelula]}
+                    />
+                  )}
                 </Box>
               </Box>
             </Box>

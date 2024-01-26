@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -18,8 +18,8 @@ import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import corIgreja from 'src/utils/coresIgreja';
-import Login from './botaoLogin';
-import Navbar from './navBarLogado';
+import Login from 'src/components/botaoLogin';
+
 import PesquisaCelulas from './pesquisa/celulas';
 import Contato from './contato';
 import Home from './home';
@@ -138,7 +138,7 @@ function TabPanel(props) {
   );
 }
 
-function HomeLogado({ perfilUser, userIgrejas, title, celulas }) {
+function HomeLogado({ userIgrejas, title, celulas }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -240,16 +240,6 @@ function HomeLogado({ perfilUser, userIgrejas, title, celulas }) {
             <Login />
           </Toolbar>
         </AppBar>
-
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.drawer}
-          classes={{ paper: classes.desktopDrawer }}
-        >
-          <Navbar perfilUser={perfilUser} userIgrejas={userIgrejas} />
-        </Drawer>
 
         <main
           className={clsx(classes.contentMain, {

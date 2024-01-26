@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useRouter } from 'next/router';
@@ -18,11 +18,6 @@ import { TiArrowBack } from 'react-icons/ti';
 import SvgIcon from '@mui/material/SvgIcon';
 import corIgreja from 'src/utils/coresIgreja';
 import { MdGroups } from 'react-icons/md';
-
-import NabarMembro from '../navBar/membro';
-import NabarLider from '../navBar/lider';
-import NavbarSuper from '../navBar/supervisor';
-import NavbarCoord from '../navBar/coordenador';
 
 import Aniversarios from './aniversarios';
 import Aniversarios2 from './aniversarios2';
@@ -128,7 +123,7 @@ function TabPanel(props) {
   );
 }
 
-function Aniversariantes({ rolMembros, title, perfilUser }) {
+function Aniversariantes({ distritos, rolMembros, title, perfilUser }) {
   const classes = useStyles();
   const router = useRouter();
   const [value, setValue] = React.useState(0);
@@ -145,8 +140,6 @@ function Aniversariantes({ rolMembros, title, perfilUser }) {
   };
 
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }
@@ -248,31 +241,6 @@ function Aniversariantes({ rolMembros, title, perfilUser }) {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.drawer}
-          classes={{ paper: classes.desktopDrawer }}
-        >
-          {perfilUser.Funcao === 'Membro' && (
-            <NabarMembro perfilUser={perfilUser} />
-          )}
-
-          {perfilUser.Funcao === 'Lider' && (
-            <NabarLider perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Supervisor' && (
-            <NavbarSuper perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Coordenador' && (
-            <NavbarCoord perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'PastorDistrito' && (
-            <NavbarCoord perfilUser={perfilUser} />
-          )}
-        </Drawer>
-
         <main
           className={clsx(classes.contentMain, {
             [classes.contentShiftMain]: open,
@@ -282,13 +250,25 @@ function Aniversariantes({ rolMembros, title, perfilUser }) {
           {/* {children} */}
 
           <TabPanel value={value} index={0} className={classes.tabPanel}>
-            <Aniversarios3 rolMembros={rolMembros} perfilUser={perfilUser} />
+            <Aniversarios3
+              distritos={distritos}
+              rolMembros={rolMembros}
+              perfilUser={perfilUser}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Aniversarios2 rolMembros={rolMembros} perfilUser={perfilUser} />
+            <Aniversarios2
+              distritos={distritos}
+              rolMembros={rolMembros}
+              perfilUser={perfilUser}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Aniversarios rolMembros={rolMembros} perfilUser={perfilUser} />
+            <Aniversarios
+              distritos={distritos}
+              rolMembros={rolMembros}
+              perfilUser={perfilUser}
+            />
           </TabPanel>
         </main>
       </div>

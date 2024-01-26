@@ -1,19 +1,27 @@
 import React from 'react';
+import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Oval } from 'react-loading-icons';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { TiArrowBack } from 'react-icons/ti';
-import Box from '@material-ui/core/Box';
-// import HomeIcon from '@material-ui/icons/Home';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useRouter } from 'next/router';
+import Box from '@material-ui/core/Box';
+import { Oval } from 'react-loading-icons';
+// import HomeIcon from '@material-ui/icons/Home';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { FaBible } from 'react-icons/fa';
+import { BsFillMegaphoneFill } from 'react-icons/bs';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { TiArrowBack } from 'react-icons/ti';
+import SvgIcon from '@mui/material/SvgIcon';
 import corIgreja from 'src/utils/coresIgreja';
-import Login from 'src/components/botaoLogin';
-import Avisos from './Avisos';
+import { MdGroups } from 'react-icons/md';
 
-// import Carrossel from '../carrossel';
+import Mensagem from '../mensagem/mensagem';
+import Avisos from './avisosSemana';
+import Aniversarios3 from '../aniversariantes/aniversarios3';
 // import GoogleMaps from './googleMap';
 // import Pesquisar from './pesquisar';
 
@@ -21,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
     justifyContent: 'space-around',
     backgroundColor: corIgreja.principal,
-    width: '70vw',
+    width: '80vw',
     minWidth: 80,
   },
   root: {
@@ -99,39 +107,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function IdpbFiladelfia({ title, dadosAvisos }) {
-  const classes = useStyles();
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={0}>{children}</Box>}
+    </div>
+  );
+}
+
+function Aniversariantes({
+  distritos,
+  rolMembros,
+  dadosAvisos,
+  mensagem,
+  title,
+  perfilUser,
+}) {
+  const classes = useStyles();
+  const router = useRouter();
+  const [value, setValue] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
   const theme = useTheme();
 
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
-  const handleDrawerClose = () => {
-    // //console.log(mobile);
 
+  const handleVoltar = () => {
+    setLoading(true);
+    router.back();
+  };
+
+  const handleDrawerClose = () => {
     if (mobile && open) {
       setOpen(false);
     }
   };
-
-  const [loading, setLoading] = React.useState(false);
-  const handleVoltar = () => {
-    setLoading(true);
-    router.back();
-
-    // setOpen(false);
-    // window.location.reload();
-  };
   return (
-    <div
-      style={{
-        minWidth: 300,
-        background: corIgreja.principal2,
-      }}
-      onLoad={handleDrawerClose}
-    >
+    <div onLoad={handleDrawerClose}>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
@@ -140,41 +161,122 @@ function IdpbFiladelfia({ title, dadosAvisos }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div>
+      <div className={classes.root}>
         <AppBar className={classes.root2}>
           <Toolbar className={classes.toolbar}>
-            <Box display="flex" alignItems="center" onClick={handleVoltar}>
-              {loading ? (
-                <Box>
-                  <Oval stroke="white" width={25} height={25} />
-                </Box>
-              ) : (
-                <TiArrowBack size={25} color="white" />
-              )}
+            <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" onClick={handleVoltar}>
+                {loading ? (
+                  <Box>
+                    <Oval stroke="white" width={25} height={25} />
+                  </Box>
+                ) : (
+                  <TiArrowBack size={25} color="white" />
+                )}
+              </Box>
             </Box>
 
             <Box display="flex">
-              <img
-                src="/images/logo1.png"
-                height={30}
-                width={120}
-                className={classes.logo}
-                alt="bolo"
-              />
+              <BottomNavigation
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+                showLabels
+                className={classes.rootTopbarIcon}
+              >
+                <BottomNavigationAction
+                  style={
+                    value === 0
+                      ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                      : { color: '#eeeeee', fontSize: '12px' }
+                  }
+                  label="Mensagem"
+                  icon={
+                    value === 0 ? (
+                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                        <FaBible />
+                      </SvgIcon>
+                    ) : (
+                      <SvgIcon sx={{ color: corIgreja.iconeOff }}>
+                        <FaBible />
+                      </SvgIcon>
+                    )
+                  }
+                />
+
+                <BottomNavigationAction
+                  style={
+                    value === 1
+                      ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                      : { color: '#eeeeee', fontSize: '12px' }
+                  }
+                  label="Avisos"
+                  icon={
+                    value === 1 ? (
+                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                        <BsFillMegaphoneFill />
+                      </SvgIcon>
+                    ) : (
+                      <SvgIcon sx={{ color: corIgreja.iconeOff }}>
+                        <BsFillMegaphoneFill />
+                      </SvgIcon>
+                    )
+                  }
+                />
+                <BottomNavigationAction
+                  style={
+                    value === 2
+                      ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                      : { color: '#eeeeee', fontSize: '12px' }
+                  }
+                  label="Aniversariantes"
+                  icon={
+                    value === 2 ? (
+                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                        <MdGroups />
+                      </SvgIcon>
+                    ) : (
+                      <SvgIcon sx={{ color: '#eeeeee' }}>
+                        <MdGroups />
+                      </SvgIcon>
+                    )
+                  }
+                />
+              </BottomNavigation>
             </Box>
-            <Login />
           </Toolbar>
         </AppBar>
 
-        <main>
+        <main
+          className={clsx(classes.contentMain, {
+            [classes.contentShiftMain]: open,
+          })}
+        >
           <div className={classes.drawerHeader} />
           {/* {children} */}
 
-          <Avisos dadosAvisos={dadosAvisos} />
+          <TabPanel value={value} index={0} className={classes.tabPanel}>
+            <Mensagem
+              titulo2={title}
+              mensagem={mensagem}
+              perfilUser={perfilUser}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Avisos dadosAvisos={dadosAvisos} perfilUser={perfilUser} />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <Aniversarios3
+              distritos={distritos}
+              rolMembros={rolMembros}
+              perfilUser={perfilUser}
+            />
+          </TabPanel>
         </main>
       </div>
     </div>
   );
 }
 
-export default IdpbFiladelfia;
+export default Aniversariantes;

@@ -6,7 +6,7 @@ import {
   csrfToken,
   useSession,
 } from 'next-auth/client';
-
+import validator from 'validator';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { MdVisibilityOff, MdVisibility } from 'react-icons/md';
@@ -53,7 +53,8 @@ export default function Login({ providers2, rolMembros }) {
   });
 
   const handleFieldChange = (e) => {
-    setAuthState((old) => ({ ...old, [e.target.id]: e.target.value }));
+    const valorCPF2 = e.target.value.slice(0, 14);
+    setAuthState((old) => ({ ...old, [e.target.id]: valorCPF2 }));
     setPageState((old) => ({ ...old, processing: true, error: '' }));
   };
 
@@ -65,18 +66,16 @@ export default function Login({ providers2, rolMembros }) {
   };
   React.useEffect(() => {
     if (session) {
-      if (
-        session.user.email.replace(/\D/g, '') ===
-        authState.cpf.replace(/\D/g, '')
-      )
-        router.push({
-          pathname: '/selectPerfilCPF',
-        });
-      else
+      if (validator.isEmail(session.user.email))
         router.push({
           pathname: '/selectPerfil',
+        });
+      else {
+        router.push({
+          pathname: '/selectPerfilCPF',
           query: { cpf: authState.cpf },
         });
+      }
     }
   }, [session]);
   const handleAuth = async (providers22) => {
@@ -99,11 +98,15 @@ export default function Login({ providers2, rolMembros }) {
       }
       if (vCPF && authState.password.length > 3) {
         try {
-          const user = rolMembros.filter(
-            (val) =>
-              val.CPF.replace(/\D/g, '') === authState.cpf.replace(/\D/g, ''),
-          );
-
+          const user = rolMembros.filter((val) => {
+            if (val.CPF) {
+              return (
+                String(val.CPF.replace(/\D/g, '')) ===
+                String(authState.cpf.replace(/\D/g, ''))
+              );
+            }
+            return 0;
+          });
           if (user && user.length) {
             setPageState((old) => ({ ...old, processing: true, error: '' }));
             signIn('credentials', {
@@ -143,11 +146,13 @@ export default function Login({ providers2, rolMembros }) {
               pathname: '/cadastro',
               query: { cpf: authState.cpf },
             });
-          }
+          } // ola
         } catch (error) {
           setLoading(0);
-          const { message } = error.response.data;
-          throw new Error(message);
+          if (error.response) {
+            const { message } = error.response.data;
+            throw new Error(message);
+          } else console.log(error);
         }
       } else {
         setLoading(0);
@@ -179,6 +184,7 @@ export default function Login({ providers2, rolMembros }) {
         const getData = moment(user[0].Nascimento.substring(0, 10)).format(
           'DD/MM/YYYY',
         );
+
         if (dataNascimento.length === 10)
           if (getData === dataNascimento) {
             setLoading(1);
@@ -306,6 +312,10 @@ export default function Login({ providers2, rolMembros }) {
                               autoComplete="off"
                               sx={{ mb: 1 }}
                               onChange={(e) => {
+                                handleFieldChange(e);
+                                setValorCPF(false);
+                              }}
+                              onBlur={(e) => {
                                 handleFieldChange(e);
                                 setValorCPF(false);
                               }}

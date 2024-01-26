@@ -8,7 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import SvgIcon from '@mui/material/SvgIcon';
-import { FaHome, FaPeopleCarry } from 'react-icons/fa';
+import { FaBalanceScale } from 'react-icons/fa';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { TiArrowBack } from 'react-icons/ti';
@@ -20,12 +20,12 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { useSession } from 'next-auth/client';
 // import Eventos from './eventos';
-import { IoIosPeople } from 'react-icons/io';
+import { IoIosPeople, IoIosPaper } from 'react-icons/io';
 import corIgreja from 'src/utils/coresIgreja';
 
-import Celula from './celebracao';
-import Equipe from './discipulado';
-import RelCelula from './relCelula';
+import Criterios from './criterios';
+import Equipe from './membrosCelula';
+import RelCelula from './relatorios';
 
 // const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -199,15 +199,15 @@ function Participacoes({ title, rolMembros, perfilUser }) {
                       ? { color: corIgreja.iconeOn, fontSize: '18px' }
                       : { color: '#eeeeee', fontSize: '18px' }
                   }
-                  label="Celula"
+                  label="Relatorios"
                   icon={
                     value === 0 ? (
                       <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <IoIosPeople />
+                        <IoIosPaper />
                       </SvgIcon>
                     ) : (
                       <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <IoIosPeople />
+                        <IoIosPaper />
                       </SvgIcon>
                     )
                   }
@@ -218,15 +218,15 @@ function Participacoes({ title, rolMembros, perfilUser }) {
                       ? { color: corIgreja.iconeOn, fontSize: '18px' }
                       : { color: '#eeeeee', fontSize: '18px' }
                   }
-                  label="Celebração"
+                  label="Critérios"
                   icon={
                     value === 1 ? (
                       <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <FaHome />
+                        <FaBalanceScale />
                       </SvgIcon>
                     ) : (
                       <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <FaHome />
+                        <FaBalanceScale />
                       </SvgIcon>
                     )
                   }
@@ -237,15 +237,15 @@ function Participacoes({ title, rolMembros, perfilUser }) {
                       ? { color: corIgreja.iconeOn, fontSize: '12px' }
                       : { color: '#eeeeee', fontSize: '12px' }
                   }
-                  label="Discipulado"
+                  label="Membros"
                   icon={
                     value === 2 ? (
                       <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <FaPeopleCarry />
+                        <IoIosPeople />
                       </SvgIcon>
                     ) : (
                       <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <FaPeopleCarry />
+                        <IoIosPeople />
                       </SvgIcon>
                     )
                   }
@@ -277,7 +277,7 @@ function Participacoes({ title, rolMembros, perfilUser }) {
           <TabPanel value={value} index={1}>
             {session && (
               <Box>
-                <Celula
+                <Criterios
                   perfilUser={perfilUser}
                   secao={session}
                   rolMembros={rolMembros}

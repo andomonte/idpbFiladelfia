@@ -116,7 +116,12 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                     borderRight: '1px solid #000',
                   }}
                 >
-                  <Box>{row.CAT_NOME ? row.CAT_NOME : '-'}</Box>
+            
+                  <Box>
+                    {row.CAT_NOME !== 'Recursos de Terceiros'
+                      ? row.CAT_NOME
+                      : row.LANC_DESCRICAO}
+                  </Box>
                 </Box>
                 <Box
                   height="100%"

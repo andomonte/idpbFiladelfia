@@ -90,9 +90,10 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-073');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
   let valorPerfil = {};
   let userMembro = {};
+  const membro = rolMembros.filter((val) => val.Email === session.user.email);
   if (session) {
     if (lideranca.length) {
       secao = lideranca.filter((val) => val.rol === session.user.cpf);
@@ -113,7 +114,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
         if (items.Funcao === 'Presidente')
           return {
@@ -130,7 +131,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
         if (items.Funcao === 'PastorDistrito')
           return {
@@ -147,7 +148,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
 
         if (items.Funcao === 'Coordenador')
@@ -165,7 +166,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
         if (items.Funcao === 'Supervisor')
           return {
@@ -182,7 +183,7 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
 
         if (items.Funcao === 'Lider')
@@ -200,13 +201,12 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
             Nome: items.Nome,
             RolMembro: items.RolMembro,
             Supervisao: items.Supervisao,
-            foto: items.foto,
+            foto: membro[0].foto,
           };
 
         return 0;
       });
     }
-    const membro = rolMembros.filter((val) => val.Email === session.user.email);
 
     if (membro.length > 0) {
       userMembro = {

@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Box from '@material-ui/core/Box';
@@ -18,7 +18,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import Login from 'src/components/botaoLogin';
-import Navbar from '../navBar_redesSociais';
+
 import TelaPadrao from './telaPadrao';
 // import Carrossel from '../carrossel';
 // import GoogleMaps from './googleMap';
@@ -157,8 +157,6 @@ function QuemSomos({ userIgrejas, title, celulas }) {
   //! open ? setOpen(true) : setOpen(false);
 
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }
@@ -238,16 +236,6 @@ function QuemSomos({ userIgrejas, title, celulas }) {
             <Login />
           </Toolbar>
         </AppBar>
-
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.drawer}
-          classes={{ paper: classes.desktopDrawer }}
-        >
-          <Navbar userIgrejas={userIgrejas} />
-        </Drawer>
 
         <main
           className={clsx(classes.contentMain, {

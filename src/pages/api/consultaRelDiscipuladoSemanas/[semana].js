@@ -6,7 +6,6 @@ export default async function handle(req, res) {
     query: { semana },
   } = req;
 
-  // //console.log('dados do api', codigoIgreja, mes, ano);
   // const action = `${rel}.findMany`
   const semana1 = Number(semana) + 1;
   const semana2 = Number(semana) + 2;

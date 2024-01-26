@@ -4,6 +4,8 @@ import prisma from 'src/lib/prisma';
 import Espera from 'src/utils/espera';
 import axios from 'axios';
 import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/client';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 function selectPerfil({ userIgrejas, celulas, distritos }) {
@@ -11,6 +13,13 @@ function selectPerfil({ userIgrejas, celulas, distritos }) {
   const [lideranca, setLideranca] = React.useState([]);
   const url1 = `/api/consultaMembros`;
   const url2 = `/api/consultaLideranca`;
+  const router = useRouter();
+  const [session] = useSession();
+  if (session === null) {
+    router.push({
+      pathname: '/',
+    });
+  }
   const { data: members, errorMembers } = useSWR(url1, fetcher);
   const { data: liders, errorLiders } = useSWR(url2, fetcher);
 

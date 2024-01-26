@@ -3,7 +3,7 @@ import { Pagina } from 'src/components/igrejas/normal';
 import prisma from 'src/lib/prisma';
 
 function Home({ userIgrejas, celulas }) {
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-049');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
 
   return (
     <Pagina celulas={celulas} userIgrejas={dadosUser} title="IDPB-CELULAS" />

@@ -7,18 +7,11 @@ import { TiArrowBack } from 'react-icons/ti';
 import Box from '@material-ui/core/Box';
 import { useRouter } from 'next/router';
 
-import { BsFillPersonCheckFill } from 'react-icons/bs';
-// import PerfilIcon from 'src/components/icones/perfil';
-import SvgIcon from '@mui/material/SvgIcon';
-import { FaHome } from 'react-icons/fa';
-import { DiDatabase } from 'react-icons/di';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { Oval } from 'react-loading-icons';
 import { useSession } from 'next-auth/client';
 // import Eventos from './eventos';
 import corIgreja from 'src/utils/coresIgreja';
-// import NavbarCoord from '../navBar/coordenador';
+
 import DadosPessoais from './dadosPessoais';
 import DadosAdicionais from './dadosAdicionais';
 import DadosEndereco from './dadosEndereco';
@@ -130,7 +123,7 @@ function TabPanel(props) {
 
 function AtualizarDados({ title, rolMembros, perfilUser }) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value] = React.useState(0);
   const [session] = useSession();
   const router = useRouter();
 
@@ -165,74 +158,15 @@ function AtualizarDados({ title, rolMembros, perfilUser }) {
               )}
             </Box>
 
-            <Box display="flex" m={0}>
-              <BottomNavigation
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                fontSize="large"
-                showLabels
-                className={classes.rootTopbarIcon}
-              >
-                <BottomNavigationAction
-                  style={
-                    value === 0
-                      ? { color: corIgreja.iconeOn, fontSize: '18px' }
-                      : { color: '#eeeeee', fontSize: '18px' }
-                  }
-                  label="Pessoal"
-                  icon={
-                    value === 0 ? (
-                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <BsFillPersonCheckFill />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <BsFillPersonCheckFill />
-                      </SvgIcon>
-                    )
-                  }
-                />
-                <BottomNavigationAction
-                  style={
-                    value === 1
-                      ? { color: corIgreja.iconeOn, fontSize: '18px' }
-                      : { color: '#eeeeee', fontSize: '18px' }
-                  }
-                  label="Endereço"
-                  icon={
-                    value === 1 ? (
-                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <FaHome />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <FaHome />
-                      </SvgIcon>
-                    )
-                  }
-                />
-                <BottomNavigationAction
-                  style={
-                    value === 2
-                      ? { color: corIgreja.iconeOn, fontSize: '12px' }
-                      : { color: '#eeeeee', fontSize: '12px' }
-                  }
-                  label="Geral"
-                  icon={
-                    value === 2 ? (
-                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <DiDatabase />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon sx={{ color: '#eeeeee' }}>
-                        <DiDatabase />
-                      </SvgIcon>
-                    )
-                  }
-                />
-              </BottomNavigation>
+            <Box
+              fontSize="18px"
+              fontFamily="Fugaz One"
+              justifyContent="center"
+              width="100%"
+              display="flex"
+              m={0}
+            >
+              ATUALIZE SEUS DADOS
             </Box>
           </Toolbar>
         </AppBar>

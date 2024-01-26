@@ -44,9 +44,9 @@ export default function TabCelula({
   ]);
   const [mediaAtualDiscipulado, setMediaAtualDiscipulado] = React.useState([]);
 
-  const url1 = `/api/consultaRelatorioCelulasAno/${contSemana2}/${Ano}`;
-  const url2 = `/api/consultaRelatorioCelebracaoAno/${contSemana2}/${Ano}`;
-  const url3 = `/api/consultaRelatorioDiscipuladoAno/${contSemana2}/${Ano}`;
+  const url1 = `/api/consultaRelatorioCelulasAno2/${contSemana2}/${Ano}`;
+  const url2 = `/api/consultaRelatorioCelebracaoAno2/${contSemana2}/${Ano}`;
+  const url3 = `/api/consultaRelatorioDiscipuladoAno2/${contSemana2}/${Ano}`;
 
   const { data: sem1, errorSem1 } = useSWR(url1, fetcher);
 
@@ -152,7 +152,7 @@ export default function TabCelula({
 
     if (!sem1) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [sem1]);
+  }, [sem1, numeroCelula]);
 
   React.useEffect(() => {
     setPresCeleb([]);
@@ -230,7 +230,7 @@ export default function TabCelula({
 
     if (!culto) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [culto]);
+  }, [culto, numeroCelula]);
 
   React.useEffect(() => {
     setPresDisc([]);
@@ -304,7 +304,7 @@ export default function TabCelula({
 
     if (!discipular) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [discipular]);
+  }, [discipular, numeroCelula]);
 
   React.useEffect(() => {
     if (presSem1.length) {

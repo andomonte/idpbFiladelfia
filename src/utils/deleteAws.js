@@ -25,7 +25,7 @@ const deletar = s3.deleteBucket(bucketParams, (err) => {
   if (err) {
     console.log('Error', err);
   } else {
-    //    console.log('Success', data);
+    //
   }
 });
 

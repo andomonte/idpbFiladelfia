@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Box from '@material-ui/core/Box';
@@ -23,12 +22,8 @@ import { IoIosPeople, IoIosSchool } from 'react-icons/io';
 import corIgreja from 'src/utils/coresIgreja';
 import { HiUserGroup } from 'react-icons/hi';
 import BuscarNome from './abas/buscarNome';
-import NabarSecretaria from '../navBar/secretaria';
-import NabarMembro from '../navBar/membro';
-import NabarLider from '../navBar/lider';
-import NavbarSuper from '../navBar/supervisor';
 
-import Dicas from './dicas';
+import Dicas from './dadosPessoais';
 import Liderados from './liderados';
 import LideradosCoord from './lideradosCoord';
 import LideradosDistrito from './lideradosDistrito';
@@ -148,7 +143,7 @@ function TabPanel(props) {
   );
 }
 
-function Perfil({ celulas, title, rolMembros, lideranca, perfilUser }) {
+function Perfil({ title, rolMembros, lideranca, perfilUser }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -234,7 +229,7 @@ function Perfil({ celulas, title, rolMembros, lideranca, perfilUser }) {
                         ? { color: corIgreja.iconeOn, fontSize: '18px' }
                         : { color: '#eeeeee', fontSize: '18px' }
                     }
-                    label="Dicas"
+                    label="Atualizar Dados"
                     icon={
                       value === 1 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -306,7 +301,7 @@ function Perfil({ celulas, title, rolMembros, lideranca, perfilUser }) {
                         ? { color: corIgreja.iconeOn, fontSize: '18px' }
                         : { color: '#eeeeee', fontSize: '18px' }
                     }
-                    label="Dicas"
+                    label="Atualizar Dados"
                     icon={
                       value === 1 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -489,36 +484,6 @@ function Perfil({ celulas, title, rolMembros, lideranca, perfilUser }) {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.drawer}
-          classes={{ paper: classes.desktopDrawer }}
-        >
-          {perfilUser.Funcao === 'Secretaria' && (
-            <NabarSecretaria perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Membro' && (
-            <NabarMembro perfilUser={perfilUser} />
-          )}
-
-          {perfilUser.Funcao === 'Lider' && (
-            <NabarLider perfilUser={perfilUser} />
-          )}
-          {(perfilUser.Funcao === 'Supervisor' ||
-            perfilUser.Funcao === 'Coordenador' ||
-            perfilUser.Funcao === 'PastorDistrito' ||
-            perfilUser.Funcao === 'Presidente') && (
-            <NavbarSuper
-              items={lideranca}
-              celulas={celulas}
-              rolMembros={rolMembros}
-              perfilUser={perfilUser}
-            />
-          )}
-        </Drawer>
-
         <main
           className={clsx(classes.contentMain, {
             [classes.contentShiftMain]: open,
@@ -559,8 +524,12 @@ function Perfil({ celulas, title, rolMembros, lideranca, perfilUser }) {
           <TabPanel value={value} index={1}>
             {session && (
               <Box>
-                {perfilUser.Funcao === 'Membro' ? <Dicas /> : null}
-                {perfilUser.Funcao === 'Lider' ? <Dicas /> : null}
+                {perfilUser.Funcao === 'Membro' ? (
+                  <Dicas rolMembros={rolMembros} perfilUser={perfilUser} />
+                ) : null}
+                {perfilUser.Funcao === 'Lider' ? (
+                  <Dicas rolMembros={rolMembros} perfilUser={perfilUser} />
+                ) : null}
                 {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
                 {perfilUser.Funcao === 'Supervisor' ? (
                   <Liderados

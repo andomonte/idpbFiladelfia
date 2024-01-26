@@ -41,7 +41,7 @@ function relatorios({ celulas, rolMembros, lideranca }) {
           title="IDPB-CELULAS"
           rolMembros={rolMembros}
           lideranca={lideranca}
-          perfilUser={perfilUser}
+          perfilUser={perfilUserF}
         />
       )}
     </div>
@@ -53,7 +53,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

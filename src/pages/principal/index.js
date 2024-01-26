@@ -4,12 +4,15 @@ import { Pagina } from 'src/components/igrejas/normal';
 import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
+import validator from 'validator';
+import Espere from 'src/utils/espera';
 
 function Home({ userIgrejas, celulas, LiderancaCelulas, rolMembros }) {
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-049');
+  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-025');
   const router = useRouter();
   const [session] = useSession();
   const perfilUser = router.query;
+
   let mudaDados = 'sai';
 
   if (perfilUser.id) mudaDados = 'entra';
@@ -22,29 +25,40 @@ function Home({ userIgrejas, celulas, LiderancaCelulas, rolMembros }) {
     } else {
       const result = JSON.parse(sessionStorage.getItem('perfilUser'));
 
-      if (session) {
-        if (!result)
-          router.push(
-            {
-              pathname: '/selectPerfil',
-            },
-            '/selectPerfil',
-          );
-      } else
-        router.push(
-          {
-            pathname: '/',
-          },
-          '/',
-        );
-      // resultado = result.id;
       setPerfilUserF(result);
+      // resultado = result.id;
     }
   }, [mudaDados]);
 
+  React.useEffect(() => {
+    if (
+      (perfilUserF === null || perfilUserF === '') &&
+      (perfilUser.length === null || !perfilUser.length)
+    ) {
+      const result = JSON.parse(sessionStorage.getItem('perfilUser'));
+
+      if (
+        session !== null &&
+        session !== undefined &&
+        (result === '' || result === null)
+      ) {
+        if (validator.isEmail(session.user.email))
+          router.push({
+            pathname: '/selectPerfil',
+          });
+        else {
+          router.push({
+            pathname: '/selectPerfilCPF',
+            query: { cpf: session.user.email },
+          });
+        }
+      }
+    }
+  }, [session]);
+
   return (
     <div>
-      {perfilUserF && perfilUserF.id ? (
+      {perfilUser && perfilUserF && perfilUserF && perfilUserF.id ? (
         <div>
           <SistemaCelulas
             celulas={celulas}
@@ -57,8 +71,12 @@ function Home({ userIgrejas, celulas, LiderancaCelulas, rolMembros }) {
         </div>
       ) : (
         <div>
-          {!perfilUserF && !perfilUser && (
+          {(session === null || session === undefined) &&
+          (perfilUserF === null || perfilUserF === '') &&
+          (perfilUser.length === null || !perfilUser.length) ? (
             <Pagina userIgrejas={dadosUser} title="IDPB-CELULAS" />
+          ) : (
+            <Espere descricao="Buscando Conexão..." />
           )}
         </div>
       )}
@@ -84,7 +102,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

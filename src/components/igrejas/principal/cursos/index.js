@@ -20,7 +20,6 @@ import { useSession } from 'next-auth/client';
 // import Eventos from './eventos';
 import corIgreja from 'src/utils/coresIgreja';
 
-// import NavbarCoord from '../navBar/coordenador';
 import Cursos from './cursos';
 import MeusCursos from './meusCursos';
 // const drawerWidth = 240;

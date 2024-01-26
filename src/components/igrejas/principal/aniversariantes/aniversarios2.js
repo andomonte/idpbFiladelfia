@@ -2,7 +2,6 @@
 import React from 'react';
 import { Box, Grid } from '@material-ui/core';
 import List from '@mui/material/List';
-import Meses from 'src/utils/meses';
 import corIgreja from 'src/utils/coresIgreja';
 import moment from 'moment';
 import IconButton from '@mui/material/IconButton';
@@ -33,7 +32,7 @@ function compare(a, b) {
   return true;
 }
 
-function BuscarAniversariantes({ rolMembros, perfilUser }) {
+function BuscarAniversariantes({ distritos, rolMembros, perfilUser }) {
   // const mes = Meses();
 
   //= ========================================================================
@@ -42,7 +41,20 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
 
   //= ========================================================================
   //= ================================================================
-  const mes = Meses();
+  const mes = [
+    'JANEIRO',
+    'FEVEREIRO',
+    'MARÇO',
+    'ABRIL',
+    'MAIO',
+    'JUNHO',
+    'JULHO',
+    'AGOSTO',
+    'SETEMBRO',
+    'OUTUBRO',
+    'NOVEMBRO',
+    'DEZEMBRO',
+  ];
   const d = new Date();
   const mesAtual = Number(d.getMonth());
   const [contMes, setContMes] = React.useState(mesAtual);
@@ -93,7 +105,7 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
       justifyContent="center"
       alignItems="center"
       width="100vw"
-      minHeight={570}
+      minHeight={500}
       minWidth={300}
       bgcolor={corIgreja.principal2}
       height="calc(100vh - 56px)"
@@ -115,8 +127,6 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
             justifyContent="center"
             alignItems="center"
             style={{
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -130,7 +140,7 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
-              fontSize="20px"
+              fontSize="16px"
               color="white"
               sx={{ fontFamily: 'Fugaz One' }}
             >
@@ -172,10 +182,10 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                fontSize="16px"
+                fontSize="14px"
                 sx={{ fontFamily: 'Fugaz One' }}
               >
-                {mes[contMes].descricao.toUpperCase()}
+                {mes[contMes]}
               </Box>
               <Box
                 width="20%"
@@ -225,9 +235,9 @@ function BuscarAniversariantes({ rolMembros, perfilUser }) {
                       <Box>
                         <Grid>
                           <SearchList
-                            perfilUser={perfilUser}
                             mesAtual={contMes}
                             rolMembros={itens}
+                            distritos={distritos}
                           />
                         </Grid>
                       </Box>

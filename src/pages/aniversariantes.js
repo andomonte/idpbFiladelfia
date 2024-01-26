@@ -4,7 +4,7 @@ import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 
-function Planejar({ rolMembros }) {
+function Planejar({ rolMembros, distritos }) {
   const router = useRouter();
   const perfilUser = router.query;
   const [session] = useSession();
@@ -37,9 +37,10 @@ function Planejar({ rolMembros }) {
     <div>
       {perfilUserF && (
         <Aniversariantes
-          title="IDPB-FILADELFIA"
+          title="APP-CÉLULAS"
           rolMembros={rolMembros}
           perfilUser={perfilUserF}
+          distritos={distritos}
         />
       )}
     </div>
@@ -48,11 +49,20 @@ function Planejar({ rolMembros }) {
 
 export const getStaticProps = async () => {
   // pega o valor do banco de dados
-
+  const distritos = await prisma.distrito.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {
@@ -66,6 +76,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
+      distritos: JSON.parse(JSON.stringify(distritos)),
       rolMembros: JSON.parse(
         JSON.stringify(
           rolMembros,

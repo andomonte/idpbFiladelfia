@@ -490,7 +490,6 @@ export default function Todos({
           setInfo(
             'Não foi possível fazer sua Inscrição, tente novamente mais tarde',
           );
-          // console.log(erro); //  updateFile(uploadedFile.id, { error: true });
         });
     }
     // const nomesMembros = JSON.parse(RelCelulaFinal.NomesMembros);

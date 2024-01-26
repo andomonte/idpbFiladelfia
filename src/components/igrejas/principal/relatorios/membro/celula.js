@@ -54,7 +54,7 @@ function Celula({ rolMembros, perfilUser }) {
                         height: 80,
                       }}
                       alt="Remy Sharp"
-                      src="images/filadelfia/filadelfia.png"
+                      src={corIgreja.logo}
                     />
                   </Box>
 
@@ -68,7 +68,7 @@ function Celula({ rolMembros, perfilUser }) {
                     }}
                     textAlign="center"
                   >
-                    IDPB - FILADELFIA{' '}
+                    IDPB - Filadelfia{' '}
                   </Box>
                 </Box>
               </Box>

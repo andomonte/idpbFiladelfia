@@ -127,9 +127,7 @@ function Eventos({ perfilUser, rolMembros }) {
                           {row.imagemCurso && (
                             <img
                               style={{ borderRadius: '16px' }}
-                              src={`http://approomservice.com.br/idpbfiladelfia/${row.imagemCurso.slice(
-                                row.imagemCurso.indexOf('Images'),
-                              )}`}
+                              src={row.imagemCurso}
                               width="auto"
                               alt="imagem"
                             />

@@ -4,14 +4,15 @@ import corIgreja from 'src/utils/coresIgreja';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requer um carregador
 import Modal from '@mui/material/Modal';
 import TableContainer from '@mui/material/TableContainer';
-import { BsMegaphone } from 'react-icons/bs';
-import { MdOutlinePublishedWithChanges } from 'react-icons/md';
-import { usePWAInstall } from 'react-use-pwa-install';
+
+import { IoCalendarOutline } from 'react-icons/io5';
+import { MdOutlinePublishedWithChanges, MdGroups } from 'react-icons/md';
+// import { usePWAInstall } from 'react-use-pwa-install';
 // import { IoGameControllerOutline } from 'react-icons/io5';
 import { Oval } from 'react-loading-icons';
-import { RiInstallLine } from 'react-icons/ri';
+// import { RiInstallLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-
+import { FaChartBar } from 'react-icons/fa';
 import Avisos from './Avisos';
 import Mensagem from './mensagem';
 // import PegaSemanaDomingo from 'src/utils/getSemanaDomingo';
@@ -30,18 +31,18 @@ const home = ({ perfilUser }) => {
   const [loadingHow, setLoadingHow] = React.useState(false);
   const [loadingPerfil, setLoadingPerfil] = React.useState(false);
   const [loadingCont, setLoadingCont] = React.useState(false);
+  const [loadingPontos, setLoadingPontos] = React.useState(false);
   const [loadingRel, setLoadingRel] = React.useState(false);
   const [loadingPlan, setLoadingPlan] = React.useState(false);
   const [loadingAtual, setLoadingAtual] = React.useState(false);
   const [loadingMidia, setLoadingMidia] = React.useState(false);
-  // const [loadingJogos, setLoadingJogos] = React.useState(false);
   const [loadingCursos, setLoadingCursos] = React.useState(false);
   const [loadingMudar, setLoadingMudar] = React.useState(false);
 
-  const handleAvisos = () => {
+  const handleAgenda = () => {
     setLoadingAviso(true);
     router.push({
-      pathname: '/principal/aviso',
+      pathname: '/agenda',
       //      query: { idCompra, qrCode, qrCodeCopy },
     });
   };
@@ -94,11 +95,28 @@ const home = ({ perfilUser }) => {
       //      query: { idCompra, qrCode, qrCodeCopy },
     });
   };
-  const handleQuemSomos = () => {
+  const handlePontuacao = () => {
+    setLoadingPontos(true);
+
+    router.push({
+      pathname: '/pontuacao',
+      //      query: { idCompra, qrCode, qrCodeCopy },
+    });
+  };
+  /*  const handleQuemSomos = () => {
     setLoadingHow(true);
 
     router.push({
       pathname: '/quemSomos',
+      //      query: { idCompra, qrCode, qrCodeCopy },
+    });
+  }; */
+
+  const handleMembros = () => {
+    setLoadingHow(true);
+
+    router.push({
+      pathname: '/membros',
       //      query: { idCompra, qrCode, qrCodeCopy },
     });
   };
@@ -153,6 +171,7 @@ const home = ({ perfilUser }) => {
 
   const handleMudarPerfil = () => {
     setLoadingMudar(true);
+
     if (perfilUser.login === 'google')
       router.push({
         pathname: '/selectPerfil',
@@ -170,7 +189,7 @@ const home = ({ perfilUser }) => {
       pathname: '/midia',
     });
   };
-  const install = usePWAInstall();
+  // const install = usePWAInstall();
 
   return (
     <Box
@@ -244,11 +263,11 @@ const home = ({ perfilUser }) => {
                     />
                   )}
                 </Box>
-                <Box fontSize="12px">MENSAGENS</Box>
+                <Box fontSize="12px">BOLETIM</Box>
               </Box>
             </Box>
             <Box
-              onClick={handleAvisos}
+              onClick={handleAgenda}
               ml={1}
               borderRadius={16}
               height="100%"
@@ -273,10 +292,10 @@ const home = ({ perfilUser }) => {
                       <Oval stroke="white" width={35} height={35} />
                     </Box>
                   ) : (
-                    <BsMegaphone size={35} />
+                    <IoCalendarOutline size={35} color="white" />
                   )}
                 </Box>
-                <Box fontSize="12px">AVISOS</Box>
+                <Box fontSize="12px">AGENDA</Box>
               </Box>
             </Box>
             <Box
@@ -714,7 +733,7 @@ const home = ({ perfilUser }) => {
               </Box>
             </Box> */}
             <Box
-              onClick={handleQuemSomos}
+              onClick={handleMembros}
               ml={0}
               borderRadius={16}
               height="100%"
@@ -739,15 +758,10 @@ const home = ({ perfilUser }) => {
                       <Oval stroke="white" width={35} height={35} />
                     </Box>
                   ) : (
-                    <img
-                      src="/images/quemSomos.png"
-                      height={35}
-                      width={35}
-                      alt="bolo"
-                    />
+                    <MdGroups size={35} color="white" />
                   )}
                 </Box>
-                <Box fontSize="12px">QUEM SOMOS</Box>
+                <Box fontSize="12px">MEMBROS</Box>
               </Box>
             </Box>
             <Box
@@ -782,61 +796,39 @@ const home = ({ perfilUser }) => {
                 <Box fontSize="12px">MUDAR PERFIL</Box>
               </Box>
             </Box>
-            {install ? (
+
+            <Box
+              onClick={handlePontuacao}
+              ml={1}
+              borderRadius={16}
+              height="100%"
+              width="32%"
+              minWidth={80}
+              bgcolor={corIgreja.principal}
+              display="flex"
+              color="white"
+              fontFamily="Rubik"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Box
-                onClick={install}
-                ml={1}
-                borderRadius={16}
-                height="100%"
-                width="32%"
-                minWidth={80}
-                bgcolor={corIgreja.principal}
                 display="flex"
-                color="white"
-                fontFamily="Rubik"
                 justifyContent="center"
                 alignItems="center"
+                flexDirection="column"
               >
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  flexDirection="column"
-                >
-                  <Box mb={1}>
-                    <RiInstallLine color="white" size={35} />
-                  </Box>
-                  <Box fontSize="12px">INSTALAR</Box>
+                <Box mb={1}>
+                  {loadingPontos ? (
+                    <Box>
+                      <Oval stroke="white" width={35} height={35} />
+                    </Box>
+                  ) : (
+                    <FaChartBar color="#f0f0f0" size={35} />
+                  )}
                 </Box>
+                <Box fontSize="12px">PONTUAÇÃO</Box>
               </Box>
-            ) : (
-              <Box
-                ml={1}
-                borderRadius={16}
-                height="100%"
-                width="32%"
-                onClick={install}
-                minWidth={80}
-                bgcolor={corIgreja.principal}
-                display="flex"
-                color="white"
-                fontFamily="Rubik"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  flexDirection="column"
-                >
-                  <Box mb={1}>
-                    <RiInstallLine color="white" size={35} />
-                  </Box>
-                  <Box fontSize="12px">INSTALAR</Box>
-                </Box>
-              </Box>
-            )}
+            </Box>
           </Box>
         </TableContainer>
       </Box>

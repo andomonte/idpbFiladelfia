@@ -128,6 +128,7 @@ export default function TabCelula({
 
   React.useEffect(() => {
     setPresSem1([]);
+
     if (sem1) {
       if (sem1 && sem1[0]) {
         for (let i = 0; i < numeroCelula.length; i += 1) {
@@ -158,7 +159,7 @@ export default function TabCelula({
 
     if (!sem1) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [sem1]);
+  }, [sem1, numeroCelula]);
 
   React.useEffect(() => {
     if (celebracaoSem) {
@@ -192,7 +193,7 @@ export default function TabCelula({
 
     if (!celebracaoSem) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [celebracaoSem]);
+  }, [celebracaoSem, numeroCelula]);
 
   React.useEffect(() => {
     if (discipuladoSem) {
@@ -226,7 +227,7 @@ export default function TabCelula({
 
     if (!discipuladoSem) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [discipuladoSem]);
+  }, [discipuladoSem, numeroCelula]);
 
   React.useEffect(() => {
     if (pontos) {
@@ -267,7 +268,7 @@ export default function TabCelula({
 
     if (!pontos) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [pontos]);
+  }, [pontos, numeroCelula]);
 
   /* React.useEffect(() => {
     
@@ -305,7 +306,7 @@ export default function TabCelula({
 
     if (!pontos2) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [pontos2]);
+  }, [pontos2, numeroCelula]);
 
   React.useEffect(() => {
     if (pontos3) {
@@ -339,7 +340,7 @@ export default function TabCelula({
 
     if (!pontos3) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [pontos3]);
+  }, [pontos3, numeroCelula]);
 
   React.useEffect(() => {
     if (pontos4) {
@@ -373,7 +374,7 @@ export default function TabCelula({
 
     if (!pontos4) return <Espera descricao="Buscando os Dados" />;
     return 0;
-  }, [pontos4]);
+  }, [pontos4, numeroCelula]);
 
   const handleIncSemana = () => {
     let contSemanaAtual = contSemana2 + 1;
@@ -1299,7 +1300,7 @@ export default function TabCelula({
                             )}
                           </Box>
                         )}
-                        {console.log('quantidade', row.PresDisc)}
+
                         {tipo[contTipo] === 'Relatório do Discipulado' && (
                           <Box
                             mt={0}

@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function IdpbFiladelfia({ title, perfilUser }) {
+function IdpbCastelo({ title, perfilUser }) {
   const classes = useStyles();
 
   const theme = useTheme();
@@ -109,8 +109,6 @@ function IdpbFiladelfia({ title, perfilUser }) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }
@@ -177,4 +175,4 @@ function IdpbFiladelfia({ title, perfilUser }) {
   );
 }
 
-export default IdpbFiladelfia;
+export default IdpbCastelo;

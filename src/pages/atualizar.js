@@ -39,7 +39,7 @@ function Atualizar({ rolMembros }) {
         <AtualizarDados
           perfilUser={perfilUserF}
           rolMembros={rolMembros}
-          title="IDPB-FILADELFIA"
+          title="IDPB-CASTELO"
         />
       )}
     </div>
@@ -52,7 +52,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

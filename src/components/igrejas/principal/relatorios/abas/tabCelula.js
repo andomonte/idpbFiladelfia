@@ -14,8 +14,9 @@ export default function TabCelula({
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
 
   const [respostas, setRespostas] = React.useState({});
-  let dados = [{ Nome: 'Sem nomes registrados', Presenca: false }];
-  if (nomesCelulas) dados = nomesCelulas;
+  const dados = nomesCelulas || [
+    { Nome: 'Sem nomes registrados', Presenca: false },
+  ];
 
   const handleRegistro = (index) => {
     let cor;
@@ -56,7 +57,7 @@ export default function TabCelula({
         ...updatedValue,
       }));
     }
-  }, []);
+  }, [dados]);
   React.useEffect(() => {
     for (let index = 0; index < dados.length; index += 1) {
       let cor;
@@ -74,6 +75,7 @@ export default function TabCelula({
       }));
     }
   }, [nomesCelulas.length]);
+
   return (
     <Paper
       sx={{
@@ -102,9 +104,27 @@ export default function TabCelula({
           >
             <Box display="flex" width="100%">
               <Box width="100%" display="flex" alignItems="center" ml={1}>
-                {row.Nome.length > 30
-                  ? row.Nome.substring(0, row.Nome.lastIndexOf(' '))
-                  : row.Nome}
+                {row.Nome.length > 30 ? (
+                  <Box
+                    color={
+                      row.status && row.status.toUpperCase() === 'NOVO'
+                        ? 'blue'
+                        : 'black'
+                    }
+                  >
+                    {row.Nome.substring(0, row.Nome.lastIndexOf(' '))}
+                  </Box>
+                ) : (
+                  <Box
+                    color={
+                      row.status && row.status.toUpperCase() === 'NOVO'
+                        ? 'blue'
+                        : 'black'
+                    }
+                  >
+                    {row.Nome}
+                  </Box>
+                )}
               </Box>
               <Box
                 onClick={() => {

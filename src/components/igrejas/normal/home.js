@@ -30,13 +30,18 @@ const home = () => {
       //      query: { idCompra, qrCode, qrCodeCopy },
     });
   };
-  const handleQuemSomos = () => {
+  /* const handleQuemSomos = () => {
     router.push({
       pathname: '/quemSomos',
       //      query: { idCompra, qrCode, qrCodeCopy },
     });
+  }; */
+  const handleMembros = () => {
+    router.push({
+      pathname: '/membros',
+      //      query: { idCompra, qrCode, qrCodeCopy },
+    });
   };
-
   const handleMensagem = () => {
     router.push({
       pathname: '/principal/mensagem',
@@ -225,7 +230,7 @@ const home = () => {
             mt={1}
           >
             <Box
-              onClick={handleQuemSomos}
+              onClick={handleMembros}
               borderRadius={16}
               height="100%"
               width="100%"
@@ -261,8 +266,9 @@ const home = () => {
                   <Box width="30%" display="flex" justifyContent="center">
                     <img
                       src="/images/quemSomos.png"
-                      alt="quemSomos"
-                      width="60%"
+                      alt="equipe"
+                      height={35}
+                      width={35}
                     />
                   </Box>
                   <Box
@@ -274,7 +280,7 @@ const home = () => {
                     width="70%"
                     color="white"
                   >
-                    QUEM SOMOS
+                    EQUIPE
                   </Box>
                 </Box>
               </Box>

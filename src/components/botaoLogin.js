@@ -72,6 +72,7 @@ export default function BotaoLogin() {
                 callbackUrl: `${window.location.origin}`,
               })
             }
+            ord="123456789?"
             alt="User"
             className={classes.avatar}
             src={foto.foto || session?.user?.image}

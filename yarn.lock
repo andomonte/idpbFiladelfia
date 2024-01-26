@@ -14381,10 +14381,10 @@ react-i18next@^11.18.3:
     "@babel/runtime" "^7.14.5"
     html-parse-stringify "^3.0.1"
 
-react-icons@^4.2.0:
-  version "4.3.1"
-  resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.3.1.tgz"
-  integrity sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==
+react-icons@^4.12.0:
+  version "4.12.0"
+  resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.12.0.tgz"
+  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
 
 react-iframe@^1.8.0:
   version "1.8.0"
@@ -17751,6 +17751,11 @@ webworkify@^1.5.0:
   version "1.5.0"
   resolved "https://registry.npmjs.org/webworkify/-/webworkify-1.5.0.tgz"
   integrity sha512-AMcUeyXAhbACL8S2hqqdqOLqvJ8ylmIbNwUIqQujRSouf4+eUFaXbG6F1Rbu+srlJMmxQWsiU7mOJi0nMBfM1g==
+
+weeknumber@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/weeknumber/-/weeknumber-1.2.1.tgz"
+  integrity sha512-F5AbhjKQhRDHweBnDuYRiJvS9/2f19/3/431+ZiZQb/jTgLKuAg8kwZzgS9/9a1SyA1KeJPEfQpf6dggaw7NBg==
 
 whatwg-encoding@^1.0.5:
   version "1.0.5"

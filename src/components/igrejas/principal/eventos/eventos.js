@@ -7,7 +7,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requer um car
 import { Carousel } from 'react-responsive-carousel';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
-
+import { useRouter } from 'next/router';
 import TableContainer from '@mui/material/TableContainer';
 import Inscricoes from './inscricoes';
 
@@ -18,7 +18,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 function Eventos({ perfilUser, rolMembros }) {
   //  const eventoIni = consultaInscricoes.filter((val) => Number(val.id) === Number(0));
-
+  const router = useRouter();
   const [todos, setTodos] = React.useState('');
   const [openPlan, setOpenPlan] = React.useState(false);
   const [eventoEscolhido, setEventoEscolhido] = React.useState('');
@@ -38,13 +38,17 @@ function Eventos({ perfilUser, rolMembros }) {
           Number(dataAtual) >= Number(new Date(results.DataIni).getTime()) &&
           Number(dataAtual) <= Number(new Date(results.DataFim).getTime()),
       );
-
-      const evento = eventoAtivo.filter(
-        (val) =>
-          Number(val.Distrito) === Number(perfilUser.Distrito) ||
-          Number(val.Distrito) === 0,
-      );
-
+      let evento;
+      if (perfilUser)
+        evento = eventoAtivo.filter(
+          (val) =>
+            Number(val.Distrito) === Number(perfilUser.Distrito) ||
+            Number(val.Distrito) === 0,
+        );
+      else
+        evento = eventoAtivo.filter(
+          (val) => Number(val.Distrito) === 0 || Number(val.Distrito) === 1,
+        );
       setTodos(evento);
     }
     if (error) return <div>An error occured.</div>;
@@ -57,7 +61,12 @@ function Eventos({ perfilUser, rolMembros }) {
     const evento = todos.filter((val) => Number(val.id) === Number(index));
     setEventoEscolhido(evento);
   };
-
+  const handlePagar = (eventoSelecionado) => {
+    router.push({
+      pathname: '/comprar',
+      query: { eventoSelecionado: JSON.stringify(eventoSelecionado) },
+    });
+  };
   return (
     <Box
       display="flex"
@@ -68,11 +77,12 @@ function Eventos({ perfilUser, rolMembros }) {
       minWidth={300}
       bgcolor={corIgreja.principal2}
       height="calc(100vh - 56px)"
+      color={corIgreja.texto1}
     >
       <Box
         height="97%"
         width="100%"
-        bgcolor="white"
+        bgcolor={corIgreja.principal}
         ml={1.2}
         mr={1.2}
         display="flex"
@@ -88,7 +98,7 @@ function Eventos({ perfilUser, rolMembros }) {
                   <Box key={row.id} height="90vh" width="100%" mt={0}>
                     <TableContainer
                       style={{
-                        height: '100%',
+                        height: '88%',
                         minHeight: 200,
                         marginTop: 0,
                         display: 'flex',
@@ -97,15 +107,17 @@ function Eventos({ perfilUser, rolMembros }) {
                         width: '100%',
                       }}
                     >
-                      <Box height="96%" width="100%">
+                      <Box height="96%" width="100%" maxWidth={500}>
                         <Box height="100%" width="100%">
                           {row.LogoEvento && (
                             <img
-                              style={{ borderRadius: '16px' }}
-                              src={`http://approomservice.com.br/idpbfiladelfia/${row.LogoEvento.slice(
-                                row.LogoEvento.indexOf('Images'),
-                              )}`}
-                              width="auto"
+                              style={{
+                                borderRadius: '16px',
+                                width: '100%',
+                                height: 'auto',
+                                maxHeight: row.Evento ? '44vh' : 'auto',
+                              }}
+                              src={row.LogoEvento}
                               alt="imagem"
                             />
                           )}
@@ -134,36 +146,67 @@ function Eventos({ perfilUser, rolMembros }) {
                               </Box>
                             </Box>
                           </Box>
-
-                          <Box
-                            display={row.inscricao ? 'display' : 'none'}
-                            mt="1vh"
-                            width="100%"
-                            height="13%"
-                          >
-                            <Button
-                              style={{
-                                background: corIgreja.principal,
-                                color: 'white',
-                                fontFamily: 'Fugaz One',
-                                fontSize: '18px',
-                                width: '90%',
-                                maxWidth: 300,
-                                height: '70%',
-                                borderRadius: 16,
-                              }}
-                              component="a"
-                              variant="contained"
-                              onClick={() => {
-                                handleIncricao(row.id);
-                              }}
-                            >
-                              FAZER INSCRIÇÃO
-                            </Button>
-                          </Box>
                         </Box>
                       </Box>
                     </TableContainer>
+                    <Box display="flex" width="100%" height="100%">
+                      <Box
+                        display={row.inscricao ? 'display' : 'none'}
+                        width="100%"
+                        height="9%"
+                      >
+                        <Button
+                          style={{
+                            background: corIgreja.tercenaria,
+                            color: corIgreja.texto2,
+                            fontFamily: 'Fugaz One',
+                            fontSize: '14px',
+                            width: '90%',
+                            maxWidth: 300,
+                            height: '70%',
+                            borderRadius: 16,
+                          }}
+                          component="a"
+                          variant="contained"
+                          onClick={() => {
+                            handleIncricao(row.id);
+                          }}
+                        >
+                          FAZER INSCRIÇÃO
+                        </Button>
+                      </Box>
+
+                      <Box
+                        display={row.pagarOnline ? 'display' : 'none'}
+                        width="100%"
+                        height="9%"
+                      >
+                        <Button
+                          style={{
+                            background: corIgreja.secundaria,
+                            color: 'black',
+                            fontFamily: 'Fugaz One',
+                            fontSize: '14px',
+                            width: '90%',
+                            maxWidth: 300,
+                            height: '70%',
+                            borderRadius: 16,
+                          }}
+                          component="a"
+                          variant="contained"
+                          onClick={() => {
+                            handlePagar(row);
+                          }}
+                        >
+                          PAGAR INSCRIÇÃO
+                        </Button>
+                      </Box>
+                    </Box>
+                    <Box
+                      display={row.inscricao ? 'display' : 'none'}
+                      width="100%"
+                      height="3%"
+                    />
                   </Box>
                 ))}
               </Carousel>
@@ -174,10 +217,8 @@ function Eventos({ perfilUser, rolMembros }) {
               height="80%"
               fontFamily="Fugaz One"
               fontSize="18px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              color="black"
+              textAlign="center"
+              color={corIgreja.texto1}
             >
               NENHUM EVENTO PREVISTO NESSE PERÍODO
             </Box>

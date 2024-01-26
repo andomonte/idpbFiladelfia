@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -22,10 +22,7 @@ import { useSession } from 'next-auth/client';
 // import Eventos from './eventos';
 import { BsFillPersonCheckFill } from 'react-icons/bs';
 import corIgreja from 'src/utils/coresIgreja';
-import NabarSecretaria from '../navBar/secretaria';
-import NabarLider from '../navBar/lider';
-import NavbarSuper from '../navBar/supervisor';
-import NavbarCoord from '../navBar/coordenador';
+
 import DadosMembros from './dadosMembros';
 import DadosAdicionais from './dadosAdicionais';
 import DadosEndereco from './dadosEndereco';
@@ -252,30 +249,6 @@ function AtualizarDados({ title, rolMembros, perfilUser }) {
             <Login />
           </Toolbar>
         </AppBar>
-
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.drawer}
-          classes={{ paper: classes.desktopDrawer }}
-        >
-          {perfilUser.Funcao === 'Secretaria' && (
-            <NabarSecretaria perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Lider' && (
-            <NabarLider perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Supervisor' && (
-            <NavbarSuper perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'Coordenador' && (
-            <NavbarCoord perfilUser={perfilUser} />
-          )}
-          {perfilUser.Funcao === 'PastorDistrito' && (
-            <NavbarCoord perfilUser={perfilUser} />
-          )}
-        </Drawer>
 
         <main
           className={clsx(classes.contentMain, {

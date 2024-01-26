@@ -8,16 +8,16 @@ datasource db {
 }
 
 model avisos {
-  Data     DateTime @id @db.DateTime
+  Data     DateTime @id(map: "PK_avisos") @db.DateTime
   avisos   String?  @db.VarChar(255)
   conteudo String?  @db.Text
-  Distrito Int?     @default(0)
+  Distrito Int?     @default(0, map: "DF__avisos__Distrito__36B12243")
 }
 
 model boletim {
-  id         Int       @id @default(autoincrement())
+  id         Int       @id(map: "PK_boletim") @default(autoincrement())
   Data       DateTime? @db.DateTime
-  semana     Int       @default(0)
+  semana     Int       @default(0, map: "DF__boletim__semana__398D8EEE")
   titulo     String?   @db.Text
   introducao String?   @db.Text
   ponto1     String?   @db.VarChar(255)
@@ -45,28 +45,28 @@ model boletim {
 }
 
 model celulas {
-  Celula        Int       @default(0)
+  Celula        Int       @default(0, map: "DF__celulas__Celula__3C69FB99")
   Nome          String    @db.VarChar(255)
-  Supervisao    Int       @default(0)
+  Supervisao    Int       @default(0, map: "DF__celulas__Supervi__3D5E1FD2")
   Anfitriao     String?   @db.VarChar(255)
   CriadoEm      DateTime? @db.DateTime
   CriandoPor    String?   @db.VarChar(145)
   AtualizadoEm  DateTime? @db.DateTime
   AtualizadoPor String?   @db.VarChar(255)
-  Distrito      Int       @default(0)
-  Coordenacao   Int       @default(0)
+  Distrito      Int       @default(0, map: "DF__celulas__Distrit__3E52440B")
+  Coordenacao   Int       @default(0, map: "DF__celulas__Coorden__3F466844")
 
-  @@id([Celula, Supervisao, Coordenacao, Distrito])
+  @@id([Celula, Supervisao, Coordenacao, Distrito], map: "PK_celulas")
 }
 
 model contribuicoes {
-  id        Int       @id @default(autoincrement())
-  RolMembro Int       @default(0)
+  id        Int       @id(map: "PK_contribuicoes") @default(autoincrement())
+  RolMembro Int       @default(0, map: "DF__contribui__RolMe__4222D4EF")
   Nome      String    @db.VarChar(255)
-  Semana    Int?      @default(0)
-  Mes       Int?      @default(0)
+  Semana    Int?      @default(0, map: "DF__contribui__Seman__4316F928")
+  Mes       Int?      @default(0, map: "DF__contribuico__Mes__440B1D61")
   Data      DateTime  @db.DateTime
-  Ano       Int?      @default(0)
+  Ano       Int?      @default(0, map: "DF__contribuico__Ano__44FF419A")
   Tipo      String    @db.VarChar(45)
   Valor     String    @db.VarChar(145)
   CriadoPor String?   @db.VarChar(150)
@@ -74,34 +74,34 @@ model contribuicoes {
 }
 
 model cordenacao {
-  Coordenacao      Int       @default(0)
+  Coordenacao      Int       @default(0, map: "DF__cordenaca__Coord__47DBAE45")
   Coordenacao_Nome String    @db.VarChar(150)
-  Distrito         Int       @default(0)
+  Distrito         Int       @default(0, map: "DF__cordenaca__Distr__48CFD27E")
   CriadoEm         DateTime? @db.DateTime
   CriadoPor        String?   @db.VarChar(150)
   AtualizadoEm     DateTime? @db.DateTime
   AtualizadoPor    String?   @db.VarChar(255)
 
-  @@id([Coordenacao, Distrito])
+  @@id([Coordenacao, Distrito], map: "PK_cordenacao")
 }
 
 model cursos {
-  codigoCurso  BigInt  @id @default(0)
+  codigoCurso  BigInt  @id(map: "PK_cursos") @default(0, map: "DF__cursos__codigoCu__4BAC3F29")
   Curso        String  @db.VarChar(255)
   imagemCurso  String? @db.VarChar(255)
-  PreRequisito Boolean @default(false)
-  Requisito    BigInt? @default(0)
+  PreRequisito Boolean @default(false, map: "DF__cursos__PreRequi__4CA06362")
+  Requisito    BigInt? @default(0, map: "DF__cursos__Requisit__4D94879B")
   inscricao    Boolean
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model dicas {
-  id   Int    @id @default(autoincrement())
+  id   Int    @id(map: "PK_dicas") @default(autoincrement())
   Dica String @db.Text
 }
 
 model distrito {
-  Distrito      Int       @id @default(0)
+  Distrito      Int       @id(map: "PK_distrito") @default(0, map: "DF__distrito__Distri__5165187F")
   Distrito_Nome String    @db.VarChar(200)
   Endereco      String?   @db.VarChar(250)
   CriadoEm      DateTime? @db.DateTime
@@ -111,40 +111,40 @@ model distrito {
 }
 
 model eventos {
-  id       Int      @id @default(autoincrement())
+  id       Int      @id(map: "PK_EVENTOS1") @unique(map: "id_UNIQUE") @default(autoincrement())
   Data     DateTime @db.DateTime
   Horario  String?  @db.VarChar(5)
   Evento   String   @db.Text
   Local    String?  @db.Text
-  Distrito Int?     @default(0)
-  Mes      Int?     @default(0)
-  Ano      Int?     @default(0)
+  Distrito Int?     @default(0, map: "DF__eventos_Distrito_DefaultValueByAdapter")
+  Mes      Int?     @default(0, map: "DF__eventos_Mes_DefaultValueByAdapter")
+  Ano      Int?     @default(0, map: "DF__eventos_Ano_DefaultValueByAdapter")
   Objetivo String?  @db.Text
   Publico  String?  @db.VarChar(45)
-  Numero   Int?     @default(0)
+  Numero   Int?     @default(0, map: "DF__eventos_Numero_DefaultValueByAdapter")
   Funcao   String?  @db.VarChar(100)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model eventosCelulas {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id(map: "PK_eventosCelulas") @default(autoincrement())
   Data      DateTime @db.DateTime
   Evento    String   @db.Text
   Local     String   @db.Text
   Objetivo  String   @db.Text
   Descricao String   @db.VarChar(255)
-  Ano       Int      @default(0)
-  Mes       Int      @default(0)
+  Ano       Int      @default(0, map: "DF__eventosCelu__Ano__59063A47")
+  Mes       Int      @default(0, map: "DF__eventosCelu__Mes__59FA5E80")
   Horario   String   @db.VarChar(5)
-  Celula    Int      @default(0)
-  Distrito  Int      @default(0)
+  Celula    Int      @default(0, map: "DF__eventosCe__Celul__5AEE82B9")
+  Distrito  Int      @default(0, map: "DF__eventosCe__Distr__5BE2A6F2")
   CriadoEm  DateTime @db.DateTime
 }
 
 model eventosGeral {
-  id         Int       @id @default(autoincrement())
-  Evento     String    @db.Text
-  Distrito   Int?      @default(0)
+  id         Int       @id(map: "PK_eventosGeral") @default(autoincrement())
+  Evento     String?   @db.Text
+  Distrito   Int?      @default(0, map: "DF__eventosGe__Distr__5EBF139D")
   DataIni    DateTime  @db.DateTime
   DataFim    DateTime  @db.DateTime
   LogoEvento String    @db.VarChar(500)
@@ -154,12 +154,12 @@ model eventosGeral {
 }
 
 model funcao {
-  id     Int    @id @default(autoincrement())
+  id     Int    @id(map: "PK_funcao") @default(autoincrement())
   Funcao String @db.VarChar(100)
 }
 
 model igreja {
-  id              Int       @id @default(autoincrement())
+  id              Int       @id(map: "PK_igreja") @default(autoincrement())
   codigo          String    @db.VarChar(20)
   nome            String    @db.Text
   foneSecretaria  String?   @db.VarChar(15)
@@ -179,16 +179,17 @@ model igreja {
   CriadoPor       String?   @db.VarChar(150)
   AtualizadoEm    DateTime? @db.DateTime
   AtualizadoPor   String?   @db.VarChar(255)
+  website         String?   @db.VarChar(1000)
 }
 
 model inscritosCursos {
-  id              Int       @unique @default(autoincrement())
-  idTurma         BigInt    @default(0)
-  codigoCurso     BigInt    @default(0)
+  id              Int       @unique(map: "NK_inscritosCursos1") @default(autoincrement())
+  idTurma         BigInt    @default(0, map: "DF__inscritosCursos_idTurma_DefaultValueByAdapter")
+  codigoCurso     BigInt    @default(0, map: "DF__inscritos__codig__656C112C")
   Curso           String    @db.VarChar(255)
   DataCurso       DateTime  @db.DateTime
-  Documento       String    @default("0") @db.VarChar(50)
-  RolMembro       Int       @default(0)
+  Documento       String    @default("0", map: "DF__inscritos__Docum__66603565") @db.VarChar(50)
+  RolMembro       Int       @default(0, map: "DF__inscritos__RolMe__6754599E")
   Nome            String    @db.VarChar(255)
   Nascimento      DateTime? @db.Date
   Contato         String?   @db.VarChar(20)
@@ -200,17 +201,17 @@ model inscritosCursos {
   Situacao        String?   @db.VarChar(50)
   CreatedAt       DateTime  @db.DateTime
   CriadoPor       String?   @db.VarChar(150)
-  valor_pago      Decimal?  @default(0) @db.Decimal(10, 2)
+  valor_pago      Decimal?  @default(0, map: "DF__inscritos__valor__5DEAEAF5") @db.Decimal(10, 2)
   data_pagamento  DateTime? @db.Date
   forma_pagamento String?   @db.VarChar(50)
   participante    String?   @db.VarChar(50)
 
-  @@id([codigoCurso, Documento, RolMembro])
+  @@id([codigoCurso, Documento, RolMembro], map: "PK_inscritosCursos")
 }
 
 model inscritosEventosGeral {
-  id              Int       @unique @default(autoincrement())
-  idEvento        Int       @default(0)
+  id              Int       @unique(map: "NK_inscritosEventosGeralIdUnico") @default(autoincrement())
+  idEvento        Int       @default(0, map: "DF__inscritos__idEve__6A30C649")
   Evento          String?   @db.Text
   Identificador   String    @db.VarChar(45)
   Nome            String    @db.VarChar(255)
@@ -219,40 +220,40 @@ model inscritosEventosGeral {
   Email           String?   @db.VarChar(255)
   Igreja          String    @db.VarChar(20)
   Status          String    @db.VarChar(50)
-  RolMembro       Int       @default(0)
+  RolMembro       Int       @default(0, map: "DF__inscritos__RolMe__6B24EA82")
   CreatedAt       DateTime  @db.DateTime
-  Distrito        Int?      @default(0)
+  Distrito        Int?      @default(0, map: "DF__inscritos__Distr__6C190EBB")
   participante    String    @db.VarChar(50)
-  Documento       String    @default("0") @db.VarChar(50)
-  valor_pago      Decimal?  @default(0) @db.Decimal(10, 2)
+  Documento       String    @default("0", map: "DF__inscritos__Docum__6D0D32F4") @db.VarChar(50)
+  valor_pago      Decimal?  @default(0, map: "DF__inscritos__valor__5EDF0F2E") @db.Decimal(10, 2)
   forma_pagamento String?   @db.VarChar(50)
   data_pagamento  DateTime? @db.Date
 
-  @@id([idEvento, RolMembro, Documento])
+  @@id([idEvento, RolMembro, Documento], map: "PK_inscritosEventosGeral")
 }
 
 model lideranca {
   Funcao        String    @db.VarChar(100)
   Nome          String    @db.VarChar(255)
   Nascimento    DateTime? @db.Date
-  RolMembro     Int       @default(0)
+  RolMembro     Int       @default(0, map: "DF__lideranca__RolMe__6FE99F9F")
   Email         String?   @db.VarChar(255)
-  Celula        Int       @default(0)
+  Celula        Int       @default(0, map: "DF__lideranca_Celula_DefaultValueByAdapter")
   CriadoEm      DateTime? @db.DateTime
   CriadoPor     String?   @db.VarChar(150)
   AtualizadoEm  DateTime? @db.DateTime
   AtualizadoPor String?   @db.VarChar(255)
   Sexo          String?   @db.VarChar(10)
-  Distrito      Int       @default(0)
-  Coordenacao   Int       @default(0)
-  Supervisao    Int       @default(0)
-  id            Int       @unique @default(autoincrement())
+  Distrito      Int       @default(0, map: "DF__lideranca__Distr__71D1E811")
+  Coordenacao   Int       @default(0, map: "DF__lideranca_Coordenacao_DefaultValueByAdapter")
+  Supervisao    Int       @default(0, map: "DF__lideranca_Supervisao_DefaultValueByAdapter")
+  id            Int       @unique(map: "NK_lideranca1") @default(autoincrement())
   foto          String?   @db.VarChar(500)
   Igreja        String    @db.VarChar(20)
-  Nucleo        BigInt?   @default(0)
-  idTurma       BigInt?   @default(0)
+  Nucleo        BigInt?   @default(0, map: "DF__lideranca_Nucleo_DefaultValueByAdapter")
+  idTurma       BigInt?   @default(0, map: "DF__lideranca_idTurma_DefaultValueByAdapter")
 
-  @@id([RolMembro, Distrito, Coordenacao, Supervisao, Celula, Funcao])
+  @@id([RolMembro, Distrito, Coordenacao, Supervisao, Celula, Funcao], map: "PK_lideranca")
 }
 
 model membros {
@@ -260,12 +261,11 @@ model membros {
   Igreja            String    @db.VarChar(20)
   Nome              String    @db.VarChar(255)
   foto              String?   @db.VarChar(500)
-  Celula            Int       @default(0)
-  Distrito          Int?      @default(0)
-  Coordenacao       Int?      @default(0)
-  Supervisao        Int?      @default(0)
+  Celula            Int       @default(0, map: "DF__membros__Celula__76969D2E")
+  Distrito          Int?      @default(0, map: "DF__membros__Distrit__778AC167")
+  Coordenacao       Int?      @default(0, map: "DF__membros__Coorden__787EE5A0")
+  Supervisao        Int?      @default(0, map: "DF__membros__Supervi__797309D9")
   Discipulador      String?   @db.VarChar(145)
-  RolMembro         Int       @id @default(0)
   TelCelular        String?   @db.VarChar(25)
   TelFixo           String?   @db.VarChar(25)
   Email             String?   @db.VarChar(255)
@@ -280,11 +280,11 @@ model membros {
   CEP               String?   @db.VarChar(10)
   Logradouro        String?   @db.VarChar(255)
   Bairro            String?   @db.VarChar(255)
-  Numero            Int?      @default(0)
+  Numero            Int?      @default(0, map: "DF__membros__Numero__7B5B524B")
   Complemento       String?   @db.VarChar(255)
   Localidade        String?   @db.VarChar(255)
   UF                String?   @db.VarChar(25)
-  CPF               String?   @default("0") @db.VarChar(14)
+  CPF               String?   @default("0", map: "DF__membros__CPF__7C4F7684") @db.VarChar(14)
   RG                String?   @db.VarChar(25)
   FormacaoAcademica String?   @db.VarChar(255)
   Profissao         String?   @db.VarChar(255)
@@ -294,35 +294,39 @@ model membros {
   AtualizadoEm      DateTime? @db.DateTime
   AtualizadoPor     String?   @db.VarChar(255)
   CriadoPor         String?   @db.VarChar(150)
-  idFuncao          BigInt?   @default(0)
+  idFuncao          BigInt?   @default(0, map: "DF__membros__idFunca__0FEC5ADD")
   Funcao            String?   @db.VarChar(100)
   GrauMinisterial   String?   @db.VarChar(255)
   idNucleo          BigInt?
   nomeNucleo        String?   @db.VarChar(255)
   senha             String?   @db.VarChar(255)
+  conjuge           String?   @db.VarChar(255)
+  RolMembro         Int       @id(map: "PK_membros") @default(autoincrement())
 }
 
 model mensagem {
-  Data     DateTime @id @db.DateTime
+  Data     DateTime @db.DateTime
   titulo   String   @db.VarChar(255)
   Mensagem String   @db.Text
   Autor    String   @db.VarChar(250)
-  Distrito Int?     @default(0)
+  Distrito Int      @default(0, map: "DF__mensagem_Distrito_DefaultValueByAdapter")
+
+  @@id([Data, Distrito], map: "PK_mensagem")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model plancelula {
-  id            Int      @id @default(autoincrement())
+  id            Int      @id(map: "PK_plancelula") @default(autoincrement())
   Anfitriao     String   @db.VarChar(255)
   Multiplicacao String   @db.VarChar(25)
   Horario       String   @db.VarChar(5)
   Fase          String   @db.Text
-  Semana        Int      @default(0)
+  Semana        Int      @default(0, map: "DF__plancelul__Seman__01142BA1")
   Data          DateTime @db.DateTime
-  Celula        Int      @default(0)
-  Supervisao    Int      @default(0)
-  Coordenacao   Int      @default(0)
-  Distrito      Int      @default(0)
+  Celula        Int      @default(0, map: "DF__plancelul__Celul__02084FDA")
+  Supervisao    Int      @default(0, map: "DF__plancelul__Super__02FC7413")
+  Coordenacao   Int      @default(0, map: "DF__plancelul__Coord__03F0984C")
+  Distrito      Int      @default(0, map: "DF__plancelul__Distr__04E4BC85")
   Encontro      String   @db.Text
   Exaltacao     String   @db.Text
   Edificacao    String   @db.Text
@@ -332,21 +336,21 @@ model plancelula {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model pontuacao {
-  id         Int      @id @default(autoincrement())
-  Semana     Int      @default(0)
-  Ano        Int      @default(0)
-  Celula     Int      @default(0)
-  Supervisao Int      @default(0)
-  Distrito   Int      @default(0)
+  id         Int      @id(map: "PK_pontuacao") @default(autoincrement())
+  Semana     Int      @default(0, map: "DF__pontuacao__Seman__06CD04F7")
+  Ano        Int      @default(0, map: "DF__pontuacao__Ano__07C12930")
+  Celula     Int      @default(0, map: "DF__pontuacao__Celul__08B54D69")
+  Supervisao Int      @default(0, map: "DF__pontuacao__Super__09A971A2")
+  Distrito   Int      @default(0, map: "DF__pontuacao__Distr__0A9D95DB")
   Pontuacao  String   @db.VarChar(4000)
-  TotalRank  Decimal  @default(0) @db.Decimal(10, 2)
+  TotalRank  Decimal  @default(0, map: "DF__pontuacao_TotalRank_DefaultValueByAdapter") @db.Decimal(10, 2)
   Total      String   @db.VarChar(25)
   CriadoPor  String   @db.VarChar(150)
   CriadoEm   DateTime @db.DateTime
 }
 
 model radio {
-  id         Int    @id @default(autoincrement())
+  id         Int    @id(map: "PK_radio") @default(autoincrement())
   url        String @db.VarChar(255)
   label      String @db.VarChar(255)
   compositor String @db.VarChar(255)
@@ -354,17 +358,17 @@ model radio {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model relatorioCelebracao {
-  id              Int       @id @default(autoincrement())
-  Semana          Int       @default(0)
+  id              Int       @id(map: "PK_relatorioCelebracao") @default(autoincrement())
+  Semana          Int       @default(0, map: "DF__relatorio__Seman__0E6E26BF")
   Data            DateTime  @db.DateTime
-  Celula          Int       @default(0)
-  Distrito        Int       @default(0)
+  Celula          Int       @default(0, map: "DF__relatorio__Celul__0F624AF8")
+  Distrito        Int       @default(0, map: "DF__relatorio__Distr__10566F31")
   NomesMembros    String    @db.VarChar(4000)
   NomesVisitantes String?   @db.VarChar(4000)
-  Adultos         Int?      @default(0)
-  Criancas        Int?      @default(0)
-  Visitantes      Int?      @default(0)
-  Conversoes      Int?      @default(0)
+  Adultos         Int?      @default(0, map: "DF__relatorio__Adult__114A936A")
+  Criancas        Int?      @default(0, map: "DF__relatorio__Crian__123EB7A3")
+  Visitantes      Int?      @default(0, map: "DF__relatorio__Visit__1332DBDC")
+  Conversoes      Int?      @default(0, map: "DF__relatorio__Conve__14270015")
   Observacoes     String?   @db.VarChar(4000)
   CriadoPor       String?   @db.VarChar(150)
   CriadoEm        DateTime? @db.DateTime
@@ -372,19 +376,19 @@ model relatorioCelebracao {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model relatorioCelulas {
-  id               Int       @id @default(autoincrement())
-  Celula           Int       @default(0)
-  Distrito         Int       @default(0)
-  Semana           Int       @default(0)
+  id               Int       @id(map: "PK_relatorioCelulas") @default(autoincrement())
+  Celula           Int       @default(0, map: "DF__relatorio__Celul__160F4887")
+  Distrito         Int       @default(0, map: "DF__relatorio__Distr__17036CC0")
+  Semana           Int       @default(0, map: "DF__relatorio__Seman__17F790F9")
   Data             DateTime  @db.DateTime
   NomesMembros     String    @db.VarChar(4000)
   NomesVisitantes  String?   @db.NVarChar(Max)
-  Adultos          Int?      @default(0)
-  Criancas         Int?      @default(0)
-  Visitantes       Int?      @default(0)
-  PresentesEventos Int?      @default(0)
-  Visitas          Int?      @default(0)
-  Conversoes       Int?      @default(0)
+  Adultos          Int?      @default(0, map: "DF__relatorio__Adult__18EBB532")
+  Criancas         Int?      @default(0, map: "DF__relatorio__Crian__19DFD96B")
+  Visitantes       Int?      @default(0, map: "DF__relatorio__Visit__1AD3FDA4")
+  PresentesEventos Int?      @default(0, map: "DF__relatorio__Prese__1BC821DD")
+  Visitas          Int?      @default(0, map: "DF__relatorio__Visit__1CBC4616")
+  Conversoes       Int?      @default(0, map: "DF__relatorio__Conve__1DB06A4F")
   Observacoes      String?   @db.VarChar(4000)
   CriadoPor        String?   @db.VarChar(150)
   CriadoEm         DateTime? @db.DateTime
@@ -392,15 +396,15 @@ model relatorioCelulas {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model relatorioDiscipulado {
-  id             Int       @id @default(autoincrement())
-  Celula         Int       @default(0)
-  Distrito       Int       @default(0)
-  Semana         Int       @default(0)
+  id             Int       @id(map: "PK_relatorioDiscipulado") @default(autoincrement())
+  Celula         Int       @default(0, map: "DF__relatorio__Celul__1F98B2C1")
+  Distrito       Int       @default(0, map: "DF__relatorio__Distr__208CD6FA")
+  Semana         Int       @default(0, map: "DF__relatorio__Seman__2180FB33")
   Data           DateTime  @db.DateTime
-  Adultos        Int?      @default(0)
-  Criancas       Int?      @default(0)
+  Adultos        Int?      @default(0, map: "DF__relatorio__Adult__22751F6C")
+  Criancas       Int?      @default(0, map: "DF__relatorio__Crian__236943A5")
   NomesMembros   String    @db.VarChar(4000)
-  LeituraBiblica Int?      @default(0)
+  LeituraBiblica Int?      @default(0, map: "DF__relatorio__Leitu__245D67DE")
   Observacoes    String?   @db.VarChar(4000)
   CriadoPor      String?   @db.VarChar(150)
   CriadoEm       DateTime? @db.DateTime
@@ -408,58 +412,58 @@ model relatorioDiscipulado {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model relatorioVisitaSupervisao {
-  id             Int      @id @default(autoincrement())
+  id             Int      @id(map: "PK_relatorioVisitaSupervisao") @default(autoincrement())
   Nome           String   @db.VarChar(255)
   Funcao         String   @db.VarChar(100)
   CelulaVisitada String   @db.VarChar(25)
-  Supervisao     Int      @default(0)
-  Coordenacao    Int      @default(0)
-  Distrito       Int      @default(0)
+  Supervisao     Int      @default(0, map: "DF__relatorio__Super__2645B050")
+  Coordenacao    Int      @default(0, map: "DF__relatorio__Coord__2739D489")
+  Distrito       Int      @default(0, map: "DF__relatorio__Distr__282DF8C2")
   Data           DateTime @db.DateTime
   Recepcao       String   @db.Text
   Etapas         String   @db.Text
   Estrutura      String   @db.Text
   Observacoes    String   @db.VarChar(4000)
-  Mes            Int      @default(0)
-  Ano            Int      @default(0)
+  Mes            Int      @default(0, map: "DF__relatorioVi__Mes__29221CFB")
+  Ano            Int      @default(0, map: "DF__relatorioVi__Ano__2A164134")
   Ranking        String   @db.VarChar(45)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model relSupervisao {
-  id               Int      @id @default(autoincrement())
+  id               Int      @id(map: "PK_relSupervisao") @default(autoincrement())
   Nome             String   @db.VarChar(255)
   Funcao           String   @db.VarChar(100)
-  CelulaVisitada   Int      @default(0)
-  Supervisao       Int      @default(0)
-  Coordenacao      Int      @default(0)
-  Distrito         Int      @default(0)
+  CelulaVisitada   Int      @default(0, map: "DF__relSupervisao_CelulaVisitada_DefaultValueByAdapter")
+  Supervisao       Int      @default(0, map: "DF__relSuperv__Super__2BFE89A6")
+  Coordenacao      Int      @default(0, map: "DF__relSuperv__Coord__2CF2ADDF")
+  Distrito         Int      @default(0, map: "DF__relSuperv__Distr__2DE6D218")
   Data             DateTime @db.DateTime
   Avaliacoes       String   @db.VarChar(4000)
   Presentes        String   @db.VarChar(4000)
-  Mes              Int      @default(0)
-  Ano              Int      @default(0)
-  MembrosVisitados Int      @default(0)
+  Mes              Int      @default(0, map: "DF__relSupervis__Mes__2EDAF651")
+  Ano              Int      @default(0, map: "DF__relSupervis__Ano__2FCF1A8A")
+  MembrosVisitados Int      @default(0, map: "DF__relSupervisao_MembrosVisitatos_DefaultValueByAdapter")
 }
 
 model TB_CATEGORIA {
-  CAT_ID   BigInt @id
+  CAT_ID   BigInt @id(map: "PK_TB_CATEGORIA")
   CAT_NOME String @db.VarChar(100)
   GC_ID    BigInt
 }
 
 model TB_CENTRO_CUSTO {
-  CC_ID   BigInt @id @default(autoincrement())
+  CC_ID   BigInt @id(map: "PK_TB_CENTRO_CUSTO") @default(autoincrement())
   CC_NOME String @db.VarChar(100)
 }
 
 model TB_CONTA {
-  CT_ID   BigInt @id @default(autoincrement())
+  CT_ID   BigInt @id(map: "PK_TB_CONTA") @default(autoincrement())
   CT_NOME String @db.VarChar(100)
 }
 
 model TB_CORRENTISTA {
-  COR_ID       BigInt  @id @default(autoincrement())
+  COR_ID       BigInt  @id(map: "PK_TB_CORRENTISTA") @default(autoincrement())
   COR_NOME     String  @db.VarChar(200)
   COR_TIPO_DOC String? @db.VarChar(14)
   COR_NUM_DOC  String? @db.VarChar(50)
@@ -470,16 +474,16 @@ model TB_CORRENTISTA {
 }
 
 model TB_GRUPO_CATEGORIA {
-  GC_ID   BigInt @id @default(autoincrement())
+  GC_ID   BigInt @id(map: "PK_TB_GRUPO_CATEGORIA") @default(autoincrement())
   GC_NOME String @db.VarChar(100)
 }
 
 model TB_LANCAMENTO {
-  LANC_ID                 BigInt    @id @default(autoincrement())
+  LANC_ID                 BigInt    @id(map: "PK_TB_LANCAMENTO") @default(autoincrement())
   LANC_DESCRICAO          String?   @db.VarChar(100)
   LANC_DATA               DateTime  @db.Date
   LANC_TIPO               String?   @db.VarChar(100)
-  LANC_VALOR              Decimal   @default(0) @db.Decimal(10, 2)
+  LANC_VALOR              Decimal   @default(0, map: "DF__TB_LANCAM__LANC___40F9A68C") @db.Decimal(10, 2)
   LANC_PAGO               Boolean
   LANC_DATA_HORA_INCLUSAO DateTime? @db.DateTime
   COR_ID                  BigInt?
@@ -487,22 +491,25 @@ model TB_LANCAMENTO {
   CT_ID                   BigInt
   CC_ID                   BigInt
   nota_recibo             String?   @db.VarChar(500)
-  id_membro               BigInt?   @default(0)
+  id_membro               BigInt?   @default(0, map: "DF__TB_LANCAM__id_me__41EDCAC5")
   tipo_ofertante          Boolean
   plano_conta             String?   @db.VarChar(20)
   forma_pagamento         String?   @db.VarChar(50)
   CAT_NOME                String    @db.VarChar(100)
+  mesReferencia           BigInt    @default(0, map: "DF__TB_LANCAM__mesRe__3296789C")
+  anoReferencia           BigInt    @default(0, map: "DF__TB_LANCAM__anoRe__338A9CD5")
+  GC_ID                   BigInt    @default(0, map: "DF__TB_LANCAM__GC_ID__347EC10E")
 }
 
 model TB_LOGIN_DEVICE {
-  LOGIN_DEVICE_ID           String   @id @db.VarChar(255)
+  LOGIN_DEVICE_ID           String   @id(map: "LOGIN_DEVICE_PK") @db.VarChar(255)
   LOGIN_USER_LOGIN          String?  @db.VarChar(40)
-  LOGIN_DEVICE_TYPE         Int      @default(0) @db.SmallInt
+  LOGIN_DEVICE_TYPE         Int      @default(0, map: "DF__TB_LOGIN___LOGIN__44CA3770") @db.SmallInt
   LOGIN_DEVICE_REGISTRATION DateTime @db.DateTime
 }
 
 model TB_LOGIN_GROUP {
-  LOGIN_GROUP_NAME     String          @id @db.VarChar(60)
+  LOGIN_GROUP_NAME     String          @id(map: "LOGIN_GROUP_PK") @db.VarChar(60)
   LOGIN_GROUP_IS_ADMIN Boolean
   TB_LOGIN_RULE        TB_LOGIN_RULE[]
   TB_LOGIN_USER        TB_LOGIN_USER[]
@@ -513,114 +520,116 @@ model TB_LOGIN_RULE {
   LOGIN_GROUP_NAME       String         @db.VarChar(60)
   LOGIN_RULE_OBJECT      String         @db.VarChar(100)
   LOGIN_RULE_PERMISSIONS String         @db.VarChar(100)
-  TB_LOGIN_GROUP         TB_LOGIN_GROUP @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME])
+  TB_LOGIN_GROUP         TB_LOGIN_GROUP @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME], onDelete: Cascade, onUpdate: NoAction, map: "TB_LOGIN_GROUP_RULE")
 
-  @@id([LOGIN_RULE_PROJECT, LOGIN_GROUP_NAME, LOGIN_RULE_OBJECT])
+  @@id([LOGIN_RULE_PROJECT, LOGIN_GROUP_NAME, LOGIN_RULE_OBJECT], map: "LOGIN_RULE_PK")
 }
 
 model TB_LOGIN_TOKEN {
-  LOGIN_TOKEN_ID         String        @id @db.VarChar(36)
+  LOGIN_TOKEN_ID         String        @id(map: "LOGIN_TOKEN_PK") @db.VarChar(36)
   LOGIN_USER_LOGIN       String        @db.VarChar(40)
   LOGIN_TOKEN_ACQUIRED   DateTime      @db.DateTime
   LOGIN_TOKEN_EXPIRATION DateTime      @db.DateTime
-  TB_LOGIN_USER          TB_LOGIN_USER @relation(fields: [LOGIN_USER_LOGIN], references: [LOGIN_USER_LOGIN])
+  TB_LOGIN_USER          TB_LOGIN_USER @relation(fields: [LOGIN_USER_LOGIN], references: [LOGIN_USER_LOGIN], onDelete: Cascade, map: "TB_LOGIN_USER_TOKEN")
 }
 
 model TB_LOGIN_USER {
   LOGIN_GROUP_NAME    String           @db.VarChar(60)
-  LOGIN_USER_LOGIN    String           @id @db.VarChar(40)
+  LOGIN_USER_LOGIN    String           @id(map: "LOGIN_USER_PK") @db.VarChar(40)
   LOGIN_USER_PASSWORD String           @db.VarChar(40)
   LOGIN_USER_NAME     String           @db.VarChar(60)
   LOGIN_USER_OBS      String           @db.Text
-  TB_LOGIN_GROUP      TB_LOGIN_GROUP   @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME])
+  TB_LOGIN_GROUP      TB_LOGIN_GROUP   @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME], onDelete: Cascade, onUpdate: NoAction, map: "TB_LOGIN_GROUP_USER")
   TB_LOGIN_TOKEN      TB_LOGIN_TOKEN[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model TB_PARAMETRO {
-  PAR_CAT_TRANSF BigInt @id @default(0)
+  PAR_CAT_TRANSF BigInt @id(map: "PK_TB_PARAMETRO") @default(0, map: "DF__TB_PARAME__PAR_C__4E53A1AA")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model TB_SALDO_INICAL {
-  ano   Int     @default(0) @db.SmallInt
-  valor Decimal @default(0) @db.Decimal(10, 2)
-  Mes   Int     @default(0)
+  ano   Int     @default(0, map: "DF__TB_SALDO_IN__ano__503BEA1C") @db.SmallInt
+  valor Decimal @default(0, map: "DF__TB_SALDO___valor__51300E55") @db.Decimal(10, 2)
+  Mes   Int     @default(0, map: "DF__TB_SALDO_IN__Mes__5224328E")
 
-  @@id([ano, Mes])
+  @@id([ano, Mes], map: "PK_TB_SALDO_INICAL")
 }
 
 model TB_TRANSFERENCIA {
-  TF_ID                 BigInt   @id @default(autoincrement())
+  TF_ID                 BigInt   @id(map: "PK_TB_TRANSFERENCIA") @default(autoincrement())
   TF_DESCRICAO          String   @db.VarChar(100)
   TF_DATA               DateTime @db.Date
-  TF_CT_ORIGEM          BigInt   @default(0)
-  TF_CT_DESTINO         BigInt   @default(0)
-  TF_VALOR              Decimal  @default(0) @db.Decimal(10, 2)
+  TF_CT_ORIGEM          BigInt   @default(0, map: "DF__TB_TRANSF__TF_CT__55009F39")
+  TF_CT_DESTINO         BigInt   @default(0, map: "DF__TB_TRANSF__TF_CT__55F4C372")
+  TF_VALOR              Decimal  @default(0, map: "DF__TB_TRANSF__TF_VA__56E8E7AB") @db.Decimal(10, 2)
   TF_DATA_HORA_INCLUSAO DateTime @db.DateTime
   CAT_ID                BigInt
+  mesReferencia         BigInt   @default(0, map: "DF__TB_TRANSF__mesRe__3572E547")
+  anoReferencia         BigInt   @default(0, map: "DF__TB_TRANSF__anoRe__36670980")
 }
 
 model turma {
-  idTurma          BigInt   @id @default(autoincrement())
-  codigoCurso      BigInt   @default(0)
+  idTurma          BigInt   @id(map: "PK_turma") @default(autoincrement())
+  codigoCurso      BigInt   @default(0, map: "DF__turma__codigoCur__59C55456")
   Curso            String   @db.VarChar(255)
   DataCurso        DateTime @db.DateTime
   imagemCurso      String?  @db.VarChar(255)
-  PreRequisito     Boolean? @default(false)
-  Requisito        BigInt?  @default(0)
+  PreRequisito     Boolean? @default(false, map: "DF__turma__PreRequis__5AB9788F")
+  Requisito        BigInt?  @default(0, map: "DF__turma__Requisito__5BAD9CC8")
   inicioDivulgacao DateTime @db.DateTime
   fimDivulgacao    DateTime @db.DateTime
-  valor            Decimal? @default(0) @db.Decimal(10, 2)
-  Distrito         Int?     @default(0)
+  valor            Decimal? @default(0, map: "DF__turma__valor__5CA1C101") @db.Decimal(10, 2)
+  Distrito         Int?     @default(0, map: "DF__turma__Distrito__5D95E53A")
   Professor        String?  @db.VarChar(255)
   Email            String?  @db.VarChar(255)
-  RolMembro        Int?     @default(0)
+  RolMembro        Int?     @default(0, map: "DF__turma__RolMembro__5E8A0973")
   Status           String   @db.VarChar(50)
 }
 
 model visitantes {
-  id         Int      @id @default(autoincrement())
-  Celula     Int      @default(0)
-  Distrito   Int      @default(0)
-  Nome       String   @db.VarChar(255)
-  Contato    String   @db.VarChar(20)
-  Nascimento DateTime @db.Date
-  CriadoPor  String   @db.VarChar(150)
-  CriadoEm   DateTime @db.DateTime
+  id         Int       @id(map: "PK_visitantes") @default(autoincrement())
+  Celula     Int       @default(0, map: "DF__visitante__Celul__6166761E")
+  Distrito   Int       @default(0, map: "DF__visitante__Distr__625A9A57")
+  Nome       String    @db.VarChar(255)
+  Contato    String?   @db.VarChar(20)
+  Nascimento DateTime? @db.Date
+  CriadoPor  String    @db.VarChar(150)
+  CriadoEm   DateTime  @db.DateTime
 }
 
 model supervisao {
-  Supervisao      Int       @default(0)
+  Supervisao      Int       @default(0, map: "DF__supervisa__Super__32AB8735")
   Supervisao_Nome String    @db.VarChar(100)
   CriadoEm        DateTime? @db.DateTime
   CriadoPor       String    @db.VarChar(150)
   AtualizadoEm    DateTime? @db.DateTime
   AtualizadoPor   String?   @db.VarChar(255)
-  Coordenacao     Int       @default(0)
-  Distrito        Int       @default(0)
+  Coordenacao     Int       @default(0, map: "DF__supervisa__Coord__339FAB6E")
+  Distrito        Int       @default(0, map: "DF__supervisa__Distr__3493CFA7")
 
-  @@id([Supervisao, Coordenacao, Distrito])
+  @@id([Supervisao, Coordenacao, Distrito], map: "PK_supervisao")
 }
 
 model cursosConcluidos {
-  codigoCurso BigInt   @default(0)
+  codigoCurso BigInt   @default(0, map: "DF__cursosCon__codig__79FD19BE")
   Curso       String   @db.VarChar(255)
-  RolMembro   Int      @default(0)
+  RolMembro   Int      @default(0, map: "DF__cursosCon__RolMe__7AF13DF7")
   Nome        String   @db.VarChar(255)
   Data        DateTime @db.DateTime
-  id          Int      @id @default(autoincrement())
-  idTurma     BigInt?  @default(0)
+  id          Int      @id(map: "PK_cursosConcluidos") @default(autoincrement())
+  idTurma     BigInt?  @default(0, map: "DF__cursosCon__idTur__13BCEBC1")
 }
 
 model Nucleos {
   nomeNucleo String  @db.VarChar(255)
   Endereco   String? @db.VarChar(250)
-  idNucleo   BigInt  @id
+  idNucleo   BigInt  @id(map: "PK_Nucleos")
 }
 
 model agenda_igreja {
-  id_agenda BigInt   @id @default(autoincrement())
+  id_agenda BigInt   @id(map: "PK_agenda_igreja") @default(autoincrement())
   Descricao String   @db.VarChar(255)
   Objetivo  String?  @db.Text
   DataIni   DateTime @db.DateTime
@@ -628,19 +637,25 @@ model agenda_igreja {
 }
 
 model TB_PLANO_CONTA {
-  codigo     String   @id @db.VarChar(20)
+  codigo     String   @id(map: "PK_TB_PLANO_CONTA") @db.VarChar(20)
   Descricao  String?  @db.VarChar(255)
-  Reduz      String?  @default("0") @db.VarChar(20)
+  Reduz      String?  @default("0", map: "DF__TB_PLANO_CONTA_Reduz_DefaultValueByAdapter") @db.VarChar(20)
   analitica  Boolean?
   patrimonio Boolean?
   natureza   String?  @db.VarChar(100)
 }
 
 model TB_MES_REFERENCIA {
-  mesReferencia        BigInt  @default(0)
-  anoReferencia        BigInt  @default(0)
-  mesAtivo             Boolean
-  mesExtensoReferencia String  @db.VarChar(50)
+  mesReferencia BigInt @default(0, map: "DF__TB_MES_RE__mesRe__7775B2CE")
+  anoReferencia BigInt @default(0, map: "DF__TB_MES_RE__anoRe__7869D707")
 
-  @@id([mesReferencia, anoReferencia])
+  @@id([mesReferencia, anoReferencia], map: "PK_TB_MES_REFERENCIA")
+}
+
+model TB_MESES_USADOS {
+  mesReferencia BigInt  @default(0, map: "DF__TB_MESES___mesRe__30AE302A")
+  anoReferencia BigInt  @default(0, map: "DF__TB_MESES___anoRe__31A25463")
+  mesAtivo      Boolean
+
+  @@id([mesReferencia, anoReferencia], map: "PK_TB_MESES_USADOS")
 }

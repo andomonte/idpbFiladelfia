@@ -21,7 +21,7 @@ import api from 'src/components/services/api';
 import axios from 'axios';
 import Espera from 'src/utils/espera';
 import Erros from 'src/utils/erros';
-import { IoArrowUndoSharp, IoArrowRedoSharp } from 'react-icons/io5';
+import { IoArrowUndoSharp } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -171,7 +171,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tf_m: {
     backgroundColor: '#f5f5f5',
-
+    borderRadius: 6,
     width: '96%',
     fontSize: '5px',
   },
@@ -264,11 +264,13 @@ function RelatorioCelebracao({
   const dadosUser = rolMembros.filter(
     (val) => val.RolMembro === Number(perfilUser.RolMembro),
   );
+
   const [Encontro, setEncontro] = React.useState(dadosUser[0].Encontro);
   const [Exaltacao, setExaltacao] = React.useState(dadosUser[0].Exaltacao);
   const [Evangelismo, setEvangelismo] = React.useState(
     dadosUser[0].Evangelismo,
   );
+
   const [Lanche, setLanche] = React.useState(dadosUser[0].Lanche);
   const [Edificacao, setEdificacao] = React.useState(dadosUser[0].Edificacao);
 
@@ -319,6 +321,7 @@ function RelatorioCelebracao({
   const [inputValue, setInputValue] = React.useState(
     moment(PegaData(semanaEnviada, AnoPesquisado)).format('DD/MM/YYYY'),
   );
+
   // zera as opções dos 5 Es
   const zerarValues = () => {
     setValues(valorInicial);
@@ -430,11 +433,12 @@ function RelatorioCelebracao({
 
       setHorario(horarioNovo);
 
-      const newAnfitriao = nomesCelulaParcial.filter(
-        (val) => val.label === relatorio[0].Anfitriao,
-      );
+      const newAnfitriao = {
+        label: relatorio[0].Anfitriao,
+        value: 0,
+      };
 
-      if (newAnfitriao.length) setValueAnfitriao(newAnfitriao[0].label);
+      setValueAnfitriao(newAnfitriao.label);
 
       const newFase = fases.filter((val) => val.label === relatorio[0].Fase);
 
@@ -479,7 +483,7 @@ function RelatorioCelebracao({
         relExiste = 'sim';
         const dataAgora = new Date();
         const semanaAgora = semanaExata(dataAgora);
-        if (semanaAgora - semana < 3) setPodeEditar(true);
+        if (semanaAgora - semana < 8) setPodeEditar(true);
         else setPodeEditar(false);
 
         setExisteRelatorio(true); // avisa que tem relatório
@@ -511,7 +515,7 @@ function RelatorioCelebracao({
         const dataAgora = new Date();
         const semanaAgora = semanaExata(dataAgora);
 
-        if (semanaAgora - semana < 3) setPodeEditar(true);
+        if (semanaAgora - semana < 8) setPodeEditar(true);
         else setPodeEditar(false);
 
         const date1 = moment(dataAgora);
@@ -672,24 +676,44 @@ function RelatorioCelebracao({
       justifyContent="center"
       alignItems="center"
       width="100vw"
-      minHeight={570}
+      minHeight={700}
       minWidth={300}
       bgcolor={corIgreja.principal2}
       height="100vh"
+      flexDirection="column"
     >
       <Box
+        height="5%"
+        width="100vw"
+        minHeight={40}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        bgcolor={corIgreja.principal}
+      >
+        <Box
+          color="white"
+          fontFamily="Fugaz One"
+          fontSize="18px"
+          textAlign="center"
+          display="flex"
+        >
+          PLANEJAMENTO DA CÉLULA <Box ml={2}> {perfilUser.Celula}</Box>
+        </Box>
+      </Box>
+
+      <Box
         width="96%"
-        height="97%"
-        minHeight={550}
+        height="95%"
+        minHeight={560}
         display="flex"
         alignItems="center"
         justifyContent="center"
-        borderRadius={16}
-        bgcolor={corIgreja.principal} // cor principal tela inteira
+        // cor principal tela inteira
       >
         {checkRelatorio ? (
           <Box
-            height="100%"
+            height="98%"
             minWidth={300}
             width="100%"
             mt={0}
@@ -700,63 +724,14 @@ function RelatorioCelebracao({
             <Box minWidth={300} height="100%" width="100vw" maxWidth="1410px">
               <Box height="100%">
                 <Box
-                  height="10%"
-                  minHeight={75}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  bgcolor={corIgreja.principal}
-                  style={{}}
-                >
-                  <Box width="90%" ml={1}>
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      width="100%"
-                      mb={1}
-                    >
-                      <Grid item xs={7} md={7} lg={7} xl={7}>
-                        <Paper style={{ background: '#fafafa', height: 40 }}>
-                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <Grid container justifyContent="center">
-                              <KeyboardDatePicker
-                                open={open}
-                                disableToolbar
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                id="date-picker-inline"
-                                value={selectedDate}
-                                inputValue={inputValue}
-                                onClick={handleDateClick}
-                                onChange={handleDateChange}
-                                onClose={getData()}
-                                style={{
-                                  marginLeft: 10,
-                                  marginRight: 10,
-                                  marginTop: 5,
-                                  height: 30,
-                                  background: '#fafafa',
-                                }}
-                                KeyboardButtonProps={{
-                                  'aria-label': 'change date',
-                                }}
-                              />
-                            </Grid>
-                          </MuiPickersUtilsProvider>
-                        </Paper>
-                      </Grid>
-                    </Box>
-                  </Box>
-                </Box>
-
-                <Box
-                  height="73.9%"
+                  height="100%"
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
                   minHeight={343}
                   width="100%"
                   bgcolor={corIgreja.principal}
+                  borderRadius={16}
                 >
                   <Box
                     display="flex"
@@ -774,12 +749,7 @@ function RelatorioCelebracao({
                       width="100%"
                       height="100%"
                     >
-                      <Box
-                        height="63.7%"
-                        minHeight={330}
-                        bgcolor={corIgreja.principal}
-                        width="100%"
-                      >
+                      <Box height="100%" minHeight={330} width="100%">
                         {tela === 1 && (
                           <Box
                             display="flex"
@@ -790,87 +760,6 @@ function RelatorioCelebracao({
                             height="100%"
                           >
                             <Box
-                              height="10%"
-                              width="100%"
-                              minHeight={70}
-                              mb={5}
-                              mt={-2}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              borderBottom="2px solid #fff"
-                              borderTop="2px solid #fff"
-                              bgcolor={corIgreja.principal}
-                              sx={{
-                                color: '#fff',
-                                fontFamily: 'Geneva',
-                                fontWeight: 'bold',
-                                fontSize: '20px',
-                              }}
-                            >
-                              <Box
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                width="100%"
-                                height="100%"
-                              >
-                                <Box
-                                  sx={{ fontSize: '16px' }}
-                                  display="flex"
-                                  flexDirection="column"
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  height="100%"
-                                  borderRight="2px solid #fff"
-                                  width="50%"
-                                >
-                                  <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                  >
-                                    CÉLULA
-                                  </Box>
-                                  <Box
-                                    fontFamily="arial black"
-                                    color="white"
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                  >
-                                    {perfilUser.Celula}
-                                  </Box>
-                                </Box>
-                                <Box
-                                  sx={{ fontSize: '16px' }}
-                                  display="flex"
-                                  flexDirection="column"
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  height="100%"
-                                  width="50%"
-                                >
-                                  <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                  >
-                                    SEMANA
-                                  </Box>
-                                  <Box
-                                    fontFamily="arial black"
-                                    color="white"
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                  >
-                                    {semana}
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                            <Box
                               display="flex"
                               alignItems="center"
                               justifyContent="center"
@@ -878,21 +767,127 @@ function RelatorioCelebracao({
                               ml={0}
                               width="96%"
                               height="100%"
-                              bgcolor={corIgreja.principal}
                             >
                               <Box width="96%">
-                                <Box
-                                  color={corIgreja.iconeOn}
-                                  fontFamily="arial black"
-                                  fontSize="20px"
-                                  mb={5}
-                                  mt={-2}
-                                  textAlign="center"
-                                >
-                                  PLANEJAMENTO DA CÉLULA
-                                </Box>
                                 <Grid container spacing={2}>
-                                  <Grid item xs={12} md={12}>
+                                  <Box width="97%" ml={1}>
+                                    <Box
+                                      display="flex"
+                                      justifyContent="center"
+                                      width="100%"
+                                      alignItems="center"
+                                      mb={2}
+                                      mt={1}
+                                    >
+                                      <Grid item xs={7} md={7} lg={7} xl={7}>
+                                        <Box
+                                          mt={-1}
+                                          ml={2}
+                                          color="white"
+                                          sx={{ fontSize: 'bold' }}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            display="block"
+                                            gutterBottom
+                                          >
+                                            DATA DA CÉLULA
+                                          </Typography>
+                                        </Box>
+                                        <Paper
+                                          style={{
+                                            background: '#fafafa',
+                                            height: 40,
+                                          }}
+                                        >
+                                          <MuiPickersUtilsProvider
+                                            utils={DateFnsUtils}
+                                          >
+                                            <Grid
+                                              container
+                                              justifyContent="center"
+                                            >
+                                              <KeyboardDatePicker
+                                                open={open}
+                                                disableToolbar
+                                                variant="inline"
+                                                format="dd/MM/yyyy"
+                                                id="date-picker-inline"
+                                                value={selectedDate}
+                                                inputValue={inputValue}
+                                                onClick={handleDateClick}
+                                                onChange={handleDateChange}
+                                                onClose={getData()}
+                                                style={{
+                                                  marginLeft: 10,
+                                                  marginRight: 10,
+                                                  marginTop: 5,
+                                                  height: 30,
+                                                  background: '#fafafa',
+                                                }}
+                                                KeyboardButtonProps={{
+                                                  'aria-label': 'change date',
+                                                }}
+                                              />
+                                            </Grid>
+                                          </MuiPickersUtilsProvider>
+                                        </Paper>
+                                      </Grid>
+                                      <Grid item xs={6} md={6}>
+                                        <Box
+                                          mt={-1}
+                                          ml={2}
+                                          color="white"
+                                          sx={{ fontSize: 'bold' }}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            display="block"
+                                            gutterBottom
+                                          >
+                                            HORÁRIO DA CÉLULA
+                                          </Typography>
+                                        </Box>
+                                        <Box width="100%" ml={1.4} mt={0}>
+                                          <Box width="90%">
+                                            <Paper
+                                              style={{
+                                                background: '#fafafa',
+                                                height: 40,
+                                              }}
+                                            >
+                                              <LocalizationProvider
+                                                dateAdapter={AdapterDayjs}
+                                              >
+                                                <DesktopTimePicker
+                                                  ampm={false}
+                                                  inputRef={horarioRef}
+                                                  value={horario}
+                                                  variant="inline"
+                                                  onChange={(newValue) => {
+                                                    setHorario(newValue);
+                                                  }}
+                                                  renderInput={(params) => (
+                                                    <TextField
+                                                      {...params}
+                                                      style={{
+                                                        marginLeft: 10,
+                                                        marginRight: 10,
+                                                        marginTop: 5,
+                                                        height: 30,
+                                                        background: '#fafafa',
+                                                      }}
+                                                    />
+                                                  )}
+                                                />
+                                              </LocalizationProvider>
+                                            </Paper>
+                                          </Box>
+                                        </Box>
+                                      </Grid>
+                                    </Box>
+                                  </Box>
+                                  <Grid item xs={6} md={6}>
                                     <Box
                                       mt={-1}
                                       ml={2}
@@ -904,7 +899,7 @@ function RelatorioCelebracao({
                                         display="block"
                                         gutterBottom
                                       >
-                                        OBJETIVO CENTRAL DA REUNIÃO
+                                        FASE DA CÉLULA
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox2} mt={-2}>
@@ -912,7 +907,6 @@ function RelatorioCelebracao({
                                         id="Objetivo"
                                         value={objetivo}
                                         onChange={(e) => {
-                                          // setValues2(e);
                                           setObjetivo(e);
                                           multiplicacaoRef.current.focus();
                                         }}
@@ -935,15 +929,16 @@ function RelatorioCelebracao({
                                         MULTIPLICAÇÃO
                                       </Typography>
                                     </Box>
-                                    <Box ml={1.4} mt={0}>
+                                    <Box ml={1.4} mt={-1}>
                                       <Box>
                                         <TextField
                                           className={classes.tf_m}
                                           inputProps={{
                                             style: {
+                                              borderRadius: 16,
                                               width: '100%',
+                                              height: 27,
                                               textAlign: 'center',
-
                                               WebkitBoxShadow:
                                                 '0 0 0 1000px #fafafa  inset',
                                             },
@@ -969,61 +964,10 @@ function RelatorioCelebracao({
                                       </Box>
                                     </Box>
                                   </Grid>
-                                  <Grid item xs={6} md={6}>
-                                    <Box
-                                      mt={-1}
-                                      ml={2}
-                                      color="white"
-                                      sx={{ fontSize: 'bold' }}
-                                    >
-                                      <Typography
-                                        variant="caption"
-                                        display="block"
-                                        gutterBottom
-                                      >
-                                        HORÁRIO DA CÉLULA
-                                      </Typography>
-                                    </Box>
-                                    <Box width="100%" ml={1.4} mt={0}>
-                                      <Box width="90%">
-                                        <Paper
-                                          style={{
-                                            background: '#fafafa',
-                                            height: 32,
-                                          }}
-                                        >
-                                          <LocalizationProvider
-                                            dateAdapter={AdapterDayjs}
-                                          >
-                                            <DesktopTimePicker
-                                              ampm={false}
-                                              inputRef={horarioRef}
-                                              value={horario}
-                                              variant="inline"
-                                              onChange={(newValue) => {
-                                                setHorario(newValue);
-                                              }}
-                                              renderInput={(params) => (
-                                                <TextField
-                                                  {...params}
-                                                  style={{
-                                                    marginLeft: 10,
-                                                    marginRight: 10,
-                                                    marginTop: 0,
-                                                    height: 30,
-                                                    background: '#fafafa',
-                                                  }}
-                                                />
-                                              )}
-                                            />
-                                          </LocalizationProvider>
-                                        </Paper>
-                                      </Box>
-                                    </Box>
-                                  </Grid>
+
                                   <Grid item xs={12} md={12}>
                                     <Box
-                                      mt={1}
+                                      mt={0}
                                       ml={2}
                                       color="white"
                                       sx={{ fontSize: 'bold' }}
@@ -1100,36 +1044,9 @@ function RelatorioCelebracao({
                                       </Paper>
                                     </Box>
                                   </Grid>
-                                </Grid>
-                              </Box>
-                            </Box>
-                          </Box>
-                        )}
-
-                        {tela === 2 && (
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            flexDirection="column"
-                            width="100%"
-                            height="100%"
-                          >
-                            <Box
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              mt={0}
-                              ml={0}
-                              width="96%"
-                              height="100%"
-                              bgcolor={corIgreja.principal}
-                            >
-                              <Box width="96%">
-                                <Grid container spacing={2}>
                                   <Grid item xs={12} md={12}>
                                     <Box
-                                      mt={1}
+                                      mt={-2}
                                       ml={2}
                                       color="white"
                                       sx={{ fontSize: 'bold' }}
@@ -1145,7 +1062,7 @@ function RelatorioCelebracao({
 
                                     <Box className={classes.novoBox} mt={-2}>
                                       <Select
-                                        defaultValue={values}
+                                        value={values}
                                         onChange={(e) => {
                                           setValues(e);
                                           setEncontro(e.label);
@@ -1171,10 +1088,37 @@ function RelatorioCelebracao({
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>
                                       <Select
-                                        defaultValue={values2}
+                                        value={values2}
                                         onChange={(e) => {
                                           setValues2(e);
                                           setExaltacao(e.label);
+                                        }}
+                                        options={nomesCelulaParcial}
+                                      />
+                                    </Box>
+                                  </Grid>
+
+                                  <Grid item xs={12} md={12}>
+                                    <Box
+                                      mt={-1}
+                                      ml={2}
+                                      color="white"
+                                      sx={{ fontSize: 'bold' }}
+                                    >
+                                      <Typography
+                                        variant="caption"
+                                        display="block"
+                                        gutterBottom
+                                      >
+                                        Oração
+                                      </Typography>
+                                    </Box>
+                                    <Box className={classes.novoBox} mt={-2}>
+                                      <Select
+                                        value={values4}
+                                        onChange={(e) => {
+                                          setValues4(e);
+                                          setEvangelismo(e.label);
                                         }}
                                         options={nomesCelulaParcial}
                                       />
@@ -1197,7 +1141,7 @@ function RelatorioCelebracao({
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>
                                       <Select
-                                        defaultValue={values3}
+                                        value={values3}
                                         onChange={(e) => {
                                           setValues3(e);
                                           setEdificacao(e.label);
@@ -1218,38 +1162,12 @@ function RelatorioCelebracao({
                                         display="block"
                                         gutterBottom
                                       >
-                                        Compartilhando a Visão
+                                        Lanche
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>
                                       <Select
-                                        defaultValue={values4}
-                                        onChange={(e) => {
-                                          setValues4(e);
-                                          setEvangelismo(e.label);
-                                        }}
-                                        options={nomesCelulaParcial}
-                                      />
-                                    </Box>
-                                  </Grid>
-                                  <Grid item xs={12} md={12}>
-                                    <Box
-                                      mt={-1}
-                                      ml={2}
-                                      color="white"
-                                      sx={{ fontSize: 'bold' }}
-                                    >
-                                      <Typography
-                                        variant="caption"
-                                        display="block"
-                                        gutterBottom
-                                      >
-                                        LANCHE
-                                      </Typography>
-                                    </Box>
-                                    <Box className={classes.novoBox} mt={-2}>
-                                      <Select
-                                        defaultValue={values5}
+                                        value={values5}
                                         onChange={(e) => {
                                           setValues5(e);
                                           setLanche(e.label);
@@ -1258,269 +1176,158 @@ function RelatorioCelebracao({
                                       />
                                     </Box>
                                   </Grid>
+                                  <Box
+                                    width="100%"
+                                    mb={1}
+                                    mt={2}
+                                    display="flex"
+                                    justifyContent="center"
+                                  >
+                                    <Box width="86%">
+                                      <Grid container spacing={2}>
+                                        {tela === 1 && (
+                                          <Grid container spacing={2}>
+                                            <Grid
+                                              item
+                                              xs={6}
+                                              md={6}
+                                              lg={6}
+                                              xl={6}
+                                            >
+                                              <Paper
+                                                style={{
+                                                  borderRadius: 16,
+                                                  textAlign: 'center',
+                                                  background: '#ffeeee',
+                                                  height: 40,
+                                                }}
+                                              >
+                                                <Button
+                                                  onClick={() => {
+                                                    setOpenPlan(false);
+                                                    ajusteRelatorio();
+                                                  }}
+                                                  startIcon={
+                                                    <IoArrowUndoSharp color="blue" />
+                                                  }
+                                                >
+                                                  <Box
+                                                    mr={2}
+                                                    ml={2}
+                                                    mt={0.3}
+                                                    sx={{
+                                                      fontFamily: 'arial black',
+                                                    }}
+                                                  >
+                                                    VOLTAR
+                                                  </Box>
+                                                </Button>
+                                              </Paper>
+                                            </Grid>
+
+                                            <Grid
+                                              item
+                                              xs={6}
+                                              md={6}
+                                              lg={6}
+                                              xl={6}
+                                            >
+                                              <Paper
+                                                style={{
+                                                  borderRadius: 16,
+                                                  textAlign: 'center',
+                                                  background: podeEditar
+                                                    ? '#ffffaa'
+                                                    : 'gray',
+                                                  height: 40,
+                                                }}
+                                              >
+                                                {existeRelatorio === true ? (
+                                                  <Box>
+                                                    {podeEditar ? (
+                                                      <Box>
+                                                        <Box>
+                                                          {!carregando ? (
+                                                            <Button
+                                                              onClick={
+                                                                handleSalvar
+                                                              }
+                                                              startIcon={
+                                                                <IoIosSave color="blue" />
+                                                              }
+                                                            >
+                                                              <Box
+                                                                mt={0.3}
+                                                                sx={{
+                                                                  fontFamily:
+                                                                    'arial black',
+                                                                }}
+                                                              >
+                                                                <Box>
+                                                                  Atualizar
+                                                                </Box>
+                                                              </Box>
+                                                            </Button>
+                                                          ) : (
+                                                            <Box>
+                                                              <Espera descricao="Gerando o Relatório" />
+                                                            </Box>
+                                                          )}
+                                                        </Box>
+                                                      </Box>
+                                                    ) : (
+                                                      <Button>
+                                                        <Box
+                                                          color="#fff"
+                                                          mt={0.3}
+                                                          sx={{
+                                                            fontFamily:
+                                                              'arial black',
+                                                          }}
+                                                        >
+                                                          Consolidado
+                                                        </Box>
+                                                      </Button>
+                                                    )}
+                                                  </Box>
+                                                ) : (
+                                                  <Box>
+                                                    {!carregando ? (
+                                                      <Button
+                                                        onClick={handleSalvar}
+                                                        startIcon={
+                                                          <IoIosSave color="blue" />
+                                                        }
+                                                      >
+                                                        <Box
+                                                          mt={0.3}
+                                                          sx={{
+                                                            fontFamily:
+                                                              'arial black',
+                                                          }}
+                                                        >
+                                                          <Box>Salvar</Box>
+                                                        </Box>
+                                                      </Button>
+                                                    ) : (
+                                                      <Box>
+                                                        <Espera descricao="Criando o Planejamento" />
+                                                      </Box>
+                                                    )}
+                                                  </Box>
+                                                )}
+                                              </Paper>
+                                            </Grid>
+                                          </Grid>
+                                        )}
+                                      </Grid>
+                                    </Box>
+                                  </Box>
                                 </Grid>
                               </Box>
                             </Box>
                           </Box>
                         )}
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  height="10%"
-                  minHeight={75}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  bgcolor={corIgreja.principal}
-                >
-                  <Box
-                    height="10%"
-                    minHeight={75}
-                    width="90%"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    bgcolor={corIgreja.principal}
-                    style={{
-                      borderTopLeftRadius: '16px',
-                      borderTopRightRadius: '16px',
-                    }}
-                  >
-                    <Box
-                      height="10%"
-                      minHeight={75}
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      bgcolor={corIgreja.principal}
-                      width="100vw"
-                    >
-                      <Box
-                        height="10%"
-                        minHeight={75}
-                        width="90%"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        bgcolor={corIgreja.principal}
-                        style={{
-                          borderTopLeftRadius: '16px',
-                          borderTopRightRadius: '16px',
-                        }}
-                      >
-                        <Box width="100%" ml={1}>
-                          <Box mb={1}>
-                            <Grid container spacing={2}>
-                              {tela === 1 && (
-                                <Grid container spacing={2}>
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                                    <Paper
-                                      style={{
-                                        borderRadius: 16,
-                                        textAlign: 'center',
-                                        background: '#ffffaa',
-                                        height: 40,
-                                      }}
-                                    >
-                                      <Button
-                                        onClick={() => {
-                                          setOpenPlan(false);
-                                          ajusteRelatorio();
-                                        }}
-                                        startIcon={
-                                          <IoArrowUndoSharp color="blue" />
-                                        }
-                                      >
-                                        <Box
-                                          mr={2}
-                                          ml={2}
-                                          mt={0.3}
-                                          sx={{ fontFamily: 'arial black' }}
-                                        >
-                                          VOLTAR
-                                        </Box>
-                                      </Button>
-                                    </Paper>
-                                  </Grid>
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                                    <Paper
-                                      style={{
-                                        borderRadius: 16,
-                                        textAlign: 'center',
-                                        background: '#feeffa',
-                                        height: 40,
-                                      }}
-                                    >
-                                      {multiplicacao.length > 9 &&
-                                      horario &&
-                                      String(horario.$H).length === 2 &&
-                                      String(horario.$m).length === 2 &&
-                                      valueAnfitriao.length > 2 &&
-                                      objetivo.label !==
-                                        'Qual a fase atual da Célula?' ? (
-                                        <Button
-                                          onClick={() => {
-                                            setTela(2);
-                                          }}
-                                          endIcon={
-                                            <IoArrowRedoSharp color="blue" />
-                                          }
-                                        >
-                                          <Box
-                                            mr={2}
-                                            ml={2}
-                                            mt={0.3}
-                                            sx={{ fontFamily: 'arial black' }}
-                                          >
-                                            Próxima
-                                          </Box>
-                                        </Button>
-                                      ) : (
-                                        <Button
-                                          onClick={() => {
-                                            toast.error(
-                                              'ANTES DE IR PARA A PRÓXIMA TELA PREENCHA TODOS OS DADOS !',
-                                              {
-                                                position:
-                                                  toast.POSITION.TOP_CENTER,
-                                              },
-                                            );
-                                          }}
-                                          endIcon={
-                                            <IoArrowRedoSharp color="gray" />
-                                          }
-                                        >
-                                          <Box
-                                            mr={2}
-                                            ml={2}
-                                            mt={0.3}
-                                            sx={{ fontFamily: 'arial black' }}
-                                          >
-                                            PRÓXIMA
-                                          </Box>
-                                        </Button>
-                                      )}
-                                    </Paper>
-                                  </Grid>
-                                </Grid>
-                              )}
-                              {tela === 2 && (
-                                <Grid container spacing={2}>
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                                    <Paper
-                                      style={{
-                                        borderRadius: 16,
-                                        textAlign: 'center',
-                                        background: '#ffeeee',
-                                        height: 40,
-                                      }}
-                                    >
-                                      <Button
-                                        onClick={() => {
-                                          setTela(1);
-                                        }}
-                                        startIcon={
-                                          <IoArrowUndoSharp color="blue" />
-                                        }
-                                      >
-                                        <Box
-                                          mt={0.3}
-                                          sx={{ fontFamily: 'arial black' }}
-                                        >
-                                          ANTERIOR
-                                        </Box>
-                                      </Button>
-                                    </Paper>
-                                  </Grid>
-
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                                    <Paper
-                                      style={{
-                                        borderRadius: 16,
-                                        textAlign: 'center',
-                                        background: podeEditar
-                                          ? '#ffffaa'
-                                          : 'gray',
-                                        height: 40,
-                                      }}
-                                    >
-                                      {existeRelatorio === true ? (
-                                        <Box>
-                                          {podeEditar ? (
-                                            <Box>
-                                              <Box>
-                                                {!carregando ? (
-                                                  <Button
-                                                    onClick={handleSalvar}
-                                                    startIcon={
-                                                      <IoIosSave color="blue" />
-                                                    }
-                                                  >
-                                                    <Box
-                                                      mt={0.3}
-                                                      sx={{
-                                                        fontFamily:
-                                                          'arial black',
-                                                      }}
-                                                    >
-                                                      <Box>Atualizar</Box>
-                                                    </Box>
-                                                  </Button>
-                                                ) : (
-                                                  <Box>
-                                                    <Espera descricao="Gerando o Relatório" />
-                                                  </Box>
-                                                )}
-                                              </Box>
-                                            </Box>
-                                          ) : (
-                                            <Button>
-                                              <Box
-                                                color="#fff"
-                                                mt={0.3}
-                                                sx={{
-                                                  fontFamily: 'arial black',
-                                                }}
-                                              >
-                                                Consolidado
-                                              </Box>
-                                            </Button>
-                                          )}
-                                        </Box>
-                                      ) : (
-                                        <Box>
-                                          {!carregando ? (
-                                            <Button
-                                              onClick={handleSalvar}
-                                              startIcon={
-                                                <IoIosSave color="blue" />
-                                              }
-                                            >
-                                              <Box
-                                                mt={0.3}
-                                                sx={{
-                                                  fontFamily: 'arial black',
-                                                }}
-                                              >
-                                                <Box>Salvar</Box>
-                                              </Box>
-                                            </Button>
-                                          ) : (
-                                            <Box>
-                                              <Espera descricao="Criando o Planejamento" />
-                                            </Box>
-                                          )}
-                                        </Box>
-                                      )}
-                                    </Paper>
-                                  </Grid>
-                                </Grid>
-                              )}
-                            </Grid>
-                          </Box>
-                        </Box>
                       </Box>
                     </Box>
                   </Box>

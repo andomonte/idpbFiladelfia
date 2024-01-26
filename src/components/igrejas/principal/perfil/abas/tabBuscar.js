@@ -122,17 +122,18 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
+
       if (presCelula1.length) {
         const nomes = Object.keys(presCelula1).map((i) =>
           JSON.parse(presCelula1[Number(i)].NomesMembros),
         );
 
         setDataSem1(ConverteData(presCelula1[0].Data));
-        const pSem1 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
-        );
+        const pSem1 = nomes[0].filter((val) => val.Nome === perfilUser.Nome);
+
         setPresSem1(pSem1);
       }
       // seman 2
@@ -140,6 +141,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana2) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula2.length) {
@@ -148,9 +150,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         setDataSem2(ConverteData(presCelula2[0].Data));
-        const pSem1 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
-        );
+        const pSem1 = nomes[0].filter((val) => val.Nome === perfilUser.Nome);
         setPresSem2(pSem1);
       }
 
@@ -159,6 +159,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana3) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula3.length) {
@@ -167,9 +168,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         setDataSem3(ConverteData(presCelula3[0].Data));
-        const pSem1 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
-        );
+        const pSem1 = nomes[0].filter((val) => val.Nome === perfilUser.Nome);
         setPresSem3(pSem1);
       }
 
@@ -178,6 +177,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana4) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula4.length) {
@@ -186,9 +186,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         setDataSem4(ConverteData(presCelula4[0].Data));
-        const pSem1 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
-        );
+        const pSem1 = nomes[0].filter((val) => val.Nome === perfilUser.Nome);
 
         setPresSem4(pSem1);
       }
@@ -197,6 +195,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana5) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula5.length) {
@@ -205,9 +204,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         setDataSem5(ConverteData(presCelula5[0].Data));
-        const pSem1 = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
-        );
+        const pSem1 = nomes[0].filter((val) => val.Nome === perfilUser.Nome);
         setPresSem5(pSem1);
       }
     }
@@ -222,6 +219,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelebracao1.length) {
@@ -229,16 +227,17 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
           JSON.parse(presCelebracao1[Number(i)].NomesMembros),
         );
 
-        const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+        const pSemCelebracao = nomes[0].filter(
+          (val) => val.Nome === perfilUser.Nome,
         );
-        setCelebSem1(pSemDiscipulado);
+        setCelebSem1(pSemCelebracao);
       }
       // seman 2
       const presCelebracao2 = semCelebracao.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana2) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelebracao2.length) {
@@ -247,7 +246,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemCelebracao = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setCelebSem2(pSemCelebracao);
       }
@@ -257,6 +256,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana3) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelebracao3.length) {
@@ -265,7 +265,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemCelebracao = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setCelebSem3(pSemCelebracao);
       }
@@ -275,6 +275,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana4) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelebracao4.length) {
@@ -283,7 +284,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemCelebracao = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setCelebSem4(pSemCelebracao);
       }
@@ -293,6 +294,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana5) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelebracao5.length) {
@@ -301,7 +303,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemCelebracao = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setCelebSem5(pSemCelebracao);
       }
@@ -312,11 +314,13 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
   }, [semCelebracao]);
 
   React.useEffect(() => {
+    console.log('sem discipulado', semDiscipulado);
     if (semDiscipulado && semDiscipulado.length) {
       const presDiscipulado1 = semDiscipulado.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presDiscipulado1.length) {
@@ -325,7 +329,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setDiscSem1(pSemDiscipulado);
       }
@@ -334,6 +338,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana2) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presDiscipulado2.length) {
@@ -342,7 +347,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setDiscSem2(pSemDiscipulado);
       }
@@ -352,6 +357,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana3) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presDiscipulado3.length) {
@@ -360,16 +366,18 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setDiscSem3(pSemDiscipulado);
       }
 
       // seman 4
+
       const presDiscipulado4 = semDiscipulado.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana4) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presDiscipulado4.length) {
@@ -378,7 +386,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setDiscSem4(pSemDiscipulado);
       }
@@ -388,6 +396,8 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           val.Semana === Number(semana5) &&
+          Ano === new Date(val.Data).getFullYear() &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presDiscipulado5.length) {
@@ -396,7 +406,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
         );
 
         const pSemDiscipulado = nomes[0].filter(
-          (val) => val.Rol === Number(perfilUser.RolMembro),
+          (val) => val.Nome === perfilUser.Nome,
         );
         setDiscSem5(pSemDiscipulado);
       }

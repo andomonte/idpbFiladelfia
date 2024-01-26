@@ -6,12 +6,13 @@ import { useSession } from 'next-auth/client';
 
 function relatorios({ celulas, rolMembros, lideranca, visitantes }) {
   const router = useRouter();
+  const [session] = useSession();
   const perfilUser = router.query;
 
   let mudaDados = 'sai';
   if (perfilUser.id) mudaDados = 'entra';
   const [perfilUserF, setPerfilUserF] = React.useState();
-  const [session] = useSession();
+
   React.useEffect(() => {
     if (mudaDados === 'entra') {
       setPerfilUserF(perfilUser);
@@ -74,7 +75,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

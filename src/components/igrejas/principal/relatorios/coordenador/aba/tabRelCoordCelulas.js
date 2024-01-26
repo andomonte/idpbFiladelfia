@@ -82,7 +82,6 @@ export default function TabCelula({
     if (!sem1) return <Espera descricao="Buscando os Dados" />;
     return 0;
   }, [sem1]);
-  // console.log('sem1', presSem1, rankGeral);
   React.useEffect(() => {
     if (pontos) {
       if (pontos.length) {

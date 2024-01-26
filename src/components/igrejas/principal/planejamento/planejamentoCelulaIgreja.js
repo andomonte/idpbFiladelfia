@@ -58,7 +58,7 @@ function PlanMembro({ perfilUser, lideranca }) {
   const uniqueArr = [...new Set(numberCelulas)];
 
   const [numeroCelulas] = React.useState(uniqueArr);
-  console.log('NCELULAS', numeroCelulas);
+
   const handleIncAno = () => {
     let contAnoAtual = contAno + 1;
 

@@ -6,11 +6,15 @@ export default async function handle(req, res) {
   const posts = await prisma.avisos
     .findMany({
       orderBy: {
-        semana: 'desc',
+        Data: 'asc',
       },
     })
     .finally(async () => {
       await prisma.$disconnect();
     });
-  res.send(posts[0].semana);
+  res.statuCode = 200;
+  res.setHeader('Content-Type', 'aplication/json');
+  res.json(
+    JSON.stringify(posts, (_, v) => (typeof v === 'bigint' ? v.toString() : v)),
+  );
 }

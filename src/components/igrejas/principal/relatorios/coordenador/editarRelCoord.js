@@ -206,8 +206,6 @@ function RelSuper({
     setLoading(true);
     const Data = new Date(DataMMDDAAA(inputValue));
 
-    //    console.log(createData(`${row}`, index),)
-
     const Avaliacoes = createAvaliacoes(
       avaliacaoRelatorio.label,
       avaliacaoPlanejamento.label,

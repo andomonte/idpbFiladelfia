@@ -52,7 +52,6 @@ function meuPerfil({ celulas, rolMembros, lideranca }) {
       '/selectPerfil',
     );
   }
-  // //console.log('valor dentro do meu perfil', perfilUserF, rolMembros);
   return (
     <div>
       {perfilUserF ? (
@@ -84,7 +83,14 @@ export const getStaticProps = async () => {
   const rolMembros = await prisma.membros
     .findMany({
       where: {
-        Situacao: 'ATIVO',
+        OR: [
+          {
+            Situacao: 'ATIVO',
+          },
+          {
+            Situacao: 'NOVO',
+          },
+        ],
       },
       orderBy: [
         {

@@ -1,57 +1,130 @@
 import { Box, Grid } from '@material-ui/core';
 import React from 'react';
-import TamanhoJanela from 'src/utils/getSize';
+import PegaSemanaMes from 'src/utils/getSemanaMes';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
-
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
 
 import PegaSemanaAtual from 'src/utils/getSemanaAtual';
+
 import PegaMes from 'src/utils/getMes';
 
 import Meses from 'src/utils/mesesAbrev';
 
-import TabCelula from './coordenador/aba/tabRelCoordCelulas';
+import TamanhoJanela from 'src/utils/getSize';
+import TabCelula from './supervisor/aba/tabRelSuperCelulas';
 import TabSetor from './coordenador/aba/tabRelCoordTotal';
 import TabResumo from './supervisor/aba/tabResumo';
 
+//------------------------------------------
 const janela = TamanhoJanela();
 function RelCelula({ perfilUser, lideranca }) {
   //= ================================================================
   const mes = Meses();
-  const d = new Date();
-  const mesAtual = Number(d.getMonth());
-  const anoAtual = Number(d.getFullYear());
+  const dataAtual = new Date(); // new Date();
+  const mesAtual = Number(dataAtual.getMonth());
+  const anoAtual = Number(dataAtual.getFullYear());
   const [contMes, setContMes] = React.useState(mesAtual);
   const [contAno, setContAno] = React.useState(anoAtual);
-  const [indexTabela, setIndexTabela] = React.useState([]);
-  const dataAtual = Date.now();
+
   const semanaAtual = PegaSemanaAtual(dataAtual);
+
+  // const mesSemana = PegaMes(semanaAtual, anoAtual);
+  const semanaMes = PegaSemanaMes(dataAtual); // pega a semana certa do mes
+  const [contSemanaMes, setContSemanaMes] = React.useState(semanaMes);
 
   const [sendResumo, setSendResumo] = React.useState(false);
   const [dadosCelulaSend, setDadosCelulaSend] = React.useState([]);
   const [valorIndexSend, setValorIndexSend] = React.useState([]);
+  const [indexTabela, setIndexTabela] = React.useState([]);
 
   const [contSemana, setContSemana] = React.useState(semanaAtual);
 
   const lideresSetor = lideranca.sort((a, b) => {
-    if (new Date(a.Celula) > new Date(b.Celula)) return 1;
-    if (new Date(b.Celula) > new Date(a.Celula)) return -1;
+    if (Number(a.Celula) > Number(b.Celula)) return 1;
+    if (Number(b.Celula) > Number(a.Celula)) return -1;
     return 0;
   });
-
-  const celulaSetor = lideresSetor.filter(
+  const celulaSetorIni = lideresSetor.filter(
     (results) =>
       Number(results.Distrito) === Number(perfilUser.Distrito) &&
       results.Funcao === 'Lider',
   );
-  const numberCelulas = celulaSetor.map((itens) => itens.Celula);
+
+  const listaSetor = lideresSetor.sort((a, b) => {
+    if (Number(a.Coordenacao) > Number(b.Coordenacao)) return 1;
+    if (Number(b.Coordenacao) > Number(a.Coordenacao)) return -1;
+    return 0;
+  });
+
+  const numberCelulas = celulaSetorIni.map((itens) => itens.Celula);
   const uniqueArr = [...new Set(numberCelulas)];
+  const numeroCelula = uniqueArr;
 
-  const [numeroCelula] = React.useState(uniqueArr);
+  const numberSuper = listaSetor.map((itens) => itens.Coordenacao);
+  const uniqueArrSuper = [...new Set(numberSuper)];
+  const numeroSupervisao = uniqueArrSuper;
 
-  const tipo = ['Relatório das Celulas', 'Relatório Geral'];
+  const [contSetor, setContSetor] = React.useState(0);
+  const numeroSetorIni = numeroSupervisao.map((val) => val);
+  numeroSetorIni.unshift('TODAS AS COORDENAÇÕES');
+  const numeroSetor = numeroSetorIni;
+  const [celulaSetor, setCelulaSetor] = React.useState(numeroCelula);
+
+  const tipo = ['Relatório das Células', 'Relatório Geral'];
   const [contTipo, setContTipo] = React.useState(0);
+
+  React.useEffect(() => {}, []);
+
+  React.useEffect(() => {
+    if (contSetor !== 0) {
+      const novaLista = lideresSetor.filter(
+        (results) =>
+          Number(results.Distrito) === Number(perfilUser.Distrito) &&
+          results.Funcao === 'Lider' &&
+          Number(results.Coordenacao) === Number(numeroSetor[contSetor]),
+      );
+
+      const numberCelulasF = novaLista.map((itens) => itens.Celula);
+      const uniqueArrF = [...new Set(numberCelulasF)];
+      const numeroCelulaF = uniqueArrF;
+      setCelulaSetor(numeroCelulaF);
+    } else {
+      const novaLista = lideresSetor.filter(
+        (results) =>
+          Number(results.Distrito) === Number(perfilUser.Distrito) &&
+          results.Funcao === 'Lider',
+      );
+      const numberCelulasF = novaLista.map((itens) => itens.Celula);
+      const uniqueArrF = [...new Set(numberCelulasF)];
+      const numeroCelulaF = uniqueArrF;
+
+      const lideresSetor2 = numeroCelulaF.sort((a, b) => {
+        if (new Date(a) > new Date(b)) return 1;
+        if (new Date(b) > new Date(a)) return -1;
+        return 0;
+      });
+      setCelulaSetor(lideresSetor2);
+    }
+  }, [contSetor]);
+
+  const handleIncSetor = () => {
+    let contTipoAtual = contSetor + 1;
+    if (contTipoAtual > numeroSetor.length - 1) {
+      contTipoAtual = 0;
+    }
+
+    setContSetor(contTipoAtual);
+  };
+  const handleDecSetor = () => {
+    let contTipoAtual = contSetor - 1;
+
+    if (contTipoAtual < 0) {
+      contTipoAtual = numeroSetor.length - 1;
+    }
+    setContSetor(contTipoAtual);
+  };
+
   const handleIncTipo = () => {
     let contTipoAtual = contTipo + 1;
 
@@ -71,27 +144,58 @@ function RelCelula({ perfilUser, lideranca }) {
 
   const handleIncSemana = () => {
     let contSemanaAtual = contSemana + 1;
+    let ano2 = contAno;
     if (contSemanaAtual > semanaAtual && contAno === anoAtual) {
       contSemanaAtual = semanaAtual;
     }
     if (contSemanaAtual > 52) {
       contSemanaAtual = 1;
+      ano2 = contAno + 1;
       setContAno(contAno + 1);
     }
-    setContMes(PegaMes(contSemanaAtual, anoAtual));
+    let simple = PegaSemanaMes(new Date(ano2, 0, 1 + contSemanaAtual * 7));
+    let mesAgora = new Date(ano2, 0, 1 + contSemanaAtual * 7).getMonth();
+
+    if (Number(simple) < 1) {
+      mesAgora -= 1;
+      simple = 5;
+    }
+    setContSemanaMes(simple);
+
+    setContMes(mesAgora);
 
     setContSemana(contSemanaAtual);
   };
+
   const handleDecSemana = () => {
+    let ano2 = contAno;
     let contSemanaAtual = contSemana - 1;
     if (contSemanaAtual < 1) {
       contSemanaAtual = 52;
+      ano2 = contAno - 1;
       setContAno(contAno - 1);
     }
+
     setContMes(PegaMes(contSemanaAtual, anoAtual));
+
+    let simple = PegaSemanaMes(new Date(ano2, 0, 1 + contSemanaAtual * 7));
+
+    let mesAgora = new Date(ano2, 0, 1 + contSemanaAtual * 7).getMonth();
+
+    if (Number(simple) < 1) {
+      mesAgora -= 1;
+      simple = 5;
+    }
+    setContSemanaMes(simple);
+    setContMes(mesAgora);
     setContSemana(contSemanaAtual);
   };
-  React.useEffect(() => {}, [contMes]);
+  React.useEffect(() => {
+    const diaSemana = dataAtual.getDay();
+
+    if (diaSemana !== 1 && diaSemana !== 2) handleDecSemana();
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -120,7 +224,6 @@ function RelCelula({ perfilUser, lideranca }) {
             }}
             height="100%"
             width="100%"
-            bgcolor={corIgreja.principal}
           >
             <Box height="100%">
               <Box
@@ -131,7 +234,7 @@ function RelCelula({ perfilUser, lideranca }) {
                 alignItems="center"
                 flexDirection="column"
               >
-                <Box width="96%" mt={-1} ml={1}>
+                <Box bgcolor="gray" width="96%" mt={-1} ml={1}>
                   <Grid container item xs={12} spacing={1}>
                     <Grid item xs={12}>
                       <Box height={40} width="100%" display="flex">
@@ -162,7 +265,7 @@ function RelCelula({ perfilUser, lideranca }) {
                           color="white"
                           sx={{ fontFamily: 'Fugaz One' }}
                         >
-                          SEM - {contSemana}
+                          {contSemanaMes}ª SEM
                           <Box
                             ml={4}
                             color="white"
@@ -191,6 +294,69 @@ function RelCelula({ perfilUser, lideranca }) {
                             }}
                           >
                             <BiCaretRight size={35} color="white" />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Box mt={1} width="96%" ml={1}>
+                  <Grid container item xs={12} spacing={1}>
+                    <Grid item xs={12}>
+                      <Box
+                        borderRadius={5}
+                        height={40}
+                        bgcolor="#e1bee7"
+                        width="100%"
+                        display="flex"
+                      >
+                        <Box
+                          width="20%"
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleDecSetor();
+                            }}
+                          >
+                            <BiCaretLeft
+                              size={35}
+                              color={corIgreja.principal2}
+                            />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          width="100%"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          sx={{ fontSize: '14px', fontFamily: 'arial black' }}
+                        >
+                          {numeroSetor[contSetor]}
+                        </Box>
+                        <Box
+                          width="10%"
+                          display="flex"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleIncSetor();
+                            }}
+                          >
+                            <BiCaretRight
+                              size={35}
+                              color={corIgreja.principal2}
+                            />
                           </IconButton>
                         </Box>
                       </Box>
@@ -287,7 +453,7 @@ function RelCelula({ perfilUser, lideranca }) {
                         Mes={contMes}
                         Ano={contAno}
                         contSemana={contSemana}
-                        numeroCelula={numeroCelula}
+                        numeroCelula={celulaSetor}
                         setSendResumo={setSendResumo}
                         setDadosCelulaSend={setDadosCelulaSend}
                         setValorIndexSend={setValorIndexSend}
@@ -299,7 +465,7 @@ function RelCelula({ perfilUser, lideranca }) {
                         Mes={contMes}
                         Ano={contAno}
                         contSemana={contSemana}
-                        numeroCelula={numeroCelula}
+                        numeroCelula={celulaSetor}
                         setSendResumo={setSendResumo}
                         setDadosCelulaSend={setDadosCelulaSend}
                         setValorIndexSend={setValorIndexSend}
@@ -318,7 +484,7 @@ function RelCelula({ perfilUser, lideranca }) {
               Mes={contMes}
               Ano={contAno}
               contSemana={contSemana}
-              numeroCelula={numeroCelula}
+              numeroCelula={celulaSetor}
               setSendResumo={setSendResumo}
               dadosCelulaSend={dadosCelulaSend}
               valorIndexSend={valorIndexSend}

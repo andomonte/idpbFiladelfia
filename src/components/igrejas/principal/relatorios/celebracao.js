@@ -47,7 +47,7 @@ function Celebracao({ rolMembros, perfilUser }) {
                         height: 80,
                       }}
                       alt="Remy Sharp"
-                      src="images/filadelfia/filadelfia.png"
+                      src={corIgreja.logo}
                     />
                   </Box>
 
@@ -61,7 +61,7 @@ function Celebracao({ rolMembros, perfilUser }) {
                     }}
                     textAlign="center"
                   >
-                    IDPB - FILADELFIA{' '}
+                    IDPB - Filadelfia{' '}
                   </Box>
                 </Box>
               </Box>

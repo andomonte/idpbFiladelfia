@@ -161,7 +161,6 @@ function Cadastro({ rolMembros }) {
 
         const checarNome = searcher.search(nome);
         let valNasc = 'testar';
-        //  //console.log('searcher,checarNome', searcher, checarNome, nome);
 
         if (checarNome.length === 1) {
           setValidacaoNome(true);
@@ -471,8 +470,10 @@ function Cadastro({ rolMembros }) {
                             variant="standard"
                             placeholder="dd/mm/aaaa"
                             onChange={(e) => {
-                              setNascimento(e.target.value);
-                              handleValidacaoClose();
+                              if (e.target.value.length <= 10) {
+                                setNascimento(e.target.value);
+                                handleValidacaoClose();
+                              }
                             }}
                             onFocus={(e) => {
                               setNascimento(e.target.value);

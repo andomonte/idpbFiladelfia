@@ -125,12 +125,13 @@ function Cadastro({ rolMembros, perfilCPF }) {
 
         .then((response) => {
           if (response) {
-            router.push(
-              {
-                pathname: '/login',
+            router.push({
+              pathname: '/login',
+              query: {
+                cpf: perfilCPF,
+                password: nascimento.replace(/\D/g, ''),
               },
-              '/login',
-            );
+            });
           }
         })
         .catch((error) => {
@@ -161,7 +162,6 @@ function Cadastro({ rolMembros, perfilCPF }) {
 
         const checarNome = searcher.search(nome);
         let valNasc = 'testar';
-        //  //console.log('searcher,checarNome', searcher, checarNome, nome);
 
         if (checarNome.length === 1) {
           setValidacaoNome(true);
@@ -471,8 +471,10 @@ function Cadastro({ rolMembros, perfilCPF }) {
                             variant="standard"
                             placeholder="dd/mm/aaaa"
                             onChange={(e) => {
-                              setNascimento(e.target.value);
-                              handleValidacaoClose();
+                              if (e.target.value.length <= 10) {
+                                setNascimento(e.target.value);
+                                handleValidacaoClose();
+                              }
                             }}
                             onFocus={(e) => {
                               setNascimento(e.target.value);

@@ -9,7 +9,6 @@ export default function App({ dataYouTube }) {
   const [video, setVideo] = React.useState('video incial');
   const [numberVideo, setNumberVideo] = React.useState(0);
   const [repeat, setRepeat] = React.useState(false);
-
   React.useEffect(() => {
     setNumberVideo(0);
     setVideo(

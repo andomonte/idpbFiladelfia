@@ -6,13 +6,13 @@ import Select from 'react-select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@mui/material/Typography';
 import api from 'src/components/services/api';
-import moment from 'moment';
+
 import dataMask from 'src/components/mascaras/datas';
 import celularMask from 'src/components/mascaras/celular';
 import 'react-image-crop/dist/ReactCrop.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { Oval } from 'react-loading-icons';
-
+import { useSession } from 'next-auth/client';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,6 +20,9 @@ import DialogActions from '@mui/material/DialogActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConvData1 from 'src/utils/convData2';
+import ValidaCPF from 'src/utils/validarCPF';
+import validator from 'validator';
+import ValidaData from 'src/utils/validarData';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -272,11 +275,11 @@ const customStyles2 = {
 const tipos = [
   {
     value: 'Participante',
-    label: 'Participar do Evento',
+    label: 'Ouvinte do Evento',
   },
   {
     value: 'Apoio',
-    label: 'Apoiar ao Evento',
+    label: 'Equipe de apoio do Evento',
   },
 ];
 const quem = [
@@ -293,7 +296,12 @@ const quem = [
     label: 'Um Convidado',
   },
 ];
-
+const quemLogOut = [
+  {
+    value: 'outro',
+    label: 'Um Convidado',
+  },
+];
 function createListaNome(value, label) {
   return {
     value,
@@ -308,6 +316,7 @@ export default function Todos({
   rolMembros,
 }) {
   const classes = useStyles();
+  const [session] = useSession();
   const dadosUser = perfilUser
     ? rolMembros.filter((val) => val.RolMembro === Number(perfilUser.RolMembro))
     : '';
@@ -328,7 +337,9 @@ export default function Todos({
     createListaNome(rol.RolMembro, rol.Nome),
   );
   const [info, setInfo] = React.useState('');
-  const [inscrito, setInscrito] = React.useState(valorInicialInscrito);
+  const [inscrito, setInscrito] = React.useState(
+    session !== null ? valorInicialInscrito : quemLogOut[0],
+  );
   const [openInfo, setOpenInfo] = React.useState(false);
   const [nome, setNome] = React.useState('');
   const [nomeMembros, setNomeMembros] = React.useState(valorInicialMembro);
@@ -360,8 +371,8 @@ export default function Todos({
   const handleSalvar = () => {
     let send = true;
 
-    if (nome === '') {
-      toast.error('Preencha o Nome!', {
+    if (nome.length < 6) {
+      toast.error('Preencha o Nome e Sobrenome!', {
         position: toast.POSITION.TOP_CENTER,
       });
       send = false;
@@ -390,13 +401,20 @@ export default function Todos({
       celularRef.current.focus();
     }
 
-    if (cpf === '') {
-      toast.error('Informe seu CPF!', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      send = false;
-      cpfRef.current.focus();
-    }
+    if (inscrito.value === 'outro')
+      if (cpf === '') {
+        toast.error('Informe seu CPF!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        send = false;
+        cpfRef.current.focus();
+      } else if (!ValidaCPF(cpf) && !perfilUser) {
+        toast.error('CPF inválido', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        send = false;
+        cpfRef.current.focus();
+      }
 
     if (dataNascimento === '') {
       toast.error('Informe a data de Nascimento!', {
@@ -404,9 +422,22 @@ export default function Todos({
       });
       send = false;
       nascimentoRef.current.focus();
+    } else if (!ValidaData(dataNascimento)) {
+      toast.error('data digitada é inválida!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      send = false;
+      nascimentoRef.current.focus();
     }
+
     if (email === '') {
       toast.error('Informe o Email!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      send = false;
+      emailRef.current.focus();
+    } else if (!validator.isEmail(email)) {
+      toast.error('email inválido!', {
         position: toast.POSITION.TOP_CENTER,
       });
       send = false;
@@ -423,8 +454,14 @@ export default function Todos({
       setLoading(true);
 
       const dataInscicao = new Date();
-      const dateObject = moment(dataNascimento).format('DD/MM/YYYY 00:00:00');
-      const newDateNacimento = new Date(dateObject);
+
+      const dia = dataNascimento.substring(0, 2);
+      const mes = dataNascimento.substring(3, 5);
+      const ano = dataNascimento.substring(6, 10);
+      const AAAAMMDD = `${ano}-${mes}-${dia} 00:00:00`;
+      //     const dateObject = moment(dataNascimento).format('YYYY-DD-MM 00:00:00');
+
+      const newDateNacimento = new Date(AAAAMMDD);
       const newValorParticipante =
         inscrito.value === 'eu' || inscrito.value === 'membro'
           ? 'Membro'
@@ -434,11 +471,11 @@ export default function Todos({
         inscrito.value === 'eu' || inscrito.value === 'membro'
           ? '0'
           : cpf.replace(/([^0-9])/g, '');
-      let newValorRolMembro = 0;
-      if (inscrito.value === 'membro') newValorRolMembro = Number(cpf);
-      if (inscrito.value === 'eu')
-        newValorRolMembro = Number(perfilUser.RolMembro);
 
+      let newValorRolMembro = 0;
+
+      if (inscrito.value === 'eu' || inscrito.value === 'membro')
+        newValorRolMembro = Number(cpf); // na verdade é o rol do membro inscrito
       const DadosInscritos = {
         idEvento: Number(eventoEscolhido[0].id),
         Evento: eventoEscolhido[0].nomeEvento,
@@ -452,7 +489,7 @@ export default function Todos({
         participante: newValorParticipante,
         RolMembro: newValorRolMembro,
         Documento: newValorDocumento,
-        Distrito: Number(perfilUser.Distrito),
+        Distrito: perfilUser ? Number(perfilUser.Distrito) : 0,
         CreatedAt: dataInscicao,
       };
 
@@ -468,7 +505,7 @@ export default function Todos({
             if (response.data === 'atualizado')
               setInfo('Inscrição atualizada com Sucesso');
             else setInfo('Inscrição realizada com Sucesso');
-          }
+          } else console.log('deu erro no banco');
         })
         .catch(() => {
           setLoading(false);
@@ -476,7 +513,6 @@ export default function Todos({
           setInfo(
             'Não foi possível fazer sua Inscrição, tente novamente mais tarde',
           );
-          // console.log(erro); //  updateFile(uploadedFile.id, { error: true });
         });
     }
     // const nomesMembros = JSON.parse(RelCelulaFinal.NomesMembros);
@@ -500,8 +536,8 @@ export default function Todos({
       setCelular(dadosUser2[0].TelCelular ? dadosUser2[0].TelCelular : '');
       setCPF(dadosUser2[0].RolMembro);
       setDataNascimento(
-        moment(dadosUser2[0].Nascimento).format('DD/MM/YYYY')
-          ? moment(dadosUser2[0].Nascimento).format('DD/MM/YYYY')
+        ConvData1(dadosUser2[0].Nascimento)
+          ? ConvData1(dadosUser2[0].Nascimento)
           : '',
       );
       setEmail(dadosUser2[0].Email ? dadosUser2[0].Email : '');
@@ -591,7 +627,7 @@ export default function Todos({
                           nome2Ref.current.focus();
                         } else nomeRef.current.focus();
                       }}
-                      options={quem}
+                      options={session != null ? quem : quemLogOut}
                     />
                   </Box>
                 </Grid>
@@ -604,14 +640,14 @@ export default function Todos({
             >
               <Box width="90%">
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={3}>
+                  <Grid item xs={12} md={12}>
                     <Box mt={-0} ml={2} color="white" sx={{ fontSize: 'bold' }}>
                       <Typography
                         variant="caption"
                         display="block"
                         gutterBottom
                       >
-                        Tipo de Inscrição
+                        Função no Evento
                       </Typography>
                     </Box>
                     <Box className={classes.novoBox} mt={-2} mb="2vh">
@@ -824,9 +860,7 @@ export default function Todos({
                         display="block"
                         gutterBottom
                       >
-                        {inscrito.value !== 'outro' || !dadosUser
-                          ? 'RolMembro'
-                          : 'CPF'}
+                        {inscrito.value === 'outro' ? 'CPF' : 'RolMembro'}
                       </Typography>
                     </Box>
                     <Box mb="2vh" className={classes.novoBox} mt={-2}>
@@ -846,7 +880,7 @@ export default function Todos({
                             //                            textAlign: 'center',
                           },
                         }}
-                        disabled={inscrito.value !== 'outro' || !dadosUser}
+                        disabled={!(inscrito.value === 'outro')}
                         value={cpf}
                         variant="outlined"
                         placeholder="999.999.999-99"
@@ -1009,7 +1043,6 @@ export default function Todos({
                   borderRadius: 15,
                   width: '100%',
                 }}
-                onClick={handleSalvar}
                 variant="contained"
                 severity="success"
                 endIcon={<Oval stroke="white" width={20} height={25} />}
