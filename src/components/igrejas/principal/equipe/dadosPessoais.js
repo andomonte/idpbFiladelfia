@@ -355,8 +355,6 @@ function DadosPessoais({ rolMembros, perfilUser }) {
         value: data[0].EstadoCivil ? data[0].EstadoCivil : '',
       };
 
-      console.log('data', data);
-
       setNome(data[0].Nome);
       setCelular(data[0].TelCelular);
       setFone(data[0].TelFixo);

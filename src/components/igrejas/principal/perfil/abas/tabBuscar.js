@@ -314,7 +314,6 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
   }, [semCelebracao]);
 
   React.useEffect(() => {
-    console.log('sem discipulado', semDiscipulado);
     if (semDiscipulado && semDiscipulado.length) {
       const presDiscipulado1 = semDiscipulado.filter(
         (val) =>

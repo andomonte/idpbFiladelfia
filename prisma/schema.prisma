@@ -8,10 +8,11 @@ datasource db {
 }
 
 model avisos {
-  Data     DateTime @id(map: "PK_avisos") @db.DateTime
+  Data     DateTime @db.DateTime
   avisos   String?  @db.VarChar(255)
-  conteudo String?  @db.Text
+  conteudo String   @db.Text
   Distrito Int?     @default(0, map: "DF__avisos__Distrito__36B12243")
+  codAviso BigInt   @id(map: "PK_avisos") @default(autoincrement())
 }
 
 model boletim {
@@ -159,27 +160,29 @@ model funcao {
 }
 
 model igreja {
-  id              Int       @id(map: "PK_igreja") @default(autoincrement())
-  codigo          String    @db.VarChar(20)
-  nome            String    @db.Text
-  foneSecretaria  String?   @db.VarChar(15)
-  contatoWhatsApp String?   @db.VarChar(15)
-  foneFinanceiro  String?   @db.VarChar(15)
-  corPrimaria     String?   @db.Text
-  corSecundaria   String?   @db.Text
-  img01           String?   @db.VarChar(500)
-  img02           String?   @db.VarChar(500)
-  img03           String?   @db.VarChar(500)
-  faceBook        String?   @db.Text
-  youTube         String?   @db.Text
-  instagram       String?   @db.Text
-  googloMap       String?   @db.Text
-  cnpj            String    @db.VarChar(18)
-  CriadoEm        DateTime? @db.DateTime
-  CriadoPor       String?   @db.VarChar(150)
-  AtualizadoEm    DateTime? @db.DateTime
-  AtualizadoPor   String?   @db.VarChar(255)
-  website         String?   @db.VarChar(1000)
+  id                Int       @id(map: "PK_igreja") @default(autoincrement())
+  codigo            String    @db.VarChar(20)
+  nome              String    @db.Text
+  foneSecretaria    String?   @db.VarChar(15)
+  contatoWhatsApp   String?   @db.VarChar(15)
+  foneFinanceiro    String?   @db.VarChar(15)
+  corPrimaria       String?   @db.Text
+  corSecundaria     String?   @db.Text
+  img01             String?   @db.VarChar(500)
+  img02             String?   @db.VarChar(500)
+  img03             String?   @db.VarChar(500)
+  faceBook          String?   @db.Text
+  youTube           String?   @db.Text
+  instagram         String?   @db.Text
+  googloMap         String?   @db.Text
+  cnpj              String    @db.VarChar(18)
+  CriadoEm          DateTime? @db.DateTime
+  CriadoPor         String?   @db.VarChar(150)
+  AtualizadoEm      DateTime? @db.DateTime
+  AtualizadoPor     String?   @db.VarChar(255)
+  website           String?   @db.VarChar(1000)
+  pastor_presidente String?   @db.VarChar(500)
+  tesoureiro        String?   @db.VarChar(500)
 }
 
 model inscritosCursos {
@@ -257,51 +260,53 @@ model lideranca {
 }
 
 model membros {
-  id                Int?
-  Igreja            String    @db.VarChar(20)
-  Nome              String    @db.VarChar(255)
-  foto              String?   @db.VarChar(500)
-  Celula            Int       @default(0, map: "DF__membros__Celula__76969D2E")
-  Distrito          Int?      @default(0, map: "DF__membros__Distrit__778AC167")
-  Coordenacao       Int?      @default(0, map: "DF__membros__Coorden__787EE5A0")
-  Supervisao        Int?      @default(0, map: "DF__membros__Supervi__797309D9")
-  Discipulador      String?   @db.VarChar(145)
-  TelCelular        String?   @db.VarChar(25)
-  TelFixo           String?   @db.VarChar(25)
-  Email             String?   @db.VarChar(255)
-  Sexo              String?   @db.VarChar(15)
-  EstadoCivil       String?   @db.VarChar(45)
-  Nascimento        DateTime? @db.Date
-  Naturalidade      String?   @db.VarChar(255)
-  Situacao          String    @db.VarChar(50)
-  MOTIVO            String?   @db.VarChar(245)
-  Conversao         DateTime? @db.Date
-  Batismo           DateTime? @db.Date
-  CEP               String?   @db.VarChar(10)
-  Logradouro        String?   @db.VarChar(255)
-  Bairro            String?   @db.VarChar(255)
-  Numero            Int?      @default(0, map: "DF__membros__Numero__7B5B524B")
-  Complemento       String?   @db.VarChar(255)
-  Localidade        String?   @db.VarChar(255)
-  UF                String?   @db.VarChar(25)
-  CPF               String?   @default("0", map: "DF__membros__CPF__7C4F7684") @db.VarChar(14)
-  RG                String?   @db.VarChar(25)
-  FormacaoAcademica String?   @db.VarChar(255)
-  Profissao         String?   @db.VarChar(255)
-  Pai               String?   @db.VarChar(255)
-  Mae               String?   @db.VarChar(255)
-  CriadoEm          DateTime? @db.DateTime
-  AtualizadoEm      DateTime? @db.DateTime
-  AtualizadoPor     String?   @db.VarChar(255)
-  CriadoPor         String?   @db.VarChar(150)
-  idFuncao          BigInt?   @default(0, map: "DF__membros__idFunca__0FEC5ADD")
-  Funcao            String?   @db.VarChar(100)
-  GrauMinisterial   String?   @db.VarChar(255)
-  idNucleo          BigInt?
-  nomeNucleo        String?   @db.VarChar(255)
-  senha             String?   @db.VarChar(255)
-  conjuge           String?   @db.VarChar(255)
-  RolMembro         Int       @id(map: "PK_membros") @default(autoincrement())
+  id                    Int?
+  Igreja                String    @db.VarChar(20)
+  Nome                  String    @db.VarChar(255)
+  foto                  String?   @db.VarChar(500)
+  Celula                Int       @default(0, map: "DF__membros__Celula__76969D2E")
+  Distrito              Int?      @default(0, map: "DF__membros__Distrit__778AC167")
+  Coordenacao           Int?      @default(0, map: "DF__membros__Coorden__787EE5A0")
+  Supervisao            Int?      @default(0, map: "DF__membros__Supervi__797309D9")
+  Discipulador          String?   @db.VarChar(145)
+  TelCelular            String?   @db.VarChar(25)
+  TelFixo               String?   @db.VarChar(25)
+  Email                 String?   @db.VarChar(255)
+  Sexo                  String?   @db.VarChar(15)
+  EstadoCivil           String?   @db.VarChar(45)
+  Nascimento            DateTime? @db.Date
+  Naturalidade          String?   @db.VarChar(255)
+  Situacao              String    @db.VarChar(50)
+  MOTIVO                String?   @db.VarChar(245)
+  Conversao             DateTime? @db.Date
+  Batismo               DateTime? @db.Date
+  CEP                   String?   @db.VarChar(10)
+  Logradouro            String?   @db.VarChar(255)
+  Bairro                String?   @db.VarChar(255)
+  Numero                Int?      @default(0, map: "DF__membros__Numero__7B5B524B")
+  Complemento           String?   @db.VarChar(255)
+  Localidade            String?   @db.VarChar(255)
+  UF                    String?   @db.VarChar(25)
+  CPF                   String?   @default("0", map: "DF__membros__CPF__7C4F7684") @db.VarChar(14)
+  RG                    String?   @db.VarChar(25)
+  FormacaoAcademica     String?   @db.VarChar(255)
+  Profissao             String?   @db.VarChar(255)
+  Pai                   String?   @db.VarChar(255)
+  Mae                   String?   @db.VarChar(255)
+  CriadoEm              DateTime? @db.DateTime
+  AtualizadoEm          DateTime? @db.DateTime
+  AtualizadoPor         String?   @db.VarChar(255)
+  CriadoPor             String?   @db.VarChar(150)
+  idFuncao              BigInt?   @default(0, map: "DF__membros__idFunca__0FEC5ADD")
+  Funcao                String?   @db.VarChar(100)
+  GrauMinisterial       String?   @db.VarChar(255)
+  idNucleo              BigInt?
+  nomeNucleo            String?   @db.VarChar(255)
+  senha                 String?   @db.VarChar(255)
+  conjuge               String?   @db.VarChar(255)
+  RolMembro             Int       @id(map: "PK_membros") @default(autoincrement())
+  DtApresentacaoCrianca DateTime? @db.Date
+  ObsMembro             String?   @db.Text
 }
 
 model mensagem {
@@ -453,36 +458,39 @@ model TB_CATEGORIA {
 }
 
 model TB_CENTRO_CUSTO {
-  CC_ID   BigInt @id(map: "PK_TB_CENTRO_CUSTO") @default(autoincrement())
   CC_NOME String @db.VarChar(100)
+  CC_ID   BigInt @id(map: "PK_TB_CENTRO_CUSTO")
 }
 
 model TB_CONTA {
-  CT_ID   BigInt @id(map: "PK_TB_CONTA") @default(autoincrement())
   CT_NOME String @db.VarChar(100)
+  CT_ID   BigInt @id(map: "PK_TB_CONTA")
 }
 
 model TB_CORRENTISTA {
-  COR_ID       BigInt  @id(map: "PK_TB_CORRENTISTA") @default(autoincrement())
-  COR_NOME     String  @db.VarChar(200)
-  COR_TIPO_DOC String? @db.VarChar(14)
-  COR_NUM_DOC  String? @db.VarChar(50)
-  COR_ENDERECO String? @db.VarChar(100)
-  COR_BAIRRO   String? @db.VarChar(100)
-  COR_CIDADE   String? @db.VarChar(100)
-  COR_EMAIL    String? @db.VarChar(100)
+  COR_ID         BigInt    @id(map: "PK_TB_CORRENTISTA") @default(autoincrement())
+  COR_NOME       String    @db.VarChar(200)
+  COR_TIPO_DOC   String?   @db.VarChar(14)
+  COR_NUM_DOC    String?   @db.VarChar(50)
+  COR_ENDERECO   String?   @db.VarChar(100)
+  COR_BAIRRO     String?   @db.VarChar(100)
+  COR_CIDADE     String?   @db.VarChar(100)
+  COR_EMAIL      String?   @db.VarChar(100)
+  COR_NASCIMENTO DateTime? @db.Date
+  COR_TIPO       String?   @db.VarChar(100)
+  COR_TELEFONE   String?   @db.VarChar(15)
 }
 
 model TB_GRUPO_CATEGORIA {
-  GC_ID   BigInt @id(map: "PK_TB_GRUPO_CATEGORIA") @default(autoincrement())
   GC_NOME String @db.VarChar(100)
+  GC_ID   BigInt @id(map: "PK_TB_GRUPO_CATEGORIA")
 }
 
 model TB_LANCAMENTO {
   LANC_ID                 BigInt    @id(map: "PK_TB_LANCAMENTO") @default(autoincrement())
   LANC_DESCRICAO          String?   @db.VarChar(100)
   LANC_DATA               DateTime  @db.Date
-  LANC_TIPO               String?   @db.VarChar(100)
+  LANC_TIPO               String    @db.VarChar(100)
   LANC_VALOR              Decimal   @default(0, map: "DF__TB_LANCAM__LANC___40F9A68C") @db.Decimal(10, 2)
   LANC_PAGO               Boolean
   LANC_DATA_HORA_INCLUSAO DateTime? @db.DateTime
@@ -499,6 +507,14 @@ model TB_LANCAMENTO {
   mesReferencia           BigInt    @default(0, map: "DF__TB_LANCAM__mesRe__3296789C")
   anoReferencia           BigInt    @default(0, map: "DF__TB_LANCAM__anoRe__338A9CD5")
   GC_ID                   BigInt    @default(0, map: "DF__TB_LANCAM__GC_ID__347EC10E")
+  CriadoPor               String?   @db.VarChar(255)
+  AtualizadoEm            DateTime? @db.DateTime
+  AtualizadoPor           String?   @db.VarChar(255)
+  anexo2                  String?   @db.VarChar(500)
+  anexo3                  String?   @db.VarChar(500)
+  idLancamentoMissao      BigInt?   @default(0, map: "DF__TB_LANCAM__idLan__6E765879")
+  mesRecebido             BigInt?   @default(0, map: "DF__TB_LANCAM__mesRe__40457975")
+  DataRecebido            DateTime? @db.Date
 }
 
 model TB_LOGIN_DEVICE {
@@ -545,7 +561,13 @@ model TB_LOGIN_USER {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model TB_PARAMETRO {
-  PAR_CAT_TRANSF BigInt @id(map: "PK_TB_PARAMETRO") @default(0, map: "DF__TB_PARAME__PAR_C__4E53A1AA")
+  PAR_CAT_TRANSF          BigInt  @id(map: "PK_TB_PARAMETRO") @default(0, map: "DF__TB_PARAME__PAR_C__4E53A1AA")
+  CC_SAIDA_CONTRIBUICAOMM BigInt  @default(0, map: "DF__TB_PARAME__CC_SA__69E6AD86")
+  PAR_CENTROCUSTO         BigInt  @default(0, map: "DF__TB_PARAME__PAR_C__6ADAD1BF")
+  PERC_REPASSE_AM         Decimal @default(0, map: "DF__TB_PARAME__PERC___00CA12DE") @db.Decimal(10, 2)
+  PERC_REPASSE_NACIONAL   Decimal @default(0, map: "DF__TB_PARAME__PERC___01BE3717") @db.Decimal(10, 2)
+  CAT_MISSOES_AM          BigInt  @default(0, map: "DF__TB_PARAME__CAT_M__02B25B50")
+  CAT_MISSOES_NACIONAL    BigInt  @default(0, map: "DF__TB_PARAME__CAT_M__03A67F89")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -558,16 +580,22 @@ model TB_SALDO_INICAL {
 }
 
 model TB_TRANSFERENCIA {
-  TF_ID                 BigInt   @id(map: "PK_TB_TRANSFERENCIA") @default(autoincrement())
-  TF_DESCRICAO          String   @db.VarChar(100)
-  TF_DATA               DateTime @db.Date
-  TF_CT_ORIGEM          BigInt   @default(0, map: "DF__TB_TRANSF__TF_CT__55009F39")
-  TF_CT_DESTINO         BigInt   @default(0, map: "DF__TB_TRANSF__TF_CT__55F4C372")
-  TF_VALOR              Decimal  @default(0, map: "DF__TB_TRANSF__TF_VA__56E8E7AB") @db.Decimal(10, 2)
-  TF_DATA_HORA_INCLUSAO DateTime @db.DateTime
+  TF_ID                 BigInt    @id(map: "PK_TB_TRANSFERENCIA") @default(autoincrement())
+  TF_DESCRICAO          String    @db.VarChar(100)
+  TF_DATA               DateTime  @db.Date
+  TF_CT_ORIGEM          BigInt    @default(0, map: "DF__TB_TRANSF__TF_CT__55009F39")
+  TF_CT_DESTINO         BigInt    @default(0, map: "DF__TB_TRANSF__TF_CT__55F4C372")
+  TF_VALOR              Decimal   @default(0, map: "DF__TB_TRANSF__TF_VA__56E8E7AB") @db.Decimal(10, 2)
+  TF_DATA_HORA_INCLUSAO DateTime  @db.DateTime
   CAT_ID                BigInt
-  mesReferencia         BigInt   @default(0, map: "DF__TB_TRANSF__mesRe__3572E547")
-  anoReferencia         BigInt   @default(0, map: "DF__TB_TRANSF__anoRe__36670980")
+  mesReferencia         BigInt    @default(0, map: "DF__TB_TRANSF__mesRe__3572E547")
+  anoReferencia         BigInt    @default(0, map: "DF__TB_TRANSF__anoRe__36670980")
+  CriadoPor             String?   @db.VarChar(255)
+  AtualizadoEm          DateTime? @db.DateTime
+  AtualizadoPor         String?   @db.VarChar(255)
+  GC_ID                 BigInt?
+  TF_CC_ORIGEM          BigInt    @default(0, map: "DF__TB_TRANSF__TF_CC__41399DAE")
+  TF_CC_DESTINO         BigInt    @default(0, map: "DF__TB_TRANSF__TF_CC__422DC1E7")
 }
 
 model turma {
@@ -646,8 +674,10 @@ model TB_PLANO_CONTA {
 }
 
 model TB_MES_REFERENCIA {
-  mesReferencia BigInt @default(0, map: "DF__TB_MES_RE__mesRe__7775B2CE")
-  anoReferencia BigInt @default(0, map: "DF__TB_MES_RE__anoRe__7869D707")
+  mesReferencia BigInt    @default(0, map: "DF__TB_MES_RE__mesRe__7775B2CE")
+  anoReferencia BigInt    @default(0, map: "DF__TB_MES_RE__anoRe__7869D707")
+  CriadoEm      DateTime? @db.DateTime
+  CriadoPor     String?   @db.VarChar(255)
 
   @@id([mesReferencia, anoReferencia], map: "PK_TB_MES_REFERENCIA")
 }
@@ -658,4 +688,65 @@ model TB_MESES_USADOS {
   mesAtivo      Boolean
 
   @@id([mesReferencia, anoReferencia], map: "PK_TB_MESES_USADOS")
+}
+
+model desempenho {
+  id             Int  @id(map: "PK_desempenho") @default(0, map: "DF__desempenho__id__3BB5CE82")
+  Relatorios     Int? @default(0, map: "DF__desempenh__Relat__3CA9F2BB")
+  PresCelulas    Int? @default(0, map: "DF__desempenh__PresC__3D9E16F4")
+  PresCelebracao Int? @default(0, map: "DF__desempenh__PresC__3E923B2D")
+  Discipulado    Int? @default(0, map: "DF__desempenh__Disci__3F865F66")
+  Leitura        Int? @default(0, map: "DF__desempenh__Leitu__407A839F")
+  VisCelula      Int? @default(0, map: "DF__desempenh__VisCe__416EA7D8")
+  VisCelebracao  Int? @default(0, map: "DF__desempenh__VisCe__4262CC11")
+  Visitas        Int? @default(0, map: "DF__desempenh__Visit__4356F04A")
+  Eventos        Int? @default(0, map: "DF__desempenh__Event__444B1483")
+  Planejamento   Int? @default(0, map: "DF__desempenh__Plane__453F38BC")
+  NovoMembro     Int? @default(0, map: "DF__desempenh__NovoM__46335CF5")
+}
+
+model SYS_Sequencial {
+  PW_Projeto        String @map("PW~Projeto") @db.VarChar(10)
+  SYS_Tabela        String @map("SYS~Tabela") @db.VarChar(30)
+  SYS_Campo         String @map("SYS~Campo") @db.VarChar(30)
+  SYS_Valor         String @map("SYS~Valor") @db.VarChar(50)
+  SYS_ValorAnterior String @map("SYS~ValorAnterior") @db.VarChar(50)
+  SYS_Estacao       String @map("SYS~Estacao") @db.VarChar(50)
+  SYS_Identificacao String @map("SYS~Identificacao") @db.VarChar(30)
+  SYS_Pendentes     Int    @default(0, map: "DF__SYS~Seque__SYS~P__7CF981FA") @map("SYS~Pendentes")
+
+  @@id([SYS_Tabela, SYS_Campo], map: "Chave sequencial")
+  @@map("SYS~Sequencial")
+}
+
+model TB_MESES_FECHAMENTO_IGREJA {
+  codigoIgreja   String  @db.VarChar(10)
+  Igreja         String  @db.VarChar(255)
+  mesReferencia  BigInt  @default(0, map: "DF__TB_MESES___mesRe__481BA567")
+  anoReferencia  BigInt  @default(0, map: "DF__TB_MESES___anoRe__490FC9A0")
+  EntregueIgreja Boolean @default(false, map: "DF__TB_MESES___Entre__4A03EDD9")
+  recebidoIDPBAM Boolean @default(false, map: "DF__TB_MESES___receb__4AF81212")
+
+  @@id([codigoIgreja, mesReferencia, anoReferencia], map: "PK_TB_MESES_FECHAMENTO_IGREJA")
+}
+
+model TB_PARAM_OFERTA_MISSAO {
+  IDFERTAMISSAO  BigInt  @id(map: "PK_TB_PARAM_OFERTA_MISSAO")
+  OFERTA_DESTINO String  @db.VarChar(500)
+  PERC_DESTINO   Decimal @default(0, map: "DF__TB_PARAM___PERC___7EE1CA6C") @db.Decimal(10, 2)
+  CAT_ID         BigInt  @default(0, map: "DF__TB_PARAM___CAT_I__7FD5EEA5")
+  CAT_NOME       String? @db.VarChar(255)
+  GC_ID          BigInt  @default(0, map: "DF__TB_PARAM___GC_ID__4EFDAD20")
+}
+
+model TB_REL_FECHAMENTO {
+  CAT_ID        BigInt  @default(0, map: "DF__TB_REL_FE__CAT_I__4944D3CA")
+  CAT_NOME      String  @db.VarChar(255)
+  GC_ID         BigInt  @default(0, map: "DF__TB_REL_FE__GC_ID__4A38F803")
+  GC_NOME       String  @db.VarChar(255)
+  mesReferencia BigInt  @default(0, map: "DF__TB_REL_FE__mesRe__4B2D1C3C")
+  anoReferencia BigInt  @default(0, map: "DF__TB_REL_FE__anoRe__4C214075")
+  valor         Decimal @default(0, map: "DF__TB_REL_FE__valor__4D1564AE") @db.Decimal(10, 2)
+
+  @@id([CAT_ID, GC_ID, mesReferencia, anoReferencia], map: "PK_TB_REL_FECHAMENTO")
 }
