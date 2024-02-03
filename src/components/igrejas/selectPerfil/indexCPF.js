@@ -202,7 +202,7 @@ function SelectPerfil({
         secao = lideranca.filter(
           (val) => val.RolMembro === membro[0].RolMembro,
         );
-
+        console.log('secao', secao);
         valorPerfil = secao.map((items, index) => {
           if (items.Funcao === 'Secretaria')
             return {
@@ -346,6 +346,8 @@ function SelectPerfil({
         };
       }
       valorPerfil.push(userMembro); // para objeto -> Object.assign(secao, userMembro);
+      valorPerfil = valorPerfil.filter((val) => val);
+
       // expected output: Object { a: 1, b: 4, c: 5 }
 
       // expected output: Object { a: 1, b: 4, c: 5 }
@@ -438,6 +440,7 @@ function SelectPerfil({
                             </Box>
                           </Grid>
                         </Box>
+                        {console.log('valor perfil', valorPerfil)}
                         <Box mt={5} mb={3} width="100%" textAlign="center">
                           <Grid item xs={12} md={12}>
                             {valorPerfil && valorPerfil[0].id && (
