@@ -184,7 +184,7 @@ export default function Login({ providers2, rolMembros }) {
         const getData = moment(user[0].Nascimento.substring(0, 10)).format(
           'DD/MM/YYYY',
         );
-
+        console.log('getData', getData, dataNascimento);
         if (dataNascimento.length === 10)
           if (getData === dataNascimento) {
             setLoading(1);
@@ -678,7 +678,7 @@ export default function Login({ providers2, rolMembros }) {
                                   <Oval stroke="white" width={30} height={30} />
                                 </Box>
                               ) : (
-                                'Reinicar Senha'
+                                'Reiniciar Senha'
                               )}
                             </Box>
                           </Button>
