@@ -166,17 +166,17 @@ export default function Login({ providers2, rolMembros }) {
   };
 
   const handleResetarSenha = async () => {
-    console.log('authState', authState);
     let vCPF = ValidaCPF(authState.cpf.replace(/\D/g, ''));
-    console.log('authState', vCPF);
-    if (authState.cpf.replace(/\D/g, '').length < 10) vCPF = false;
 
+    if (authState.cpf.replace(/\D/g, '').length < 10) vCPF = false;
+    console.log('authState', authState, rolMmebros);
     if (!vCPF) {
       setValorCPF(true);
     }
     if (vCPF) {
       const user = rolMembros.filter(
         (val) =>
+          val.CPF &&
           val.CPF.replace(/\D/g, '') === authState.cpf.replace(/\D/g, ''),
       );
 
