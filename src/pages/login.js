@@ -166,7 +166,9 @@ export default function Login({ providers2, rolMembros }) {
   };
 
   const handleResetarSenha = async () => {
+    console.log('authState', authState);
     let vCPF = ValidaCPF(authState.cpf.replace(/\D/g, ''));
+    console.log('authState', vCPF);
     if (authState.cpf.replace(/\D/g, '').length < 10) vCPF = false;
 
     if (!vCPF) {
@@ -184,7 +186,7 @@ export default function Login({ providers2, rolMembros }) {
         const getData = moment(user[0].Nascimento.substring(0, 10)).format(
           'DD/MM/YYYY',
         );
-        console.log('getData', getData, dataNascimento);
+
         if (dataNascimento.length === 10)
           if (getData === dataNascimento) {
             setLoading(1);
