@@ -93,10 +93,9 @@ function createData(label, value) {
   return { label, value };
 }
 
-function createAvaliacoes(relatorios, mentoriamentos, planejamentos) {
-  return { relatorios, mentoriamentos, planejamentos };
+function createAvaliacoes(relatorios, planejamentos, mentoriamentos) {
+  return { relatorios, planejamentos, mentoriamentos };
 }
-
 function RelSuper({
   perfilUser,
 

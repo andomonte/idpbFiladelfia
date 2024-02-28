@@ -278,7 +278,7 @@ function RelCelula({
             val.Distrito === Number(perfilUser.Distrito) &&
             String(val.Data.slice(0, 4)) === String(AnoAtual),
         );
-        console.log('members', members, relatorio);
+
         if (relatorio && relatorio.length) {
           const dataAgora = new Date();
           const date1 = moment(dataAgora);
@@ -304,7 +304,7 @@ function RelCelula({
           setPresentes(qtyPresentes.length);
 
           setContBiblia(relatorio[0].LeituraBiblica);
-          console.log('nomesMembros', nomesMembros);
+
           setRelPresentes(nomesMembros);
 
           setObservacoes(relatorio[0].Observacoes);
@@ -943,7 +943,6 @@ function RelCelula({
             height="60%"
             width="100%"
           >
-            {console.log('relPresentes', relPresentes)}
             <Box display="flex" alignItems="end" height="100%" width="96%">
               {tela === 1 && (
                 <TabDiscipulado

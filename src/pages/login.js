@@ -169,7 +169,6 @@ export default function Login({ providers2, rolMembros }) {
     let vCPF = ValidaCPF(authState.cpf.replace(/\D/g, ''));
 
     if (authState.cpf.replace(/\D/g, '').length < 10) vCPF = false;
-    console.log('authState', authState, rolMmebros);
     if (!vCPF) {
       setValorCPF(true);
     }
