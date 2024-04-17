@@ -29,8 +29,8 @@ import TabCelebracao from './tabCelebracao';
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 // const fetcher2 = (url2) => axios.get(url2).then((res) => res.dataVisitante);
 
-function createData(Nome, Presenca, status) {
-  return { Nome, Presenca, status };
+function createData(Rol, Nome, Presenca, status) {
+  return { Rol, Nome, Presenca, status };
 }
 
 function createCelebracao(
@@ -65,11 +65,12 @@ function createCelebracao(
     CriadoEm,
   };
 }
-function createRelCelula(Rol, Nome, Presenca) {
+function createRelCelula(Rol, Nome, Presenca, Status) {
   return {
     Rol,
     Nome,
     Presenca,
+    Status,
   };
 }
 function createRelVisitantes(Rol, Nome, Presenca) {
@@ -151,7 +152,7 @@ function RelCelula({
   const [dataEscolhida, setDataEscolhida] = React.useState(dataFinal);
   const [contagem, setContagem] = React.useState(false);
   const [checkInicio, setCheckInicio] = React.useState('sim');
-  const visitantesCelula = visitantes.filter(
+  const visitantesCelula = visitantes?.filter(
     (val) =>
       val.Celula === Number(perfilUser.Celula) &&
       val.Distrito === Number(perfilUser.Distrito),
@@ -173,7 +174,9 @@ function RelCelula({
   const [dadosCelula, setDadosCelula] = React.useState(
     dadosSem && dadosSem.id
       ? JSON.parse(dadosSem.NomesMembros)
-      : nomesCelulas.map((row) => createData(row.Nome, false, row.Situacao)),
+      : nomesCelulas.map((row) =>
+          createData(row.RolMembro, row.Nome, false, row.Situacao),
+        ),
   );
 
   const qtyPresIni = dadosCelula.filter((val) => val.Presenca === 'igreja');
@@ -525,6 +528,7 @@ function RelCelula({
         nomesCelulas.map((row) => {
           if (val.Nome === row.Nome) {
             newValorMembros[contMembros] = createData(
+              val.Rol,
               val.Nome,
               val.Presenca,
               row.Situacao,
@@ -853,9 +857,10 @@ function RelCelula({
     const criadoEm = new Date();
     const nomesCelulaParcial = dadosCelula.map((row, index) =>
       createRelCelula(
-        row.RolMembro,
+        row.Rol,
         row.Nome,
         relPresentes[index] ? relPresentes[index].Presenca : false,
+        row.status,
       ),
     );
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);

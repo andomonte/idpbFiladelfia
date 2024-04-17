@@ -23,6 +23,8 @@ import MostrarRelatorioCelula from './mostrarRelatorioCelula';
 import MostrarRelatorioCelebracao from './mostrarRelatorioCelebracao';
 import MostrarRelatorioDiscipulado from './mostrarRelatorioDiscipulado';
 
+
+
 const PegaSemana = (mes, ano) => {
   const valor = weekNumber(new Date(ano, mes, 5, 12)); // o 6 é quarta
 
@@ -870,16 +872,6 @@ export default function TabCelula({
                               }
                             }}
                           >
-                            {console.log(
-                              'libera',
-                              AnoPesquisado0,
-                              Ano,
-                              semana0,
-                              semana0 +
-                                AnoPesquisado0 * 100 +
-                                AnoPesquisado0 * 100,
-                              anoAtual * 100 + anoAtual * 100 + semanaHoje,
-                            )}
                             <SvgIcon sx={{ color: corIgreja.iconeOn }}>
                               <MdCreateNewFolder
                                 size={25}

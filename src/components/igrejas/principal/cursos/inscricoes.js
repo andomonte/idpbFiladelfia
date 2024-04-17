@@ -312,7 +312,9 @@ export default function Todos({
   );
 
   const dadosUser = perfilUser
-    ? rolMembros.filter((val) => val.RolMembro === Number(perfilUser.RolMembro))
+    ? rolMembros?.filter(
+        (val) => val.RolMembro === Number(perfilUser.RolMembro),
+      )
     : '';
 
   const valorInicialTipo = {
@@ -873,7 +875,11 @@ export default function Todos({
                           InputLabelProps={{
                             shrink: true,
                           }}
-                          value={celularMask(celular).replace(/[\][)]/g, ') ')}
+                          value={
+                            celular
+                              ? celularMask(celular).replace(/[\][)]/g, ') ')
+                              : ''
+                          }
                           variant="outlined"
                           placeholder="(99) 9999-9999"
                           size="small"

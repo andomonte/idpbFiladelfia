@@ -170,7 +170,7 @@ function Mensagem({ mensagem, titulo2 }) {
     }
   }, [boletim]);
   React.useEffect(() => {
-    const urltiluto = `https://www.idpbcastelo.com.br/principal/aviso`;
+    const urltiluto = `https://www.idpbfiladelfia.com.br/principal/aviso`;
     setShareUrl(urltiluto);
     if (mensagem) {
       const dataMens2 = mensagem.filter(

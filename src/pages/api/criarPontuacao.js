@@ -17,6 +17,9 @@ const handler = async (req, res) => {
               Distrito: Number(dados.Distrito),
             },
           },
+          orderBy: {
+            Semana: 'asc',
+          },
         })
         .finally(async () => {
           await prisma.$disconnect();

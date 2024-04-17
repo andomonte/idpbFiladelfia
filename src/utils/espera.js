@@ -5,6 +5,8 @@ import corIgreja from 'src/utils/coresIgreja';
 import { Oval } from 'react-loading-icons';
 import '@fontsource/rubik';
 
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -34,7 +36,7 @@ export default function Espere({ descricao }) {
         >
           <Box mt={-5}>
             <Box textAlign="center" mt={3} mb={2}>
-              <img src={corIgreja.logo} alt="Filadelfia" width={200} />
+              <img src={corIgreja.logo} alt="Celulas" width={200} />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Box

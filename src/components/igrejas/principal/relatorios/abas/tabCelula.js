@@ -37,7 +37,7 @@ export default function TabCelula({
 
   React.useEffect(() => {
     //    setPresentes(setPresentes(dados.length));
-    const qtyPresentes = dados.filter((val) => val.Presenca === true);
+    const qtyPresentes = dados?.filter((val) => val.Presenca === true);
 
     setPresentes(qtyPresentes.length);
   }, [respostas]);
@@ -94,11 +94,7 @@ export default function TabCelula({
             bgcolor={Object.keys(respostas).length && respostas[index]}
             display="flex"
             alignItems="center"
-            key={
-              row.Nome.length > 30
-                ? row.Nome.substring(0, row.Nome.lastIndexOf(' '))
-                : row.Nome
-            }
+            key={index}
             height={40}
             sx={{ borderBottom: '1px solid #00a' }}
           >

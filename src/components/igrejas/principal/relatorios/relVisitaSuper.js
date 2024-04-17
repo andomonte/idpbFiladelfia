@@ -10,6 +10,8 @@ import Meses from 'src/utils/meses';
 import TamanhoJanela from 'src/utils/getSize';
 import TabRelSuperVisita from './supervisor/aba/tabRelVisita';
 
+
+
 const janela = TamanhoJanela();
 
 function PlanMembro({ perfilUser, lideranca }) {

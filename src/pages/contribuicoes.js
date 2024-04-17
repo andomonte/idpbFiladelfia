@@ -1,5 +1,5 @@
 import React from 'react';
-import Contribuicao from 'src/components/igrejas/principal/contribuicoes';
+import { Contribuicao } from 'src/components/igrejas/principal/contribuicoes';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 
@@ -34,7 +34,7 @@ function Contribuir() {
   return (
     <div>
       {perfilUserF && (
-        <Contribuicao title="IDPB-CASTELO" perfilUser={perfilUserF} />
+        <Contribuicao title="IDPB-IDPB-CELULAS" perfilUser={perfilUserF} />
       )}
     </div>
   );

@@ -297,7 +297,7 @@ function RelSuper({ dadosRelVisita, setSendResumo }) {
                   color="white"
                   mt="2vh"
                 >
-                  QUANTIDADE DE VISISTAS FEITA NO MÊS
+                  QUANTIDADE DE VISITAS FEITA NO MÊS
                 </Box>
 
                 <Grid container item xs={12} spacing={1}>

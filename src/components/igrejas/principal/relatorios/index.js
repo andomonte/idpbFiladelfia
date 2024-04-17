@@ -12,7 +12,6 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { Oval } from 'react-loading-icons';
-
 // import PerfilIcon from 'src/components/icones/perfil';
 
 import { useSession } from 'next-auth/client';
@@ -21,6 +20,9 @@ import { IoIosPeople } from 'react-icons/io';
 import { CgFileDocument } from 'react-icons/cg';
 
 import corIgreja from 'src/utils/coresIgreja';
+import Acompanhamento from './Acompanhamento/home';
+import Visitas from './Visitas/home';
+import Presidente from './feitoPeloLider';
 
 import RelCelula from './RelatorioCelulas';
 import RelVisitasSuper from './relVisitaSuper';
@@ -139,7 +141,18 @@ function TabPanel(props) {
   );
 }
 
-function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
+function Relatorios({
+  title,
+  rolMembros,
+  lideranca,
+  perfilUser,
+  distritos,
+  coordenacoes,
+  supervisoes,
+  celulas,
+  parametros,
+  igreja,
+}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -165,7 +178,6 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div>
@@ -412,6 +424,77 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
                 </BottomNavigation>
               </Box>
             )}
+            {perfilUser.Funcao === 'Presidente' && (
+              <Box display="flex" m={0}>
+                <BottomNavigation
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                  fontSize="large"
+                  showLabels
+                  className={classes.rootTopbarIcon}
+                >
+                  <BottomNavigationAction
+                    style={
+                      value === 0
+                        ? { color: corIgreja.iconeOn, fontSize: '18px' }
+                        : { color: '#eeeeee', fontSize: '18px' }
+                    }
+                    label="Célula"
+                    icon={
+                      value === 0 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <IoIosPeople />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <IoIosPeople />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                  <BottomNavigationAction
+                    style={
+                      value === 1
+                        ? { color: corIgreja.iconeOn, fontSize: '18px' }
+                        : { color: '#eeeeee', fontSize: '18px' }
+                    }
+                    label="Acompanhamento"
+                    icon={
+                      value === 1 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <MdOutlineSupervisorAccount />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <MdOutlineSupervisorAccount />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                  <BottomNavigationAction
+                    style={
+                      value === 2
+                        ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                        : { color: '#eeeeee', fontSize: '12px' }
+                    }
+                    label="Visitas"
+                    icon={
+                      value === 2 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <CgFileDocument />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <CgFileDocument />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                </BottomNavigation>
+              </Box>
+            )}
           </Toolbar>
         </AppBar>
 
@@ -429,7 +512,6 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
                     dataEscolhida={dataEscolhida}
                     secao={session}
                     rolMembros={rolMembros}
-                    visitantes={visitantes}
                   />
                 ) : null}
 
@@ -456,15 +538,33 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
                 ) : null}
                 {perfilUser.Funcao === 'PastorDistrito' ? (
                   <RelCelulaDistrito
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
                     perfilUser={perfilUser}
                     setDataEscolhida={setDataEscolhida}
                     dataEscolhida={dataEscolhida}
                     secao={session}
                     rolMembros={rolMembros}
                     lideranca={lideranca}
+                    celulas={celulas}
                   />
                 ) : null}
-                {perfilUser.Funcao === 'Presidente' ? <Padrao /> : null}
+                {perfilUser.Funcao === 'Presidente' ? (
+                  <Presidente
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    perfilUser={perfilUser}
+                    setDataEscolhida={setDataEscolhida}
+                    dataEscolhida={dataEscolhida}
+                    secao={session}
+                    rolMembros={rolMembros}
+                    lideranca={lideranca}
+                    celulas={celulas}
+                    parametros={parametros}
+                  />
+                ) : null}
               </Box>
             )}
           </TabPanel>
@@ -502,7 +602,18 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
                     lideranca={lideranca}
                   />
                 ) : null}
-                {perfilUser.Funcao === 'Presidente' ? <Padrao /> : null}
+                {perfilUser.Funcao === 'Presidente' ? (
+                  <Acompanhamento
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    rolMembros={rolMembros}
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    celulas={celulas}
+                    igreja={igreja}
+                  />
+                ) : null}
               </Box>
             )}
           </TabPanel>
@@ -528,6 +639,7 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
                 secao={session}
                 rolMembros={rolMembros}
                 lideranca={lideranca}
+                coordenacoes={coordenacoes}
               />
             ) : null}
             {perfilUser.Funcao === 'PastorDistrito' ? (
@@ -541,13 +653,15 @@ function Relatorios({ title, rolMembros, lideranca, perfilUser, visitantes }) {
               />
             ) : null}
             {perfilUser.Funcao === 'Presidente' ? (
-              <RelCoord
+              <Visitas
                 perfilUser={perfilUser}
-                setDataEscolhida={setDataEscolhida}
-                dataEscolhida={dataEscolhida}
-                secao={session}
-                rolMembros={rolMembros}
                 lideranca={lideranca}
+                rolMembros={rolMembros}
+                distritos={distritos}
+                coordenacoes={coordenacoes}
+                supervisoes={supervisoes}
+                celulas={celulas}
+                igreja={igreja}
               />
             ) : null}
           </TabPanel>

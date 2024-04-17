@@ -23,7 +23,7 @@ function userPerfil({ celulas, rolMembros, lideranca }) {
     if (secao.length === 0) {
       return (
         <Cadastro
-          title="IDPB-CASTELO"
+          title="IDPB-FILADELFIA"
           rolMembros={rolMembros}
           lideranca={lideranca}
         />
@@ -32,7 +32,7 @@ function userPerfil({ celulas, rolMembros, lideranca }) {
     return (
       <Perfil
         celulas={celulas}
-        title="IDPB-CASTELO"
+        title="IDPB-FILADELFIA"
         rolMembros={rolMembros}
         lideranca={lideranca}
         perfilUser={perfilUser}

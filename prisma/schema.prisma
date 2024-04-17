@@ -56,6 +56,7 @@ model celulas {
   AtualizadoPor String?   @db.VarChar(255)
   Distrito      Int       @default(0, map: "DF__celulas__Distrit__3E52440B")
   Coordenacao   Int       @default(0, map: "DF__celulas__Coorden__3F466844")
+  Status        Boolean?
 
   @@id([Celula, Supervisao, Coordenacao, Distrito], map: "PK_celulas")
 }
@@ -82,6 +83,7 @@ model cordenacao {
   CriadoPor        String?   @db.VarChar(150)
   AtualizadoEm     DateTime? @db.DateTime
   AtualizadoPor    String?   @db.VarChar(255)
+  Status           Boolean?
 
   @@id([Coordenacao, Distrito], map: "PK_cordenacao")
 }
@@ -109,6 +111,7 @@ model distrito {
   CriadoPor     String    @db.VarChar(150)
   AtualizadoEm  DateTime? @db.DateTime
   AtualizadoPor String?   @db.VarChar(255)
+  Status        Boolean?
 }
 
 model eventos {
@@ -555,8 +558,8 @@ model TB_LOGIN_USER {
   LOGIN_USER_PASSWORD String           @db.VarChar(40)
   LOGIN_USER_NAME     String           @db.VarChar(60)
   LOGIN_USER_OBS      String           @db.Text
-  TB_LOGIN_GROUP      TB_LOGIN_GROUP   @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME], onDelete: Cascade, onUpdate: NoAction, map: "TB_LOGIN_GROUP_USER")
   TB_LOGIN_TOKEN      TB_LOGIN_TOKEN[]
+  TB_LOGIN_GROUP      TB_LOGIN_GROUP   @relation(fields: [LOGIN_GROUP_NAME], references: [LOGIN_GROUP_NAME], onDelete: Cascade, onUpdate: NoAction, map: "TB_LOGIN_GROUP_USER")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -636,6 +639,7 @@ model supervisao {
   AtualizadoPor   String?   @db.VarChar(255)
   Coordenacao     Int       @default(0, map: "DF__supervisa__Coord__339FAB6E")
   Distrito        Int       @default(0, map: "DF__supervisa__Distr__3493CFA7")
+  Status          Boolean?
 
   @@id([Supervisao, Coordenacao, Distrito], map: "PK_supervisao")
 }

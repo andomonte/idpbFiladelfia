@@ -9,7 +9,7 @@ export default async function SendEmail(dadosEmail) {
   });
 
   try {
-    const message = await client.sendAsync({
+    await client.sendAsync({
       text: dadosEmail.mensagem,
       from: dadosEmail.enviadoPor,
       to: dadosEmail.para,

@@ -45,7 +45,7 @@ export default function TabCelula({
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
 
-  const nomeLider = lideranca.filter((val) => {
+  const nomeLider = lideranca?.filter((val) => {
     if (
       Number(val.Celula) === Number(valorIndexSend) &&
       Number(val.Distrito) === Number(perfilUser.Distrito)

@@ -7,7 +7,7 @@ const handler = async (req, res) => {
   const { dados } = req.body;
 
   let id = 0;
- 
+
   if (dados) {
     try {
       const inscricao = await prisma.inscritosEventosGeral
@@ -23,7 +23,7 @@ const handler = async (req, res) => {
         .finally(async () => {
           await prisma.$disconnect();
         });
-   
+
       if (inscricao.length) {
         id = Number(inscricao[0].id);
       }
@@ -52,7 +52,6 @@ const handler = async (req, res) => {
         res.status(400).send('vou criar o banco');
       }
     } else {
-   
       try {
         await prisma.inscritosEventosGeral
           .create({

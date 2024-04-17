@@ -17,9 +17,6 @@ import corIgreja from 'src/utils/coresIgreja';
 // import Carrossel from '../carrossel';
 // import GoogleMaps from './googleMap';
 import Pontuacao from './pontuacao';
-import PontuacaoCoord from './pontuacaoCoord';
-import PontuacaoSuper from './pontuacaoSuper';
-import PontuacaoLider from './pontuacaoLider';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -111,9 +108,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Secretaria({ parametros, perfilUser, title, lideranca, supervisao }) {
+function Secretaria({
+  coordenacoes,
+  parametros,
+  perfilUser,
+  title,
+  lideranca,
+  supervisao,
+  distritos,
+  celulas,
+}) {
   const classes = useStyles();
-
   const theme = useTheme();
 
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -138,7 +143,6 @@ function Secretaria({ parametros, perfilUser, title, lideranca, supervisao }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div className={classes.root}>
@@ -175,27 +179,15 @@ function Secretaria({ parametros, perfilUser, title, lideranca, supervisao }) {
           <div className={classes.drawerHeader} />
           {/* {children} */}
 
-          {perfilUser.Funcao === 'PastorDistrito' ? (
-            <Pontuacao
-              lideranca={lideranca}
-              supervisao={supervisao}
-              parametros={parametros}
-              perfilUser={perfilUser}
-            />
-          ) : null}
-          {perfilUser.Funcao === 'Coordenador' ? (
-            <PontuacaoCoord
-              supervisao={supervisao}
-              parametros={parametros}
-              perfilUser={perfilUser}
-            />
-          ) : null}
-          {perfilUser.Funcao === 'Supervisor' ? (
-            <PontuacaoSuper parametros={parametros} perfilUser={perfilUser} />
-          ) : null}
-          {perfilUser.Funcao === 'Lider' || perfilUser.Funcao === 'Membro' ? (
-            <PontuacaoLider parametros={parametros} perfilUser={perfilUser} />
-          ) : null}
+          <Pontuacao
+            lideranca={lideranca}
+            supervisoes={supervisao}
+            parametros={parametros}
+            perfilUser={perfilUser}
+            coordenacoes={coordenacoes}
+            distritos={distritos}
+            celulas={celulas}
+          />
         </main>
       </div>
     </div>

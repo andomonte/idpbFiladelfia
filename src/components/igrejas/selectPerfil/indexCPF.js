@@ -141,7 +141,7 @@ function SelectPerfil({
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas;
   let valorPerfil = {};
   let userMembro = {};
   const handleClick = () => {
@@ -300,7 +300,25 @@ function SelectPerfil({
               login: 'credencial',
               nomeDistrito: newDistrito[0].Distrito_Nome,
             };
-
+          if (items.Funcao === 'Professor')
+            return {
+              Funcao: items.Funcao,
+              Descricao: `Professor Igreja Local`,
+              id: index + 1,
+              numero: items.Supervisao,
+              Celula: items.Celula,
+              Coordenacao: items.Coordenacao,
+              Distrito: items.Distrito,
+              Email: items.Email,
+              Igreja: items.Igreja,
+              Nascimento: items.Nascimento,
+              Nome: items.Nome,
+              RolMembro: items.RolMembro,
+              Supervisao: items.Supervisao,
+              foto: membro[0].foto,
+              login: 'credencial',
+              nomeDistrito: newDistrito[0].Distrito_Nome,
+            };
           if (items.Funcao === 'Lider')
             return {
               Funcao: items.Funcao,
@@ -463,8 +481,8 @@ function SelectPerfil({
                                     <em>Escolha seu Perfil</em>
                                   </MenuItem>
 
-                                  {valorPerfil?.map((items) => (
-                                    <MenuItem key={items.id} value={items.id}>
+                                  {valorPerfil?.map((items, index) => (
+                                    <MenuItem key={index} value={items.id}>
                                       {items.Descricao ?? items.Descricao}
                                     </MenuItem>
                                   ))}

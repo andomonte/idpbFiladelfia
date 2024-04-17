@@ -14,6 +14,7 @@ import corIgreja from 'src/utils/coresIgreja';
 import { useRouter } from 'next/router';
 
 import Calendario from './calendario';
+
 // const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
@@ -141,7 +142,6 @@ function AtualizarDados({ title, rolMembros, perfilUser }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div>

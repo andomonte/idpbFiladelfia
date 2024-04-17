@@ -1,10 +1,11 @@
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/client';
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import LoginIcon from 'src/components/icones/login';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -24,8 +25,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
 }));
+
 export default function BotaoLogin() {
   const [session] = useSession();
+  const router = useRouter();
   const classes = useStyles();
   const [foto, setFoto] = React.useState('');
   React.useEffect(() => {
@@ -37,7 +40,11 @@ export default function BotaoLogin() {
     }
     return 0;
   }, [session]);
-
+  const handleLogout = () => {
+    router.push({
+      pathname: '/meuPerfilLogOut',
+    });
+  };
   return (
     <Box>
       {!session ? (
@@ -67,16 +74,40 @@ export default function BotaoLogin() {
       ) : (
         <Box display="flex" alignItems="center">
           <Avatar
-            onClick={() =>
-              signOut({
-                callbackUrl: `${window.location.origin}`,
-              })
-            }
-            ord="123456789?"
-            alt="User"
             className={classes.avatar}
-            src={foto.foto || session?.user?.image}
-          />
+            onClick={
+              () => handleLogout()
+              /*  signOut({
+                  callbackUrl: `${window.location.origin}`,
+                }) */
+            }
+            alt="nome"
+            ord="123456789?"
+            src={foto.foto || ''}
+          >
+            {foto.foto === '' || foto.foto === null ? (
+              <IconButton
+                style={{ color: 'black' }}
+                aria-label="upload picture"
+                component="span"
+              >
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  flexDirection="column"
+                  fontSize="8px"
+                  fontFamily="arial black"
+                  width="100%"
+                >
+                  <Box mt={0.5}>SUA</Box>
+
+                  <Box mt={0.2} mb={0.5}>
+                    FOTO
+                  </Box>
+                </Box>
+              </IconButton>
+            ) : null}
+          </Avatar>
         </Box>
       )}
     </Box>

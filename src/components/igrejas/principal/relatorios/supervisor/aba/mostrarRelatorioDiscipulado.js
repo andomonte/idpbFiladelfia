@@ -18,6 +18,8 @@ import TabCelula from './tabCelula';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+
+
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="left" ref={ref} {...props} />
 ));

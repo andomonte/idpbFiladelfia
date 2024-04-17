@@ -20,6 +20,7 @@ export default function TabCelula({
   setDadosRelVisita,
   Mes,
   Ano,
+  coordenacoes,
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
 
@@ -31,7 +32,7 @@ export default function TabCelula({
 
   // para usar semanas
 
-  const url1 = `/api/consultaRelatorioSupervisao/${Mes}/${Ano}`;
+  const url1 = `/api/consultaRelatorioSupervisao/${Mes + 1}/${Ano}`;
 
   const { data: sem1, errorSem1 } = useSWR(url1, fetcher);
 
@@ -69,16 +70,9 @@ export default function TabCelula({
 
   React.useEffect(() => {
     if (relEncontrado.length) {
-      const obj = JSON.parse(relEncontrado[0].Presentes);
-      let strPresentes = '';
-      for (let i = 0; i < obj.length; i += 1) {
-        if (strPresentes !== '')
-          strPresentes = `${String(strPresentes)}${obj[i].label}, `;
-        else if (i === 0) strPresentes = `${obj[i].label}, `;
-        else strPresentes = `${obj[i].label}`;
-      }
+      const obj = relEncontrado[0].Presentes;
 
-      setPresentes(strPresentes);
+      setPresentes(obj);
     }
   }, [relEncontrado]);
   return (
@@ -117,7 +111,7 @@ export default function TabCelula({
           textAlign="center"
           width="60%"
         >
-          PRESENTES
+          COORDENAÇÃO
         </Box>
         <Box textAlign="center" width="15%">
           VER
@@ -178,15 +172,20 @@ export default function TabCelula({
                       {relEncontrado[index] ? (
                         <Box color="blue" display="flex">
                           <Box>
-                            {presentes !== '' ? <Box> {presentes}</Box> : ''}
+                            {relEncontrado !== '' && perfilUser.Coordenacao ? (
+                              <Box>
+                                {
+                                  coordenacoes.filter(
+                                    (val) =>
+                                      Number(val.Coordenacao) ===
+                                      Number(relEncontrado[0].Coordenacao),
+                                  )[0].Coordenacao_Nome
+                                }
+                              </Box>
+                            ) : (
+                              ''
+                            )}
                           </Box>
-                        </Box>
-                      ) : (
-                        ''
-                      )}
-                      {relEncontrado[index].Progresso ? (
-                        <Box color="#ba68c8" display="flex">
-                          {relEncontrado[index].Progresso}%
                         </Box>
                       ) : (
                         ''

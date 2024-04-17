@@ -11,8 +11,10 @@ function Sec({
   celulas,
   rolMembros,
   lideranca,
+  distritos,
+  coordenacoes,
 }) {
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas;
   const router = useRouter();
   const perfilUser = router.query;
   const [session] = useSession();
@@ -35,7 +37,6 @@ function Sec({
       setPerfilUserF(result);
     }
   }, []);
-
   return (
     <div>
       {perfilUserF && (
@@ -48,6 +49,8 @@ function Sec({
           rolMembros={rolMembros}
           parametros={parametros}
           supervisao={supervisao}
+          coordenacoes={coordenacoes}
+          distritos={distritos}
         />
       )}
     </div>
@@ -91,6 +94,24 @@ export const getStaticProps = async () => {
   const supervisao = await prisma.supervisao.findMany().finally(async () => {
     await prisma.$disconnect();
   });
+  const coordenacoes = await prisma.cordenacao
+    .findMany({
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+  const distritos = await prisma.distrito
+    .findMany({
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
 
   const parametros = await prisma.desempenho.findMany().finally(async () => {
     await prisma.$disconnect();
@@ -117,6 +138,20 @@ export const getStaticProps = async () => {
       supervisao: JSON.parse(
         JSON.stringify(
           supervisao,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
+      coordenacoes: JSON.parse(
+        JSON.stringify(
+          coordenacoes,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
+      distritos: JSON.parse(
+        JSON.stringify(
+          distritos,
           (key, value) =>
             typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
         ),

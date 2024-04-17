@@ -12,6 +12,8 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import TabCelula from './tabCelula';
 
+
+
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="left" ref={ref} {...props} />
 ));

@@ -187,7 +187,7 @@ function Mensagem({ mensagem, titulo2 }) {
         setBoletim(dataMens2[0]);
         setPesquisaTitulo(true);
       }
-      const urltiluto = `https://www.idpbcastelo.com.br/principal/mensagem?titulo=${titulo}`;
+      const urltiluto = `https://www.idpbfiladelfia.com.br/principal/mensagem?titulo=${titulo}`;
       setShareUrl(urltiluto);
       const diaSemana = [
         'Domingo',

@@ -130,7 +130,7 @@ function SelectPerfil({
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas;
   let valorPerfil = {};
   let userMembro = {};
 
@@ -150,6 +150,25 @@ function SelectPerfil({
         );
         if (secao)
           valorPerfil = secao.map((items, index) => {
+            if (items.Funcao === 'Professor')
+              return {
+                Funcao: items.Funcao,
+                Descricao: `Professor Igreja Local`,
+                id: index + 1,
+                numero: items.Supervisao,
+                Celula: items.Celula,
+                Coordenacao: items.Coordenacao,
+                Distrito: items.Distrito,
+                Email: items.Email,
+                Igreja: items.Igreja,
+                Nascimento: items.Nascimento,
+                Nome: items.Nome,
+                RolMembro: items.RolMembro,
+                Supervisao: items.Supervisao,
+                foto: membros[0].foto,
+                login: 'google',
+                nomeDistrito: newDistrito[0].Distrito_Nome,
+              };
             if (items.Funcao === 'Secretaria')
               return {
                 Funcao: items.Funcao,
@@ -188,6 +207,7 @@ function SelectPerfil({
                 login: 'google',
                 nomeDistrito: newDistrito[0].Distrito_Nome,
               };
+
             if (items.Funcao === 'PastorDistrito')
               return {
                 Funcao: items.Funcao,

@@ -3,6 +3,8 @@ import React from 'react';
 import corIgreja from 'src/utils/coresIgreja';
 import TabCelula from './abas/tabCelula';
 
+
+
 function Celula({ rolMembros, perfilUser }) {
   const nomesCelulas = rolMembros.filter(
     (val) =>
@@ -68,7 +70,7 @@ function Celula({ rolMembros, perfilUser }) {
                     }}
                     textAlign="center"
                   >
-                    IDPB - Filadelfia{' '}
+                    IDPB - CAFINPI{' '}
                   </Box>
                 </Box>
               </Box>

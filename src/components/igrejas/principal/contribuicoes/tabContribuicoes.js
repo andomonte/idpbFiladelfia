@@ -6,8 +6,44 @@ import axios from 'axios';
 // import { Oval } from 'react-loading-icons';
 import ConverteData from 'src/utils/convData2';
 import TableContainer from '@mui/material/TableContainer';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontSize: '8px',
+  '@media (min-width:360px)': {
+    fontSize: '10px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '11px',
+  },
+  '@media (min-width:500px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '13px',
+  },
+};
+theme.typography.hs3 = {
+  fontSize: '10px',
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+theme.typography.hs2 = {
+  fontSize: '12px',
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
 
 export default function TabCelula({ Mes, Ano, perfilUser }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
@@ -15,7 +51,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
   const [entradas, setEntradas] = React.useState([]);
 
   const rolMembros = perfilUser.RolMembro;
-  const url = `/api/consultaContribuicoes/${Ano}/${Mes}/${rolMembros}`;
+  const url = `/api/consultaContribuicoes/1/${Ano}/${Mes}/${rolMembros}`;
   const { data: contribuicoes, errorContribuicoes } = useSWR(url, fetcher);
 
   React.useEffect(() => {
@@ -48,13 +84,15 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
           alignItems="center"
           height="100%"
           textAlign="center"
-          width="30%"
+          width="20%"
           sx={{
             borderLeft: '1px solid #000',
             borderRight: '1px solid #000',
           }}
         >
-          DATA
+          <ThemeProvider theme={theme}>
+            <Typography variant="hs2">DATA</Typography>
+          </ThemeProvider>
         </Box>
         <Box
           display="flex"
@@ -62,18 +100,25 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
           alignItems="center"
           height="100%"
           textAlign="center"
-          width="45%"
+          width="50%"
           sx={{
             borderRight: '1px solid #000',
           }}
         >
-          TIPO DE CONTRIBUIÇÃO
+          {' '}
+          <ThemeProvider theme={theme}>
+            <Typography variant="hs2">Descrição</Typography>
+          </ThemeProvider>
         </Box>
-        <Box textAlign="center" width="25%">
-          VALOR
+
+        <Box textAlign="center" width="30%">
+          <ThemeProvider theme={theme}>
+            <Typography variant="hs2">VALOR</Typography>
+          </ThemeProvider>
         </Box>
       </Box>
-      <TableContainer sx={{ minHeight: 320, height: '88%' }}>
+
+      <TableContainer sx={{ minHeight: 320, height: '85%' }}>
         {entradas && entradas.length ? (
           <Box width="100%" height="100%" fontSize="12px">
             {entradas.map((row, index) => (
@@ -97,13 +142,18 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                   alignItems="center"
                   height="100%"
                   textAlign="center"
-                  width="30%"
+                  width="20%"
                   sx={{
                     borderLeft: '1px solid #000',
                     borderRight: '1px solid #000',
                   }}
                 >
-                  {row.LANC_DATA ? ConverteData(row.LANC_DATA) : '-'}
+                  {' '}
+                  <ThemeProvider theme={theme}>
+                    <Typography variant="hs4">
+                      {row.LANC_DATA ? ConverteData(row.LANC_DATA) : '-'}
+                    </Typography>
+                  </ThemeProvider>
                 </Box>
                 <Box
                   height="100%"
@@ -111,16 +161,19 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                   justifyContent="center"
                   textAlign="center"
                   alignItems="center"
-                  width="45%"
+                  width="50%"
                   sx={{
                     borderRight: '1px solid #000',
                   }}
                 >
-            
-                  <Box>
-                    {row.CAT_NOME !== 'Recursos de Terceiros'
-                      ? row.CAT_NOME
-                      : row.LANC_DESCRICAO}
+                  <Box color={row.LANC_TIPO === 'Receita' ? 'black' : 'green'}>
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="hs4">
+                        {row.CAT_NOME !== 'Recursos de Terceiros'
+                          ? row.CAT_NOME
+                          : row.LANC_DESCRICAO}
+                      </Typography>
+                    </ThemeProvider>
                   </Box>
                 </Box>
                 <Box
@@ -129,7 +182,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                   justifyContent="center"
                   textAlign="center"
                   alignItems="center"
-                  width="25%"
+                  width="30%"
                   sx={{
                     borderRight: '1px solid #000',
                   }}
@@ -137,13 +190,17 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
                   <Box>
                     {row.LANC_VALOR ? (
                       <Box>
-                        <Box>
-                          {Number(row.LANC_VALOR).toLocaleString('pt-br', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          })}
-                        </Box>
-                        <Box>{row.forma_pagamento}</Box>
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs4">
+                            <Box>
+                              {Number(row.LANC_VALOR).toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL',
+                              })}
+                            </Box>
+                            <Box>{row.forma_pagamento}</Box>
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
                     ) : (
                       '-'

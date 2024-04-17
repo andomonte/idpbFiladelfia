@@ -31,14 +31,15 @@ import 'react-toastify/dist/ReactToastify.css';
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 // const fetcher2 = (url2) => axios.get(url2).then((res) => res.dataVisitante);
 
-function createData(Nome, Presenca, status) {
-  return { Nome, Presenca, status };
+function createData(Rol, Nome, Presenca, status) {
+  return { Rol, Nome, Presenca, status };
 }
-function createRelCelula(Rol, Nome, Presenca) {
+function createRelCelula(Rol, Nome, Presenca, Status) {
   return {
     Rol,
     Nome,
     Presenca,
+    Status,
   };
 }
 function createRelVisitantes(Rol, Nome, Presenca) {
@@ -161,7 +162,7 @@ function RelCelula({
   const [dataEscolhida, setDataEscolhida] = React.useState(dataFinal);
   const [contagem, setContagem] = React.useState(false);
   const [checkInicio, setCheckInicio] = React.useState('sim');
-  const visitantesCelula = visitantes.filter(
+  const visitantesCelula = visitantes?.filter(
     (val) =>
       val.Celula === Number(perfilUser.Celula) &&
       val.Distrito === Number(perfilUser.Distrito),
@@ -185,7 +186,9 @@ function RelCelula({
   const [dadosCelula, setDadosCelula] = React.useState(
     dadosSem && dadosSem.id
       ? JSON.parse(dadosSem.NomesMembros)
-      : nomesCelulas.map((row) => createData(row.Nome, false, row.Situacao)),
+      : nomesCelulas.map((row) =>
+          createData(row.RolMembro, row.Nome, false, row.Situacao),
+        ),
   );
 
   const [openErro, setOpenErro] = React.useState(false);
@@ -551,7 +554,7 @@ function RelCelula({
       .then((response) => {
         if (response) {
           if (response.data.length) {
-            setPlanejamento(response.data.length * 10);
+            setPlanejamento(10);
           } else setPlanejamento(0);
           return 0;
         }
@@ -640,6 +643,7 @@ function RelCelula({
   const pegarPontuacao = () => {
     if (errorPontos) return <div>An error occured.</div>;
     if (!pontos) return <div>Loading ...</div>;
+
     if (pontos) {
       const pontosSemanaAtual = pontos.filter(
         (val) => Number(val.Semana) === Number(semanaEnviada),
@@ -824,7 +828,7 @@ function RelCelula({
   React.useEffect(() => {
     criarPontuacao();
     return 0;
-  }, [pontosAtual]); // atualiza a pontuação
+  }, [pontosAtual, planejamento]); // atualiza a pontuação
 
   React.useEffect(() => {
     pegarPontuacao();
@@ -858,7 +862,7 @@ function RelCelula({
 
   const enviarPontuacao = () => {
     const CriadoEm = new Date();
-    criarPontuacao();
+
     api
       .post('/api/criarPontuacao', {
         Semana: semanaEnviada,
@@ -894,13 +898,16 @@ function RelCelula({
     setCarregando(true);
 
     const criadoEm = new Date();
+
     const nomesCelulaParcial = relPresentes.map((row, index) =>
       createRelCelula(
-        row.RolMembro,
+        row.Rol,
         row.Nome,
         relPresentes[index] ? relPresentes[index].Presenca : false,
+        row.status,
       ),
     );
+
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);
     const novaData = new Date(ConverteData(inputValue));
     const RelCelulaFinal = createEstatistico(
@@ -1006,7 +1013,7 @@ function RelCelula({
       justifyContent="center"
       alignItems="center"
       width="100vw"
-      minHeight={570}
+      minHeight={770}
       minWidth={300}
       bgcolor={corIgreja.principal2}
       height="calc(100vh)"
@@ -1014,7 +1021,7 @@ function RelCelula({
       <Box
         width="96%"
         height="97%"
-        minHeight={550}
+        minHeight={750}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -1735,6 +1742,68 @@ function RelCelula({
                           }}
                         >
                           <IoMdRemoveCircle color="red" size={30} />
+                        </Box>
+                      </Box>
+                    </Paper>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    width="100%"
+                    mt={2}
+                  >
+                    <Paper
+                      style={{
+                        marginTop: 10,
+                        width: '90%',
+                        textAlign: 'center',
+                        background: '#fafafa',
+                        height: 40,
+                        borderRadius: 15,
+                        border: '1px solid #000',
+                      }}
+                    >
+                      <Box
+                        width="100%"
+                        height="100%"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          width="100%"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          sx={{ fontFamily: 'arial black' }}
+                        >
+                          <Box width="100%" textAlign="center">
+                            <Box
+                              ml={2}
+                              justifyContent="center"
+                              display="flex"
+                              width="100%"
+                              fontSize="16px"
+                              color={planejamento ? 'blue' : 'red'}
+                            >
+                              <Box
+                                mt={0}
+                                display="flex"
+                                justifyContent="center"
+                              >
+                                {planejamento ? 'COM' : 'SEM'}
+                              </Box>
+                              <Box
+                                mt={0}
+                                ml={2}
+                                display="flex"
+                                justifyContent="center"
+                                fontSize="16px"
+                              >
+                                PLANEJAMENTO
+                              </Box>
+                            </Box>
+                          </Box>
                         </Box>
                       </Box>
                     </Paper>

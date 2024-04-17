@@ -14,7 +14,9 @@ import {
 import moment from 'moment'; */
 import Meses from 'src/utils/mesesAbrev';
 
-import ResumoParticipacao from '../../perfil/abas/tabBuscar';
+import ResumoParticipacao from '../../equipe/abas/tabBuscar';
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {

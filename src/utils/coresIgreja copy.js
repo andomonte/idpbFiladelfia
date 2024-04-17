@@ -10,6 +10,9 @@ const Cores = createTheme({
   tercenaria: '#3f51b5',
   texto1: '#90a4ae',
   texto2: '#ffff8d',
+  textoS: '#fafafa',
+  button1: '#1b5e20',
+  button2: '#e65100',
   iconeOn: '#ffff8d',
   iconeOff: '#eeee',
   palette: {

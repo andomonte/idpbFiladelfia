@@ -98,7 +98,7 @@ export default function Login({ providers2, rolMembros }) {
       }
       if (vCPF && authState.password.length > 3) {
         try {
-          const user = rolMembros.filter((val) => {
+          const user = rolMembros?.filter((val) => {
             if (val.CPF) {
               return (
                 String(val.CPF.replace(/\D/g, '')) ===
@@ -169,13 +169,13 @@ export default function Login({ providers2, rolMembros }) {
     let vCPF = ValidaCPF(authState.cpf.replace(/\D/g, ''));
 
     if (authState.cpf.replace(/\D/g, '').length < 10) vCPF = false;
+
     if (!vCPF) {
       setValorCPF(true);
     }
     if (vCPF) {
       const user = rolMembros.filter(
         (val) =>
-          val.CPF &&
           val.CPF.replace(/\D/g, '') === authState.cpf.replace(/\D/g, ''),
       );
 
@@ -863,11 +863,11 @@ export async function getStaticProps(context) {
       redirect: { destination: '/' },
     };
   }
-
+  const csrfTokens = await csrfToken(context);
   return {
     props: {
       providers2: await providers(context),
-      csrfToken: await csrfToken(context),
+      csrfTokens: JSON.parse(JSON.stringify(csrfTokens)),
       rolMembros: JSON.parse(
         JSON.stringify(
           rolMembros,

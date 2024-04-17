@@ -96,6 +96,7 @@ function createData(label, value) {
 function createAvaliacoes(relatorios, planejamentos, mentoriamentos) {
   return { relatorios, planejamentos, mentoriamentos };
 }
+
 function RelSuper({ perfilUser, setOpenNovoRelatorio, lideranca, Mes, Ano }) {
   const classes = useStyles();
   //= ================================================================
@@ -426,7 +427,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, lideranca, Mes, Ano }) {
                   color="white"
                   mt="2vh"
                 >
-                  QUANTIDADE DE VISISTAS FEITA NO MÊS
+                  QUANTIDADE DE VISITAS FEITA NO MÊS
                 </Box>
 
                 <Grid container item xs={12} spacing={1}>

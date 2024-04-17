@@ -4,7 +4,16 @@ import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 
-function relatorios({ celulas, rolMembros, lideranca, visitantes }) {
+function relatorios({
+  celulas,
+  rolMembros,
+  lideranca,
+  distritos,
+  coordenacoes,
+  supervisoes,
+  userIgrejas,
+  parametros,
+}) {
   const router = useRouter();
   const [session] = useSession();
   const perfilUser = router.query;
@@ -33,8 +42,6 @@ function relatorios({ celulas, rolMembros, lideranca, visitantes }) {
     window.history.replaceState(null, '', '/relatorio');
   }
 
-  const Visitantes = visitantes.filter((val) => val.Celula && val.Distrito);
-
   return (
     <div>
       {perfilUser.id ? (
@@ -44,7 +51,10 @@ function relatorios({ celulas, rolMembros, lideranca, visitantes }) {
           rolMembros={rolMembros}
           lideranca={lideranca}
           perfilUser={perfilUser}
-          visitantes={Visitantes}
+          distritos={distritos}
+          coordenacoes={coordenacoes}
+          supervisoes={supervisoes}
+          userIgrejas={userIgrejas}
         />
       ) : (
         <div>
@@ -55,7 +65,11 @@ function relatorios({ celulas, rolMembros, lideranca, visitantes }) {
               rolMembros={rolMembros}
               lideranca={lideranca}
               perfilUser={perfilUserF}
-              visitantes={Visitantes}
+              distritos={distritos}
+              coordenacoes={coordenacoes}
+              supervisoes={supervisoes}
+              igreja={userIgrejas}
+              parametros={parametros}
             />
           )}
         </div>
@@ -93,20 +107,43 @@ export const getStaticProps = async () => {
     .finally(async () => {
       await prisma.$disconnect();
     });
-  const visitantes = await prisma.visitantes
+  const supervisoes = await prisma.supervisao
     .findMany({
-      orderBy: [
-        {
-          Nome: 'asc',
-        },
-      ],
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+  const coordenacoes = await prisma.cordenacao
+    .findMany({
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+  const distritos = await prisma.distrito
+    .findMany({
+      where: {
+        Status: true,
+      },
     })
     .finally(async () => {
       await prisma.$disconnect();
     });
 
+  const userIgrejas = await prisma.igreja.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
+  const parametros = await prisma.desempenho.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
   return {
     props: {
+      parametros: JSON.parse(JSON.stringify(parametros)),
       celulas: JSON.parse(JSON.stringify(celulas)),
       rolMembros: JSON.parse(
         JSON.stringify(
@@ -122,7 +159,17 @@ export const getStaticProps = async () => {
             typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
         ),
       ),
-      visitantes: JSON.parse(JSON.stringify(visitantes)),
+
+      supervisoes: JSON.parse(JSON.stringify(supervisoes)),
+      coordenacoes: JSON.parse(JSON.stringify(coordenacoes)),
+      distritos: JSON.parse(
+        JSON.stringify(
+          distritos,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
+      userIgrejas: JSON.parse(JSON.stringify(userIgrejas)),
     }, // will be passed to the pperfilUser component as props
     revalidate: 15, // faz atualizar a pagina de 15 em 15 segundo sem fazer build
   };

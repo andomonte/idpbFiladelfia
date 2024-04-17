@@ -348,6 +348,7 @@ export default function TabCelula({ Mes, Ano }) {
       let diaP = 0;
       let dia = '-';
       const eventosParcial = eventoPlanejadoParcial;
+
       for (let i = 0; i < listaEventos.length; i += 1) {
         if (listaEventos && listaEventos[i]) {
           diaP = listaEventos[i].Data.slice(8, 10);
@@ -546,6 +547,7 @@ export default function TabCelula({ Mes, Ano }) {
               <Box mt={1} ml={0} width="100%" fontSize="12px">
                 {calendario[1]}
               </Box>
+
               <Box mt={-1} width="100%">
                 {eventoPlanejado !== 'inicio' &&
                 eventoPlanejado[1].Quem !== '-' ? (
@@ -554,6 +556,7 @@ export default function TabCelula({ Mes, Ano }) {
                     aria-label="upload picture"
                     component="span"
                     onClick={() => {
+                      console.log('oi nvo');
                       handleShow(1);
                     }}
                   >

@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 
+
+
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 export default function TabCelula({

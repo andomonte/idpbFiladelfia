@@ -16,7 +16,6 @@ const s3 = new aws.S3({
 const upload = multer({
   storage: multerS3({
     s3,
-
     bucket: process.env.AWSBUCKET,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
@@ -29,6 +28,7 @@ const upload = multer({
       //    const fileName = `${hash.toString('hex')}-${file.originalname}`;
       const fileName = `${file.originalname}`;
       cb(null, `membros/${fileName}`);
+
       // });
     },
   }),

@@ -1,16 +1,35 @@
 import React from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { Box } from '@material-ui/core';
+import useSWR from 'swr';
+import axios from 'axios';
+
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+function createLabelData2(label, valor) {
+  return {
+    label,
+    valor,
+  };
+}
 
 export default function Grafico({
   dados,
   qtdMembros,
   parametros,
   pontosCelulas,
+  semana,
+  ano,
+  dadosCelula,
+  distritos,
 }) {
   const pontosCelula = pontosCelulas.filter(
-    (val) => val.Celula === dados.Celula,
+    (val) => val.Celula === dados.Celula && val.Distrito === dados.Distrito,
   );
+  const [pontosGeral, setPontosGeral] = React.useState([]);
+  const pontosMes = pontosCelula.length < 2 ? pontosGeral : pontosCelula;
+  const qytSemanas =
+    pontosCelula.length < 2 ? pontosCelula.length : pontosCelula.length;
 
   const detalhesPontos = [];
   const pontosTotal = [];
@@ -23,29 +42,46 @@ export default function Grafico({
       return 0;
     });
   }
+  const url1 = `/api/consultaPontuacaoSemanaAno4/${semana + 1}/${
+    dados.Celula
+  }/${ano}`;
+  const { data: pontosAnt, error: errorPontosAnt } = useSWR(url1, fetcher);
+  React.useEffect(() => {
+    if (errorPontosAnt) return <div>An error occured.</div>;
+    if (!pontosAnt) return <div>Loading ...</div>;
+    if (pontosAnt) {
+      const pontosCelulaTemp = pontosAnt?.filter(
+        (val) =>
+          Number(val.Celula) === Number(dados.Celula) &&
+          Number(val.Distrito) === Number(dados.Distrito),
+      );
+
+      setPontosGeral(pontosCelulaTemp);
+      //  const pontosTotal = pontosCelula.reduce((prev) => prev.TotalRank);
+    }
+    return 0;
+  }, [pontosAnt]);
 
   const presCelulaDesejado =
-    dados.semanas * ((parametros[0].PresCelulas * 10) / 100).toFixed(2);
+    qytSemanas * ((parametros[0].PresCelulas * 10) / 100).toFixed(2);
 
   const presCelebracaoDesejado =
-    dados.semanas * ((parametros[0].PresCelebracao * 10) / 100).toFixed(2);
+    qytSemanas * ((parametros[0].PresCelebracao * 10) / 100).toFixed(2);
 
   const discipulado =
-    dados.semanas * ((parametros[0].Discipulado * 10) / 100).toFixed(2);
+    qytSemanas * ((parametros[0].Discipulado * 10) / 100).toFixed(2);
 
-  const leitura =
-    dados.semanas * ((parametros[0].Leitura * 10) / 100).toFixed(2);
+  const leitura = qytSemanas * ((parametros[0].Leitura * 10) / 100).toFixed(2);
 
   const visCelulaDesejado =
-    dados.semanas * ((parametros[0].VisCelula * qtdMembros) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].VisCelula * qtdMembros) / 100).toFixed(0);
 
   const visCelebracaoDesejado =
-    dados.semanas *
-    ((parametros[0].VisCelebracao * qtdMembros) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].VisCelebracao * qtdMembros) / 100).toFixed(0);
   const visitasLider =
-    dados.semanas * ((parametros[0].Visitas * qtdMembros) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].Visitas * qtdMembros) / 100).toFixed(0);
   const eventos =
-    dados.semanas * ((parametros[0].Eventos * qtdMembros) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].Eventos * qtdMembros) / 100).toFixed(0);
   const relatorios =
     dados.Relatorio +
     dados.Pontualidade +
@@ -54,9 +90,9 @@ export default function Grafico({
     dados.RelDiscipulado;
 
   const RelatorioDesejado =
-    dados.semanas * ((parametros[0].Relatorios * 5) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].Relatorios * 5) / 100).toFixed(0);
   const PlanejamentoDesejado =
-    dados.semanas * ((parametros[0].Planejamento * 10) / 100).toFixed(0);
+    qytSemanas * ((parametros[0].Planejamento * 10) / 100).toFixed(0);
 
   const data = {
     labels: [
@@ -111,8 +147,36 @@ export default function Grafico({
       },
     ],
   };
+
+  //-----------------------------------------------------
+  const vDesejadoParametros =
+    RelatorioDesejado +
+    PlanejamentoDesejado +
+    presCelulaDesejado +
+    presCelebracaoDesejado +
+    discipulado +
+    leitura +
+    visCelulaDesejado +
+    visCelebracaoDesejado +
+    visitasLider +
+    eventos;
+
+  const labelData2 = [];
+  pontosMes?.map((val, i) => {
+    if (val.Semana) {
+      labelData2[i] = createLabelData2(`Sem - ${val.Semana}`, val.Semana);
+    }
+
+    return 0;
+  });
+  const labelData2Final = labelData2?.map((val) => val.label);
+  const valorData2 = pontosMes?.map((val) => val.TotalRank);
+  const valorData2Parametros = pontosMes?.map(
+    () => Number(vDesejadoParametros) / qytSemanas,
+  );
+
   const data2 = {
-    labels: semanas,
+    labels: labelData2Final,
     datasets: [
       {
         label: 'Total de Pontos',
@@ -133,10 +197,19 @@ export default function Grafico({
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: pontosTotal,
+        data: valorData2,
+      },
+      {
+        type: 'line',
+        label: 'Pontos Desejado',
+        data: valorData2Parametros,
+        borderColor: 'rgb(255, 99, 132)',
+        fill: false,
       },
     ],
   };
+
+  //-----------------------------------------------------
 
   const options = {
     legend: {
@@ -148,6 +221,7 @@ export default function Grafico({
   const options2 = {
     maintainAspectRatio: false,
   };
+
   return (
     <Box
       display="flex"
@@ -158,18 +232,49 @@ export default function Grafico({
     >
       <Box width="100%">
         <Box width="100%" textAlign="center">
+          <Box mt={3} fontFamily="Fugaz One" fontSize="14px">
+            {dadosCelula.Nome ? dadosCelula.Nome.toUpperCase() : 'SEM'}
+          </Box>
           <Box mt={1} fontFamily="Fugaz One" fontSize="14px">
-            DESEMPENHO DE {dados.semanas}{' '}
-            {dados.semanas > 1 ? 'SEMANAS' : 'SEMANA'}
+            {distritos.length && dadosCelula.distrito
+              ? distritos[dadosCelula.distrito].Distrito_Nome
+              : 'SEM'}
+          </Box>
+        </Box>
+
+        <Box width="100%" textAlign="center">
+          <Box mt={3} mb={1} fontFamily="Fugaz One" fontSize="14px">
+            DESEMPENHO DE{' '}
+            <strong
+              style={{
+                fontFamily: 'Rubik',
+                color: 'red',
+                marginLeft: 10,
+                marginRight: 10,
+              }}
+            >
+              {qytSemanas}
+            </strong>{' '}
+            {qytSemanas > 1 ? 'SEMANAS' : 'SEMANA'}
           </Box>
           <Bar data={data} options={options2} />
         </Box>
 
-        <Box mt={5} />
+        <Box mt={2} />
         <Box textAlign="center">
           <Box fontFamily="Fugaz One" fontSize="14px">
-            PONTUAÇÃO TOTAL DE {dados.semanas}{' '}
-            {dados.semanas > 1 ? 'SEMANAS' : 'SEMANA'}
+            DESEMPENHO POR TOTAL DE{' '}
+            <strong
+              style={{
+                fontFamily: 'Rubik',
+                color: 'red',
+                marginLeft: 10,
+                marginRight: 10,
+              }}
+            >
+              {pontosMes.length}
+            </strong>
+            {qytSemanas > 1 ? 'SEMANAS' : 'SEMANA'}
           </Box>
 
           <Line data={data2} options={options} />

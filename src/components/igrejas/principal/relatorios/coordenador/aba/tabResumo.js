@@ -14,6 +14,8 @@ import Emojis from 'src/components/icones/emojis';
 import PegaSemanaAtual from 'src/utils/getSemanaAtual';
 import { makeStyles } from '@material-ui/core/styles';
 
+
+
 const useStyles = makeStyles((theme) => ({
   fontResponsive: {
     fontSize: '3vw',
@@ -46,7 +48,7 @@ export default function TabCelula({
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
   const classes = useStyles();
-  const nomeLider = lideranca.filter((val) => {
+  const nomeLider = lideranca?.filter((val) => {
     if (
       Number(val.Celula) === Number(valorIndexSend) &&
       Number(val.Distrito) === Number(perfilUser.Distrito)

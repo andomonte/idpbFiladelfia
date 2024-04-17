@@ -16,6 +16,8 @@ import TabCelula from './supervisor/aba/tabRelSuperCelulas';
 import TabSetor from './coordenador/aba/tabRelCoordTotal';
 import TabResumo from './supervisor/aba/tabResumo';
 
+
+
 //------------------------------------------
 const janela = TamanhoJanela();
 function RelCelula({ perfilUser, lideranca }) {

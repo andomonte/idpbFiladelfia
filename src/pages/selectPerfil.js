@@ -76,7 +76,13 @@ export const getStaticProps = async () => {
   return {
     props: {
       celulas: JSON.parse(JSON.stringify(celulas)),
-      distritos: JSON.parse(JSON.stringify(distritos)),
+      distritos: JSON.parse(
+        JSON.stringify(
+          distritos,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
       userIgrejas: JSON.parse(JSON.stringify(userIgrejas)),
     }, // will be passed to the pperfilUser component as props
     revalidate: 15, // faz atualizar a pagina de 15 em 15 segundo sem fazer build

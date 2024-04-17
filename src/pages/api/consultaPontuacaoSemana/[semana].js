@@ -14,6 +14,9 @@ export default async function handle(req, res) {
           Semana: Number(Semana),
         },
       },
+      orderBy: {
+        Semana: 'asc',
+      },
     })
     .finally(async () => {
       await prisma.$disconnect();

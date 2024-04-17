@@ -90,13 +90,13 @@ function SelectPerfil({ lideranca, rolMembros, celulas, userIgrejas }) {
 
   if (openEspera) return <Espera descricao="Buscando Seu Perfil" />;
 
-  const dadosUser = userIgrejas.filter((val) => val.codigo === 'AM-030');
+  const dadosUser = userIgrejas;
   let valorPerfil = {};
   let userMembro = {};
-  const membro = rolMembros.filter((val) => val.Email === session.user.email);
+  const membro = rolMembros?.filter((val) => val.Email === session.user.email);
   if (session) {
     if (lideranca.length) {
-      secao = lideranca.filter((val) => val.rol === session.user.cpf);
+      secao = lideranca?.filter((val) => val.rol === session.user.cpf);
 
       valorPerfil = secao.map((items, index) => {
         if (items.Funcao === 'Secretaria')

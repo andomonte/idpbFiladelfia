@@ -31,6 +31,7 @@ export default function TabCelula({
   const [percentualPontos, setPercentualPontos] = React.useState([]);
   const qytMembros = JSON.parse(celula.NomesMembros).length;
   const pontosF = JSON.parse(pontos.Pontuacao);
+
   const PPCL = Number(
     (pontosF.PresentesCelula * 100) / qytMembros / 10,
   ).toFixed(2); // Percentual Presentes Celula
@@ -335,6 +336,7 @@ export default function TabCelula({
                       justifyContent="end"
                       color={corIgreja.principal}
                     >
+                      {' '}
                       {PLB} Pts
                     </Box>
                   </Box>

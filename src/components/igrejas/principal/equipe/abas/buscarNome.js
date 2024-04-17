@@ -1,4 +1,4 @@
-import { Box, Grid, Paper } from '@material-ui/core';
+import { Box, Grid, Paper, Button } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import corIgreja from 'src/utils/coresIgreja';
@@ -6,25 +6,53 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
 
-/* import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers'; 
-import moment from 'moment'; */
 import Meses from 'src/utils/mesesAbrev';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import ResumoParticipacao from './tabBuscar';
 
-const useStyles = makeStyles((theme) => ({
+const theme = createTheme();
+theme.typography.h4 = {
+  fontWeight: 'normal',
+  fontSize: '10px',
+  '@media (min-width:350px)': {
+    fontSize: '11px',
+  },
+  '@media (min-width:450px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '13px',
+  },
+};
+theme.typography.h3 = {
+  fontSize: '11px',
+  '@media (min-width:350px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+theme.typography.h2 = {
+  fontSize: '13px',
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+const useStyles = makeStyles((themes) => ({
   root: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   paper: {
-    padding: theme.spacing(1),
+    padding: themes.spacing(1),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    color: themes.palette.text.secondary,
     borderRadius: '16px',
   },
   button1: {
@@ -43,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RelCelula({ perfilUser }) {
+function RelCelula({ nomeBuscado, setOpenBuscar, perfilUser }) {
   const classes = useStyles();
   //= ================================================================
   const mes = Meses();
@@ -92,97 +120,20 @@ function RelCelula({ perfilUser }) {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="100vw"
-      minHeight={570}
-      minWidth={300}
-      bgcolor={corIgreja.principal2}
-      height="calc(100vh - 56px)"
-    >
+    <Box height="100vh" minHeight={500}>
       <Box
-        height="97%"
-        width="96%"
+        height="100%"
+        minWidth={300}
+        width="100vw"
+        mt={0}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        <Box
-          height="100%"
-          width="100%"
-          bgcolor={corIgreja.principal}
-          style={{
-            borderRadius: '16px',
-          }}
-        >
-          <Box
-            height="12%"
-            minWidth={300}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Box mt={0} width="100%" ml={1} minWidth={300}>
-              <Grid container item xs={12} spacing={1}>
-                <Grid item xs={12}>
-                  <Paper width="100%" className={classes.paper}>
-                    <Box height={30} width="100%" display="flex">
-                      <Box
-                        width="20%"
-                        display="flex"
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                          onClick={() => {
-                            handleDecMes();
-                          }}
-                        >
-                          <SvgIcon sx={{ color: corIgreja.iconeOn }} />{' '}
-                          <BiCaretLeft />
-                        </IconButton>
-                      </Box>
-                      <Box
-                        width="60%"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{ fontFamily: 'arial black' }}
-                      >
-                        {mes[contMes].descricao} / {contAno}
-                      </Box>
-                      <Box
-                        width="20%"
-                        display="flex"
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                          onClick={() => {
-                            handleIncMes();
-                          }}
-                        >
-                          <SvgIcon sx={{ color: corIgreja.iconeOn }} />
-                          <BiCaretRight />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-          <Box height="80%">
+        <Box height="100%" width="100vw" maxWidth={600} minWidth={300}>
+          <Box height="100%">
             <Box
-              height="100%"
+              height="80%"
               minWidth={300}
               display="flex"
               justifyContent="center"
@@ -206,7 +157,7 @@ function RelCelula({ perfilUser }) {
                     fontSize: '14px',
                   }}
                 >
-                  {perfilUser.Nome}
+                  {nomeBuscado.Nome}
                 </Box>
                 <Box
                   height="70%"
@@ -221,11 +172,105 @@ function RelCelula({ perfilUser }) {
                   }}
                 >
                   <ResumoParticipacao
+                    nomeBuscado={nomeBuscado}
                     perfilUser={perfilUser}
                     Mes={contMes}
                     Ano={contAno}
                   />
                 </Box>
+              </Box>
+            </Box>
+            <Box
+              height="20%"
+              minHeight={110}
+              minWidth={300}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              bgcolor={corIgreja.principal}
+            >
+              <Box mt={5} width="100%" ml={1} minWidth={300}>
+                <Grid container item xs={12} spacing={1}>
+                  <Grid item xs={6}>
+                    <Paper width="100%" className={classes.paper}>
+                      <Box height={30} width="100%" display="flex">
+                        <Box
+                          width="20%"
+                          display="flex"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleDecMes();
+                            }}
+                          >
+                            <SvgIcon sx={{ color: corIgreja.iconeOn }} />{' '}
+                            <BiCaretLeft />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          width="60%"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          color="black"
+                          sx={{ fontFamily: 'arial black' }}
+                        >
+                          {' '}
+                          <ThemeProvider theme={theme}>
+                            <Typography
+                              style={{ display: 'flex' }}
+                              variant="h4"
+                            >
+                              {mes[contMes].descricao} / {contAno}
+                            </Typography>
+                          </ThemeProvider>
+                        </Box>
+                        <Box
+                          width="20%"
+                          display="flex"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                            onClick={() => {
+                              handleIncMes();
+                            }}
+                          >
+                            <SvgIcon sx={{ color: corIgreja.iconeOn }} />
+                            <BiCaretRight />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      style={{
+                        background: '#ffd740',
+                        color: 'blue',
+                        fontFamily: 'arial black',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '16px',
+                      }}
+                      variant="contained"
+                      id="reload"
+                      onClick={() => {
+                        setOpenBuscar(false);
+                      }}
+                    >
+                      Fechar
+                    </Button>
+                  </Grid>
+                </Grid>
               </Box>
             </Box>
           </Box>

@@ -10,7 +10,7 @@ import { FaHome } from 'react-icons/fa';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { useRouter } from 'next/router';
-
+import { TfiStatsUp } from 'react-icons/tfi';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 // import PerfilIcon from 'src/components/icones/perfil';
 
@@ -19,21 +19,13 @@ import { useSession } from 'next-auth/client';
 import { TiArrowBack } from 'react-icons/ti';
 import { Oval } from 'react-loading-icons';
 import { MdGroupWork } from 'react-icons/md';
-import { IoIosPeople, IoIosSchool } from 'react-icons/io';
+import { IoIosPeople } from 'react-icons/io';
 import corIgreja from 'src/utils/coresIgreja';
 import { HiUserGroup } from 'react-icons/hi';
-import BuscarNome from './abas/buscarNome';
+import Estatistico from './estatistico';
+import Membros from './membros';
+import Lideres from './lideres';
 
-import Liderados from './liderados';
-import LideradosCoord from './lideradosCoord';
-import LideradosDistrito from './lideradosDistrito';
-import Membros from './membrosSuper';
-import MembrosCoord from './membrosCoord';
-import MembrosDistrito from './membrosDistrito';
-import MembrosIgreja from './membrosIgreja';
-import MembrosCelula from './membrosCelula';
-import MembrosCelula2 from './membrosCelula2'; // só para os membros
-import Padrao from '../relatorios/lider/abas/telaPadrao';
 // const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
@@ -142,7 +134,17 @@ function TabPanel(props) {
   );
 }
 
-function Perfil({ title, rolMembros, lideranca, perfilUser }) {
+function Perfil({
+  title,
+  rolMembros,
+  lideranca,
+  perfilUser,
+  distritos,
+  coordenacoes,
+  supervisoes,
+  celulas,
+  igreja,
+}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -167,7 +169,7 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
       setOpen(false);
     }
   };
-
+  const valCelula = `Célula ${perfilUser.Celula}`;
   return (
     <div onLoad={handleDrawerClose} translate="no">
       <Head>
@@ -175,7 +177,6 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div className={classes.root}>
@@ -192,7 +193,8 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
                 )}
               </Box>
             </Box>
-            {perfilUser.Funcao === 'Membro' && (
+            {(perfilUser.Funcao === 'Membro' ||
+              perfilUser.Funcao === 'Lider') && (
               <Box display="flex" m={0}>
                 <BottomNavigation
                   value={value}
@@ -209,15 +211,34 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
                         ? { color: corIgreja.iconeOn, fontSize: '12px' }
                         : { color: '#eeeeee', fontSize: '12px' }
                     }
-                    label="Célula"
+                    label="Estatistico"
                     icon={
                       value === 0 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                          <IoIosSchool />
+                          <TfiStatsUp />
                         </SvgIcon>
                       ) : (
                         <SvgIcon sx={{ color: '#eeeeee' }}>
-                          <IoIosSchool />
+                          <TfiStatsUp />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                  <BottomNavigationAction
+                    style={
+                      value === 1
+                        ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                        : { color: '#eeeeee', fontSize: '12px' }
+                    }
+                    label={valCelula}
+                    icon={
+                      value === 1 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <HiUserGroup />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <HiUserGroup />
                         </SvgIcon>
                       )
                     }
@@ -226,19 +247,6 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
               </Box>
             )}
 
-            {perfilUser.Funcao === 'Lider' && (
-              <Box
-                justifyContent="center"
-                width="100%"
-                fontFamily="Fugaz One"
-                fontSize="18px"
-                color="white"
-                display="flex"
-                m={0}
-              >
-                CÉLULA - {perfilUser.Celula}
-              </Box>
-            )}
             {perfilUser.Funcao === 'Secretaria' && (
               <Box display="flex" m={0}>
                 <BottomNavigation
@@ -308,18 +316,18 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
                   <BottomNavigationAction
                     style={
                       value === 0
-                        ? { color: corIgreja.iconeOn, fontSize: '18px' }
-                        : { color: '#eeeeee', fontSize: '18px' }
+                        ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                        : { color: '#eeeeee', fontSize: '12px' }
                     }
-                    label="Lideres"
+                    label="Estatistico"
                     icon={
                       value === 0 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                          <MdGroupWork />
+                          <TfiStatsUp />
                         </SvgIcon>
                       ) : (
                         <SvgIcon sx={{ color: '#eeeeee' }}>
-                          <MdGroupWork />
+                          <TfiStatsUp />
                         </SvgIcon>
                       )
                     }
@@ -343,6 +351,25 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
                       )
                     }
                   />
+                  <BottomNavigationAction
+                    style={
+                      value === 2
+                        ? { color: corIgreja.iconeOn, fontSize: '18px' }
+                        : { color: '#eeeeee', fontSize: '18px' }
+                    }
+                    label="Lideres"
+                    icon={
+                      value === 2 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <MdGroupWork />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <MdGroupWork />
+                        </SvgIcon>
+                      )
+                    }
+                  />
                 </BottomNavigation>
               </Box>
             )}
@@ -360,96 +387,48 @@ function Perfil({ title, rolMembros, lideranca, perfilUser }) {
           <TabPanel value={value} index={0}>
             {session && (
               <Box>
-                {perfilUser.Funcao === 'Membro' ? (
-                  <MembrosCelula2
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Lider' ? (
-                  <MembrosCelula
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
-                {perfilUser.Funcao === 'Supervisor' ? (
-                  <Liderados
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Coordenador' ? (
-                  <LideradosCoord
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-
-                {perfilUser.Funcao === 'PastorDistrito' ? (
-                  <LideradosDistrito
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Presidente' ? (
-                  <LideradosCoord
-                    secao={session}
-                    perfilUser={perfilUser}
-                    lideranca={lideranca}
-                    rolMembros={rolMembros}
-                  />
-                ) : null}
+                <Estatistico
+                  secao={session}
+                  perfilUser={perfilUser}
+                  lideranca={lideranca}
+                  rolMembros={rolMembros}
+                  distritos={distritos}
+                  coordenacoes={coordenacoes}
+                  supervisoes={supervisoes}
+                  celulas={celulas}
+                  igreja={igreja}
+                />
               </Box>
             )}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {/*  <Eventos item={item} /> */}
-            {perfilUser.Funcao === 'Membro' ? (
-              <BuscarNome perfilUser={perfilUser} setOpenBuscar />
-            ) : null}
-
-            {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
-            {perfilUser.Funcao === 'Supervisor' ? (
-              <Membros
+            <Membros
+              secao={session}
+              perfilUser={perfilUser}
+              lideranca={lideranca}
+              rolMembros={rolMembros}
+              distritos={distritos}
+              coordenacoes={coordenacoes}
+              supervisoes={supervisoes}
+              celulas={celulas}
+              igreja={igreja}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {(session && perfilUser.Funcao === 'Supervisor') ||
+            perfilUser.Funcao === 'Coordenador' ||
+            perfilUser.Funcao === 'PastorDistrito' ||
+            perfilUser.Funcao === 'Presidente' ? (
+              <Lideres
                 secao={session}
                 perfilUser={perfilUser}
                 lideranca={lideranca}
                 rolMembros={rolMembros}
-              />
-            ) : null}
-            {perfilUser.Funcao === 'Coordenador' ? (
-              <MembrosCoord
-                secao={session}
-                perfilUser={perfilUser}
-                lideranca={lideranca}
-                rolMembros={rolMembros}
-              />
-            ) : null}
-            {perfilUser.Funcao === 'PastorDistrito' ? (
-              <MembrosDistrito
-                secao={session}
-                perfilUser={perfilUser}
-                lideranca={lideranca}
-                rolMembros={rolMembros}
-              />
-            ) : null}
-            {perfilUser.Funcao === 'Presidente' ? (
-              <MembrosIgreja
-                secao={session}
-                perfilUser={perfilUser}
-                lideranca={lideranca}
-                rolMembros={rolMembros}
+                distritos={distritos}
+                coordenacoes={coordenacoes}
+                supervisoes={supervisoes}
+                celulas={celulas}
+                igreja={igreja}
               />
             ) : null}
           </TabPanel>

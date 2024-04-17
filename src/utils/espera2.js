@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import corIgreja from 'src/utils/coresIgreja';
 
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -32,7 +34,7 @@ export default function Espere({ descricao }) {
         >
           <Box mt={-5}>
             <Box textAlign="center" mt={3} mb={2}>
-              <img src={corIgreja.logo} alt="Filadelfia" width={80} />
+              <img src={corIgreja.logo} alt="Celulas" width={80} />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Box

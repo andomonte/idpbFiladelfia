@@ -36,7 +36,7 @@ export default function TabDiscipuado({
 
   React.useEffect(() => {
     //    setPresentes(setPresentes(dados.length));
-    const qtyPresentes = dados.filter((val) => val.Presenca === true);
+    const qtyPresentes = dados?.filter((val) => val.Presenca === true);
 
     setPresentes(qtyPresentes.length);
   }, [respostas]);

@@ -8,10 +8,15 @@ const Cores = createTheme({
   principal2: '#5c6bc0', // '#3f50b5',
   secundaria: '#fafafa',
   tercenaria: '#b91072',
-  button1: '#1b5e20',
+  button1: '#e1bee7',
   button2: '#e65100',
   iconeOn: '#ffff00',
   iconeOff: '#eeee',
+  texto1: '#90a4ae',
+  texto2: '#ffff8d',
+
+  textoP: '#fff9c4',
+  textoS: '#fafafa',
   logo: 'images/filadelfia/logo.png',
   logo2: 'images/filadelfia/logo2.png',
   palette: {

@@ -27,16 +27,19 @@ import PegaData from 'src/utils/getDataQuarta';
 
 import TabDiscipulado from './tabDiscipulado';
 
+
+
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-function createData(Nome, Presenca, status) {
-  return { Nome, Presenca, status };
+function createData(Rol, Nome, Presenca, status) {
+  return { Rol, Nome, Presenca, status };
 }
-function createRelCelula(Rol, Nome, Presenca) {
+function createRelCelula(Rol, Nome, Presenca, Status) {
   return {
     Rol,
     Nome,
     Presenca,
+    Status,
   };
 }
 
@@ -157,7 +160,9 @@ function RelCelula({
   const [dadosCelula, setDadosCelula] = React.useState(
     dadosSem && dadosSem.id
       ? JSON.parse(dadosSem.NomesMembros)
-      : nomesCelulas.map((row) => createData(row.Nome, false, row.Situacao)),
+      : nomesCelulas.map((row) =>
+          createData(row.RolMembro, row.Nome, false, row.Situacao),
+        ),
   );
 
   const [openErro, setOpenErro] = React.useState(false);
@@ -276,7 +281,7 @@ function RelCelula({
           (val) =>
             val.Celula === Number(perfilUser.Celula) &&
             val.Distrito === Number(perfilUser.Distrito) &&
-            String(val.Data.slice(0, 4)) === String(AnoAtual),
+            val.Distrito === Number(perfilUser.Distrito),
         );
 
         if (relatorio && relatorio.length) {
@@ -722,9 +727,10 @@ function RelCelula({
     const criadoEm = new Date();
     const nomesCelulaParcial = nomesCelulas.map((row, index) =>
       createRelCelula(
-        row.RolMembro,
+        row.Rol,
         row.Nome,
         relPresentes[index] ? relPresentes[index].Presenca : false,
+        row.status,
       ),
     );
     const nomesCelulaFinal = JSON.stringify(nomesCelulaParcial);

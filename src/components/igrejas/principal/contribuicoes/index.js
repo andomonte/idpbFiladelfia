@@ -1,31 +1,40 @@
 import React from 'react';
+import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Oval } from 'react-loading-icons';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { TiArrowBack } from 'react-icons/ti';
 import Box from '@material-ui/core/Box';
-// import HomeIcon from '@material-ui/icons/Home';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import SvgIcon from '@mui/material/SvgIcon';
+import { GiPayMoney } from 'react-icons/gi';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { useRouter } from 'next/router';
+import { TfiStatsUp } from 'react-icons/tfi';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import PerfilIcon from 'src/components/icones/perfil';
+
+import { useSession } from 'next-auth/client';
+// import Eventos from './eventos';
+import { TiArrowBack } from 'react-icons/ti';
+import { Oval } from 'react-loading-icons';
 import corIgreja from 'src/utils/coresIgreja';
-import Login from 'src/components/botaoLogin';
+import { HiUserGroup } from 'react-icons/hi';
+import Grafico from './Graficos';
 import Contribuicoes from './contribuicoes';
-
-// import Carrossel from '../carrossel';
-// import GoogleMaps from './googleMap';
-// import Pesquisar from './pesquisar';
-
+import Igreja from './igreja';
+// const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
     justifyContent: 'space-around',
     backgroundColor: corIgreja.principal,
-    width: '70vw',
+    width: '80vw',
     minWidth: 80,
+    height: 48,
+    marginRight: 0,
   },
   root: {
-    backgroundColor: 'theme.palette.background.dark',
+    backgroundColor: corIgreja.principal2,
     display: 'flex',
     height: '100vh',
     overflow: 'hidden',
@@ -34,11 +43,12 @@ const useStyles = makeStyles((theme) => ({
   root2: {
     backgroundColor: corIgreja.principal,
     boxShadow: 'none',
-    zIndex: theme.zIndex.drawer + 1,
     height: 56,
+    zIndex: theme.zIndex.drawer + 1,
   },
   toolbar: {
-    minHeight: 56,
+    height: '8vh',
+
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -46,10 +56,11 @@ const useStyles = makeStyles((theme) => ({
   hamburger: {
     cursor: 'pointer',
     height: 28,
+    color: '#fff',
   },
   logo: {
-    height: 35,
-    marginTop: 0,
+    height: 25,
+    marginLeft: theme.spacing(2),
   },
   avatar: {
     cursor: 'pointer',
@@ -68,7 +79,12 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
-
+  contentShiftMain: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -99,20 +115,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function IdpbCastelo({ title, perfilUser }) {
-  const classes = useStyles();
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={0}>{children}</Box>}
+    </div>
+  );
+}
+
+function Contribuicao({ title, perfilUser }) {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
   const theme = useTheme();
 
+  const [session] = useSession();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [open, setOpen] = React.useState(false);
   const router = useRouter();
-  const handleDrawerClose = () => {
-    if (mobile && open) {
-      setOpen(false);
-    }
-  };
 
   const [loading, setLoading] = React.useState(false);
   const handleVoltar = () => {
@@ -122,57 +150,153 @@ function IdpbCastelo({ title, perfilUser }) {
     // setOpen(false);
     // window.location.reload();
   };
+
+  const handleDrawerClose = () => {
+    if (mobile && open) {
+      setOpen(false);
+    }
+  };
   return (
-    <div
-      style={{
-        minWidth: 300,
-        background: corIgreja.principal2,
-      }}
-      onLoad={handleDrawerClose}
-    >
+    <div onLoad={handleDrawerClose} translate="no">
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div>
-        <AppBar className={classes.root2}>
+      <div className={classes.root}>
+        <AppBar className={classes.root2} color="default">
           <Toolbar className={classes.toolbar}>
-            <Box display="flex" alignItems="center" onClick={handleVoltar}>
-              {loading ? (
+            <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" onClick={handleVoltar}>
+                {loading ? (
+                  <Box>
+                    <Oval stroke="white" width={25} height={25} />
+                  </Box>
+                ) : (
+                  <TiArrowBack size={25} color="white" />
+                )}
+              </Box>
+            </Box>
+            {perfilUser.Funcao !== 'Presidente' && (
+              <Box justifyContent="center" width="100%" display="flex" m={0}>
                 <Box>
-                  <Oval stroke="white" width={25} height={25} />
+                  <img
+                    src="/images/logo1.png"
+                    height={30}
+                    width={120}
+                    className={classes.logo}
+                    alt="idpb"
+                  />
                 </Box>
-              ) : (
-                <TiArrowBack size={25} color="white" />
-              )}
-            </Box>
+              </Box>
+            )}
 
-            <Box display="flex">
-              <img
-                src="/images/logo1.png"
-                height={30}
-                width={120}
-                className={classes.logo}
-                alt="bolo"
-              />
-            </Box>
-            <Login />
+            {perfilUser.Funcao === 'Presidente' && (
+              <Box display="flex" m={0}>
+                <BottomNavigation
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                  fontSize="large"
+                  showLabels
+                  className={classes.rootTopbarIcon}
+                >
+                  <BottomNavigationAction
+                    style={
+                      value === 0
+                        ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                        : { color: '#eeeeee', fontSize: '12px' }
+                    }
+                    label="Minhas"
+                    icon={
+                      value === 0 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <GiPayMoney />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <GiPayMoney />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                  <BottomNavigationAction
+                    style={
+                      value === 1
+                        ? { color: corIgreja.iconeOn, fontSize: '12px' }
+                        : { color: '#eeeeee', fontSize: '12px' }
+                    }
+                    label="Igreja"
+                    icon={
+                      value === 1 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <HiUserGroup />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <HiUserGroup />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                  <BottomNavigationAction
+                    style={
+                      value === 2
+                        ? { color: corIgreja.iconeOn, fontSize: '18px' }
+                        : { color: '#eeeeee', fontSize: '18px' }
+                    }
+                    label="Graficos"
+                    icon={
+                      value === 2 ? (
+                        <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                          <TfiStatsUp />
+                        </SvgIcon>
+                      ) : (
+                        <SvgIcon sx={{ color: '#eeeeee' }}>
+                          <TfiStatsUp />
+                        </SvgIcon>
+                      )
+                    }
+                  />
+                </BottomNavigation>
+              </Box>
+            )}
           </Toolbar>
         </AppBar>
 
-        <main>
+        <main
+          className={clsx(classes.contentMain, {
+            [classes.contentShiftMain]: open,
+          })}
+        >
           <div className={classes.drawerHeader} />
           {/* {children} */}
 
-          <Contribuicoes perfilUser={perfilUser} />
+          <TabPanel value={value} index={0}>
+            {session && (
+              <Box>
+                <Contribuicoes perfilUser={perfilUser} />
+              </Box>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Igreja perfilUser={perfilUser} />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {(session && perfilUser.Funcao === 'Supervisor') ||
+            perfilUser.Funcao === 'Coordenador' ||
+            perfilUser.Funcao === 'PastorDistrito' ||
+            perfilUser.Funcao === 'Presidente' ? (
+              <Grafico perfilUser={perfilUser} />
+            ) : null}
+          </TabPanel>
         </main>
       </div>
     </div>
   );
 }
 
-export default IdpbCastelo;
+export { Contribuicao, TabPanel };

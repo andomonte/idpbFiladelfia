@@ -113,14 +113,14 @@ function meuPerfil({ secao, perfilUser }) {
               api
                 .post('/api/imagePerfil', {
                   RolMembro: perfilUser.RolMembro,
-                  fileImage: `https://arquivoCastelo.s3.amazonaws.com/membros/${nomeFoto}`,
+                  fileImage: `https://arquivoFiladelfia.s3.amazonaws.com/membros/${nomeFoto}`,
                   // urlImage -> esse urlImage é o da imagem selecionada já em blob
                 })
                 .then((response2) => {
                   if (response2) {
                     const valPerfil = {
                       ...perfilUser,
-                      foto: `https://arquivoCastelo.s3.amazonaws.com/membros/${nomeFoto}`,
+                      foto: `https://arquivoFiladelfia.s3.amazonaws.com/membros/${nomeFoto}`,
                     };
 
                     sessionStorage.setItem(

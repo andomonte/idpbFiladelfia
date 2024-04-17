@@ -32,7 +32,7 @@ export default function TabCelula({ Mes, Ano, perfilUser }) {
   // para usar semanas
 
   const rolMembros = perfilUser.RolMembro;
-  const url = `/api/consultaContribuicoes/${Mes}/${rolMembros}`;
+  const url = `/api/consultaContribuicoes/1/${Ano}/${Mes}/${rolMembros}`;
   const { data: contribuicoes, errorContribuicoes } = useSWR(url, fetcher);
 
   React.useEffect(() => {

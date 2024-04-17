@@ -11,6 +11,8 @@ import NovoRelatorio from 'src/components/igrejas/principal/relatorios/superviso
 import MostrarRelatorio from 'src/components/igrejas/principal/relatorios/supervisor/aba/editarRelSuper';
 import TabRelSuper from './supervisor/aba/tabRelSuper';
 
+
+
 const janela = TamanhoJanela();
 
 function PlanMembro({ perfilUser, lideranca }) {

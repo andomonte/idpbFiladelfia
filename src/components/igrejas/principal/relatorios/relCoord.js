@@ -4,7 +4,6 @@ import { MdCreateNewFolder } from 'react-icons/md';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
-
 import Meses from 'src/utils/mesesAbrev';
 import TamanhoJanela from 'src/utils/getSize';
 import NovoRelatorio from 'src/components/igrejas/principal/relatorios/coordenador/novoRelCoord';
@@ -13,7 +12,7 @@ import TabRelCoordenador from './coordenador/aba/tabRelCoord';
 
 const janela = TamanhoJanela();
 
-function PlanMembro({ perfilUser, lideranca }) {
+function PlanMembro({ perfilUser, lideranca, coordenacoes }) {
   //= ================================================================
   const mes = Meses();
   const d = new Date();
@@ -219,6 +218,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                         lideranca={lideranca}
                         setSendResumo={setSendResumo}
                         setDadosRelVisita={setDadosRelVisita}
+                        coordenacoes={coordenacoes}
                       />
                     </Box>
                   </Box>

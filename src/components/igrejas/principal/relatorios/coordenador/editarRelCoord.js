@@ -1,11 +1,11 @@
-import { Box, Grid, Paper, Button, Typography } from '@material-ui/core';
+import { Box, Grid, Paper, Button } from '@material-ui/core';
 import React from 'react';
 import { Oval } from 'react-loading-icons';
 import { makeStyles } from '@material-ui/core/styles';
 import corIgreja from 'src/utils/coresIgreja';
 import api from 'src/components/services/api';
 import Select from 'react-select';
-import { MultiSelect } from 'react-multi-select-component';
+import TableContainer from '@mui/material/TableContainer';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -18,6 +18,102 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import TextField from '@mui/material/TextField';
 import DataMMDDAAA from 'src/utils/dataMMDDAAAA';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+import { styled } from '@mui/system';
+
+const theme2 = createTheme();
+theme2.typography.h4 = {
+  fontWeight: 'normal',
+
+  fontSize: '9px',
+  '@media (min-width:400px)': {
+    fontSize: '10px',
+  },
+  [theme2.breakpoints.up('md')]: {
+    fontSize: '11px',
+  },
+};
+theme2.typography.h3 = {
+  fontWeight: 'normal',
+
+  fontSize: '11px',
+  '@media (min-width:350px)': {
+    fontSize: '12px',
+  },
+  [theme2.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+theme2.typography.h2 = {
+  fontWeight: 'normal',
+
+  fontSize: '13px',
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme2.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+
+const blue = {
+  100: '#DAECFF',
+  200: '#b6daff',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
+};
+
+const grey = {
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
+};
+const Textarea = styled(BaseTextareaAutosize)(
+  ({ theme }) => `
+  box-sizing: border-box;
+  width: 100%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 12px;
+  border-radius: 12px 12px 0 12px;
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  box-shadow: 0px 2px 2px ${
+    theme.palette.mode === 'dark' ? grey[900] : grey[50]
+  };
+
+  &:hover {
+    border-color: ${blue[400]};
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: ${blue[400]};
+    box-shadow: 0 0 0 3px ${
+      theme.palette.mode === 'dark' ? blue[600] : blue[200]
+    };
+  }
+
+  // firefox
+  &:focus-visible {
+    outline: 0;
+  }
+`,
+);
 
 const customStyles = {
   option: (provided, state) => ({
@@ -89,22 +185,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(label, value) {
-  return { label, value };
-}
-
 function createAvaliacoes(relatorios, planejamentos, mentoriamentos) {
   return { relatorios, planejamentos, mentoriamentos };
 }
-function RelSuper({
-  perfilUser,
 
-  lideranca,
-  Mes,
-  Ano,
-  dadosRelVisita,
-  setSendResumo,
-}) {
+function RelSuper({ perfilUser, Mes, Ano, dadosRelVisita, setSendResumo }) {
   const classes = useStyles();
   //= ================================================================
   const numeroRelatorio = [
@@ -126,7 +211,6 @@ function RelSuper({
     },
   ];
 
-  const valorInicial = { label: 'Escolha entre as opções', value: 0 };
   const timeElapsed2 = Date.now();
   const dataAtual2 = new Date(timeElapsed2);
   const [selectedDate, setSelectedDate] = React.useState(dataAtual2);
@@ -134,21 +218,19 @@ function RelSuper({
   const [inputValue, setInputValue] = React.useState(
     ConvertData(dadosRelVisita.Data),
   );
-
-  const [numeroSuper, setNumeroSuper] = React.useState(
-    JSON.parse(dadosRelVisita.Presentes),
+  const [observacoes, setObservacoes] = React.useState(
+    dadosRelVisita.Presentes,
   );
+
   const [qytCelulasVisitadas, setQytCelulasVisitadas] = React.useState(
     dadosRelVisita.CelulaVisitada,
   );
   const [qytMembrosVisitados, setQytMembrosVisitados] = React.useState(
     dadosRelVisita.MembrosVisitados,
   );
-  const [listaSuper, setListaSuper] = React.useState(valorInicial);
-
+  const [corObs, setCorObs] = React.useState('white');
   const [corQytCelulas, setCorQytCelulas] = React.useState('white');
   const [corQytLiderados, setCorQytLiderados] = React.useState('white');
-  const [corPresentes, setCorPresentes] = React.useState('white');
   const [corAvalRelatorios, setCorAvalRelatorios] = React.useState('white');
   const [corAvalPlanejamento, setCorAvalPlanejamento] = React.useState('white');
   const [corAvalDiscipulado, setCorAvalDiscipulado] = React.useState('white');
@@ -170,36 +252,9 @@ function RelSuper({
   const avaliacaoDiscipuladoRef = React.useRef();
   const avaliacaoPlanejamentoRef = React.useRef();
   const avaliacaoRelatoriosRef = React.useRef();
-  const nSuperRef = React.useRef();
+  const obsRef = React.useRef();
   const qytCelulasRef = React.useRef();
   const qytLideradosRef = React.useRef();
-
-  const superOrdenada = lideranca.sort((a, b) => {
-    if (new Date(a.Supervisao) > new Date(b.Supervisao)) return 1;
-    if (new Date(b.Supervisao) > new Date(a.Supervisao)) return -1;
-    return 0;
-  });
-
-  const superSetor = superOrdenada.filter(
-    (results) =>
-      Number(results.Coordenacao) === Number(perfilUser.Coordenacao) &&
-      Number(results.Distrito) === Number(perfilUser.Distrito) &&
-      results.Funcao === 'Supervisor',
-  );
-
-  React.useEffect(() => {
-    const numberSuper = superSetor.map((itens) => itens.Supervisao);
-    const uniqueArr = [...new Set(numberSuper)];
-    //  const [numeroSuper] = React.useState(uniqueArr);
-
-    if (uniqueArr) {
-      const dadosSuper = uniqueArr.map((row, index) =>
-        createData(`${row}`, index),
-      );
-
-      setListaSuper(dadosSuper);
-    }
-  }, []);
 
   const enviarRelatorio = () => {
     setLoading(true);
@@ -223,7 +278,7 @@ function RelSuper({
         Data,
         Avaliacoes: JSON.stringify(Avaliacoes),
         MembrosVisitados: Number(qytMembrosVisitados),
-        Presentes: JSON.stringify(numeroSuper),
+        Presentes: observacoes,
         Mes,
         Ano,
       })
@@ -247,41 +302,41 @@ function RelSuper({
   const handleSalvar = () => {
     if (qytCelulasVisitadas !== '') {
       if (qytMembrosVisitados !== '') {
-        if (numeroSuper.length) {
-          if (Object.keys(avaliacaoRelatorio).length) {
-            if (Object.keys(avaliacaoPlanejamento).length) {
-              if (Object.keys(avaliacaoDiscipulado).length) {
+        if (Object.keys(avaliacaoRelatorio).length) {
+          if (Object.keys(avaliacaoPlanejamento).length) {
+            if (Object.keys(avaliacaoDiscipulado).length) {
+              if (observacoes.length) {
                 enviarRelatorio();
               } else {
-                setCorAvalDiscipulado('yellow');
-                avaliacaoDiscipuladoRef.current.focus();
-                toast.error('Avalie o Mentoriamento !', {
+                obsRef.current.focus();
+                setCorObs('yellow');
+                toast.error('Descreva suas observações !', {
                   position: toast.POSITION.TOP_CENTER,
                 });
               }
             } else {
-              setCorAvalPlanejamento('yellow');
-              avaliacaoPlanejamentoRef.current.focus();
-              toast.error('Avalie o Planejamento !', {
+              setCorAvalDiscipulado('yellow');
+              avaliacaoDiscipuladoRef.current.focus();
+              toast.error('Avalie o Mentoriamento !', {
                 position: toast.POSITION.TOP_CENTER,
               });
             }
           } else {
-            setCorAvalRelatorios('yellow');
-            avaliacaoRelatoriosRef.current.focus();
-            toast.error('Avalie a analise dos Relatório !', {
+            setCorAvalPlanejamento('yellow');
+            avaliacaoPlanejamentoRef.current.focus();
+            toast.error('Avalie o Planejamento !', {
               position: toast.POSITION.TOP_CENTER,
             });
           }
         } else {
-          setCorPresentes('yellow');
-          nSuperRef.current.focus();
-          toast.error('Quem foi na Reunião !', {
+          setCorAvalRelatorios('yellow');
+          avaliacaoRelatoriosRef.current.focus();
+          toast.error('Avalie a analise dos Relatório !', {
             position: toast.POSITION.TOP_CENTER,
           });
         }
       } else {
-        setCorQytCelulas('yellow');
+        setCorQytLiderados('yellow');
         qytLideradosRef.current.focus();
         toast.error('quantos Liderados você visitou?', {
           position: toast.POSITION.TOP_CENTER,
@@ -315,10 +370,6 @@ function RelSuper({
 
   // const jsonNecessidade = JSON.stringify(valorNecessidade);
   //  const obj = JSON.parse(jsonNecessidade);
-  const handleNewField = (value) => ({
-    label: value,
-    value: value.toUpperCase(),
-  });
 
   return (
     <Box height="100%" minHeight={570} width="100%">
@@ -352,7 +403,7 @@ function RelSuper({
             >
               <Box width="94%">
                 <Grid container item xs={12} spacing={1}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={4}>
                     <Box mt={0} ml={2} color="white" sx={{ fontSize: 'bold' }}>
                       <Typography
                         variant="caption"
@@ -398,268 +449,249 @@ function RelSuper({
                       </MuiPickersUtilsProvider>
                     </Paper>
                   </Grid>
-                </Grid>
-                <Grid container item xs={12} spacing={0}>
-                  <Grid item xs={12}>
-                    <Box
-                      mt={2}
-                      ml={1}
-                      color={corPresentes}
-                      sx={{ fontSize: 'bold' }}
-                    >
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        Selecione as Supervisões
-                      </Typography>
+                  <Grid item xs={6} sm={4}>
+                    <Box width="100%" display="flex" justifyContent="center">
+                      <Box textAlign="center" width="100%">
+                        <Box
+                          textAlign="start"
+                          width="100%"
+                          ml={0}
+                          color={corQytCelulas}
+                          sx={{ fontSize: 'bold' }}
+                        >
+                          <ThemeProvider theme={theme2}>
+                            <Typography noWrap variant="h3">
+                              Qty de Células visitadas
+                            </Typography>
+                          </ThemeProvider>
+                        </Box>
+                        <Box mt={-0}>
+                          <TextField
+                            autoComplete="off"
+                            className={classes.tf_m}
+                            inputRef={qytCelulasRef}
+                            inputProps={{
+                              style: {
+                                textAlign: 'center',
+                                height: 33,
+
+                                borderRadius: 5,
+                                WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
+                              },
+                            }}
+                            id="visCelulas"
+                            // label="Matricula"
+                            type="number"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            value={qytCelulasVisitadas}
+                            variant="standard"
+                            placeholder="Quantidade"
+                            onChange={(e) => {
+                              setCorQytCelulas('white');
+
+                              setQytCelulasVisitadas(e.target.value);
+                            }}
+                            onFocus={(e) => {
+                              setQytCelulasVisitadas(e.target.value);
+                            }}
+                          />
+                        </Box>
+                      </Box>
                     </Box>
-                    <Box mt={-0.8} width="100%" ref={nSuperRef}>
-                      <MultiSelect
-                        text="Please select your user."
-                        value={numeroSuper}
-                        overrideStrings={{
-                          allItemsAreSelected: 'Todos Presentes',
-                          clearSearch: 'Clear Search',
-                          clearSelected: 'Clear Selected',
-                          noOptions: 'No options',
-                          search: 'Search',
-                          selectAll: 'Select All',
-                          selectAllFiltered: 'Select All (Filtered)',
-                          selectSomeItems: 'Presentes na Reunião',
-                          create: 'Create',
-                        }}
-                        onChange={(e) => {
-                          setCorPresentes('white');
-                          setNumeroSuper(e);
-                          // necessidadeRef.current.focus();
-                        }}
-                        isCreatable
-                        onCreateOption={handleNewField}
-                        options={listaSuper}
-                      />
+                  </Grid>
+                  <Grid item xs={6} sm={4}>
+                    <Box width="100%" display="flex" justifyContent="center">
+                      <Box textAlign="center" width="100%">
+                        <Box
+                          width="100%"
+                          textAlign="start"
+                          ml={0}
+                          color={corQytLiderados}
+                          sx={{ fontSize: 'bold' }}
+                        >
+                          <ThemeProvider theme={theme2}>
+                            <Typography noWrap variant="h3">
+                              Qyt de Membros visitados
+                            </Typography>
+                          </ThemeProvider>
+                        </Box>
+                        <Box>
+                          <TextField
+                            className={classes.tf_m}
+                            inputRef={qytLideradosRef}
+                            autoComplete="off"
+                            inputProps={{
+                              style: {
+                                textAlign: 'center',
+                                height: 33,
+                                borderRadius: 5,
+                                width: '100%',
+                                WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
+                              },
+                            }}
+                            id="visIrmaos"
+                            // label="Matricula"
+                            type="number"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            value={qytMembrosVisitados}
+                            variant="standard"
+                            placeholder="Quantidade"
+                            onChange={(e) => {
+                              setCorQytLiderados('white');
+                              setQytMembrosVisitados(e.target.value);
+                            }}
+                            onFocus={(e) => {
+                              setQytMembrosVisitados(e.target.value);
+                            }}
+                          />
+                        </Box>
+                      </Box>
                     </Box>
                   </Grid>
                 </Grid>
+
                 <Box
                   fontFamily="Rubik"
                   fontWeight="bold"
                   fontSize="14px"
                   textAlign="center"
                   color="white"
-                  mt="2vh"
+                  mt="4vh"
+                  mb="2vh"
                 >
-                  QUANTIDADE DE VISISTAS FEITA NO MÊS
+                  SEU DESEMPENHO QUANTO À
                 </Box>
-
-                <Grid container item xs={12} spacing={1}>
-                  <Grid item xs={6} md={6}>
+                <TableContainer
+                  sx={{
+                    height: '50vh',
+                    width: '100%',
+                    minHeight: 280,
+                  }}
+                >
+                  <Box width="100%">
+                    <Box color={corAvalRelatorios} mt="1vh" ml={2} width="90%">
+                      <ThemeProvider theme={theme2}>
+                        <Typography variant="h2">
+                          Avaliação dos Relatórios de supervisão e visitas
+                          feitas pelo Supervisor
+                        </Typography>
+                      </ThemeProvider>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box height="100%" width="100%">
+                        <Select
+                          placeholder="Escolha uma opção"
+                          styles={customStyles}
+                          value={avaliacaoRelatorio}
+                          isSearchable={false}
+                          // value={avaliacaoRelatorio}
+                          onChange={(e) => {
+                            setCorAvalRelatorios('white');
+                            setAvaliacaoRelatorio(e);
+                            // estruturaRef.current.focus();
+                          }}
+                          ref={avaliacaoRelatoriosRef}
+                          options={numeroRelatorio}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box width="100%">
                     <Box
-                      mt={2}
+                      color={corAvalPlanejamento}
+                      mt="2vh"
                       ml={2}
-                      color={corQytCelulas}
-                      sx={{ fontSize: 'bold' }}
+                      width="90%"
                     >
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        Às Células
-                      </Typography>
+                      <ThemeProvider theme={theme2}>
+                        <Typography variant="h2">
+                          Orientação e Auxílio às necessdiades detectadas na
+                          supervisão e nas células
+                        </Typography>
+                      </ThemeProvider>
                     </Box>
-                    <Box mt={-0.5}>
-                      <TextField
-                        className={classes.tf_m}
-                        inputRef={qytCelulasRef}
-                        inputProps={{
-                          style: {
-                            textAlign: 'center',
-                            height: 36,
-                            borderRadius: 5,
-                            WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
-                          },
-                        }}
-                        id="visCelulas"
-                        // label="Matricula"
-                        type="tel"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        value={qytCelulasVisitadas}
-                        variant="standard"
-                        placeholder="Quantidade"
-                        onChange={(e) => {
-                          setCorQytCelulas('white');
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box height="100%" width="100%">
+                        <Select
+                          styles={customStyles}
+                          placeholder="Escolha uma opção"
+                          isSearchable={false}
+                          value={avaliacaoPlanejamento}
+                          onChange={(e) => {
+                            setCorAvalPlanejamento('white');
 
-                          setQytCelulasVisitadas(e.target.value);
-                        }}
-                        onFocus={(e) => {
-                          setQytCelulasVisitadas(e.target.value);
-                        }}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter' && e.target.value !== '') {
-                            qytLideradosRef.current.focus();
-                          }
-                        }}
-                      />
+                            setAvaliacaoPlanejamento(e);
+                            // estruturaRef.current.focus();
+                          }}
+                          ref={avaliacaoPlanejamentoRef}
+                          options={numeroRelatorio}
+                        />
+                      </Box>
                     </Box>
-                  </Grid>
-                  <Grid item xs={6} md={6}>
-                    <Box
-                      mt={2}
-                      ml={2}
-                      color={corQytLiderados}
-                      sx={{ fontSize: 'bold' }}
-                    >
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        Aos Liderados
-                      </Typography>
+                  </Box>
+                  <Box width="100%">
+                    <Box mt="2vh" ml={2} width="90%" color={corAvalDiscipulado}>
+                      <ThemeProvider theme={theme2}>
+                        <Typography variant="h2">
+                          Mentoriamento e pastoreio da equipe de Supervisores e
+                          líderes
+                        </Typography>
+                      </ThemeProvider>
                     </Box>
-                    <Box mt={-0.5}>
-                      <TextField
-                        className={classes.tf_m}
-                        inputRef={qytLideradosRef}
-                        inputProps={{
-                          style: {
-                            textAlign: 'center',
-                            height: 36,
-                            borderRadius: 5,
-                            WebkitBoxShadow: '0 0 0 1000px #fafafa  inset',
-                          },
-                        }}
-                        id="visIrmaos"
-                        // label="Matricula"
-                        type="tel"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        value={qytMembrosVisitados}
-                        variant="standard"
-                        placeholder="Quantidade"
-                        onChange={(e) => {
-                          setCorQytLiderados('white');
-                          setQytMembrosVisitados(e.target.value);
-                        }}
-                        onFocus={(e) => {
-                          setQytMembrosVisitados(e.target.value);
-                        }}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter' && e.target.value !== '') {
-                            avaliacaoRelatoriosRef.current.focus();
-                          }
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box height="100%" width="100%">
+                        <Select
+                          styles={customStyles}
+                          placeholder="Escolha uma opção"
+                          menuPlacement="top"
+                          isSearchable={false}
+                          value={avaliacaoDiscipulado}
+                          onChange={(e) => {
+                            setCorAvalDiscipulado('white');
 
-                <Box width="100%">
-                  <Box color={corAvalRelatorios} mt="4vh" ml={2} width="90%">
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      gutterBottom
-                      style={{ fontFamily: 'arial black', fontSize: '12px' }}
-                    >
-                      Avaliação semanal dos Relatórios
-                    </Typography>
+                            setAvaliacaoDiscipulado(e);
+                            // estruturaRef.current.focus();
+                          }}
+                          ref={avaliacaoDiscipuladoRef}
+                          options={numeroRelatorio}
+                        />
+                      </Box>
+                    </Box>
                   </Box>
                   <Box
-                    mt={-0.5}
-                    sx={{ display: 'flex', justifyContent: 'center' }}
+                    mt={-2}
+                    mb={0}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    width="100%"
+                    minHeight={10}
                   >
-                    <Box height="100%" width="100%">
-                      <Select
-                        styles={customStyles}
-                        defaultValue={avaliacaoRelatorio}
-                        menuPlacement="top"
-                        isSearchable={false}
-                        // value={avaliacaoRelatorio}
+                    <Box width="100%">
+                      <Box color={corObs} mt="4vh" ml={2} width="90%">
+                        <ThemeProvider theme={theme2}>
+                          <Typography variant="h2">
+                            Necessidades detectadas nesse período
+                          </Typography>
+                        </ThemeProvider>
+                      </Box>
+                      <Textarea
+                        value={observacoes}
+                        ref={obsRef}
                         onChange={(e) => {
-                          setCorAvalRelatorios('white');
-
-                          setAvaliacaoRelatorio(e);
-                          // estruturaRef.current.focus();
+                          setCorObs('white');
+                          setObservacoes(e.target.value);
                         }}
-                        ref={avaliacaoRelatoriosRef}
-                        options={numeroRelatorio}
+                        aria-label="empty textarea"
+                        placeholder="descreva suas observações"
                       />
                     </Box>
                   </Box>
-                </Box>
-                <Box width="100%">
-                  <Box color={corAvalPlanejamento} mt="2vh" ml={2} width="90%">
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      gutterBottom
-                      style={{ fontFamily: 'arial black', fontSize: '12px' }}
-                    >
-                      Planejamentos e Atividades do Mês
-                    </Typography>
-                  </Box>
-                  <Box
-                    mt={-0.5}
-                    sx={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Box height="100%" width="100%">
-                      <Select
-                        styles={customStyles}
-                        menuPlacement="top"
-                        isSearchable={false}
-                        defaultValue={avaliacaoPlanejamento}
-                        onChange={(e) => {
-                          setCorAvalPlanejamento('white');
-
-                          setAvaliacaoPlanejamento(e);
-                          // estruturaRef.current.focus();
-                        }}
-                        ref={avaliacaoPlanejamentoRef}
-                        options={numeroRelatorio}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-                <Box width="100%">
-                  <Box mt="2vh" ml={2} width="90%" color={corAvalDiscipulado}>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      gutterBottom
-                      style={{ fontFamily: 'arial black', fontSize: '12px' }}
-                    >
-                      Mentoriamento da Supervisão no Mês
-                    </Typography>
-                  </Box>
-                  <Box
-                    mt={-0.5}
-                    sx={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Box height="100%" width="100%">
-                      <Select
-                        styles={customStyles}
-                        menuPlacement="top"
-                        isSearchable={false}
-                        defaultValue={avaliacaoDiscipulado}
-                        onChange={(e) => {
-                          setCorAvalDiscipulado('white');
-
-                          setAvaliacaoDiscipulado(e);
-                          // estruturaRef.current.focus();
-                        }}
-                        ref={avaliacaoDiscipuladoRef}
-                        options={numeroRelatorio}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-
+                </TableContainer>
                 <Grid item container xs={12}>
                   <Grid item xs={6}>
                     <Box className={classes.novoBox} mt="3vh">
@@ -706,15 +738,12 @@ function RelSuper({
                             fontFamily: 'arial black',
                             borderRadius: '10px',
                           }}
-                          onClick={handleSalvar}
                           variant="contained"
                           severity="success"
                           endIcon={
                             <Oval stroke="white" width={20} height={20} />
                           }
-                        >
-                          SALVANDO...
-                        </Button>
+                        />
                       )}
                     </Box>
                   </Grid>
