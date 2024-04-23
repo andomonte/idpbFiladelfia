@@ -153,6 +153,7 @@
     "styled-components": "^5.3.0",
     "swr": "^0.4.2",
     "unfetch": "^4.2.0",
+    "uniqid": "^5.4.0",
     "util": "^0.12.4",
     "validate-date": "^2.0.0",
     "validator": "^13.7.0",
