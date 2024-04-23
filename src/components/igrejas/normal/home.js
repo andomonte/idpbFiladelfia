@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 import Avisos from 'src/components/igrejas/principal/home/Avisos';
 import Mensagem from 'src/components/igrejas/principal/home/mensagem';
+
 // import PegaSemanaDomingo from 'src/utils/getSemanaDomingo';
 
 const home = () => {

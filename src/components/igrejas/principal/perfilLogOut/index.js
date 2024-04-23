@@ -2,38 +2,32 @@ import React from 'react';
 import clsx from 'clsx';
 import Head from 'next/head';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Box from '@material-ui/core/Box';
-import corIgreja from 'src/utils/coresIgreja';
 import { useRouter } from 'next/router';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import PerfilIcon from 'src/components/icones/perfil';
+import { useSession } from 'next-auth/client';
+// import Eventos from './eventos';
 import { TiArrowBack } from 'react-icons/ti';
 import { Oval } from 'react-loading-icons';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import CallIcon from '@material-ui/icons/Call';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import corIgreja from 'src/utils/coresIgreja';
 
-import SvgIcon from '@mui/material/SvgIcon';
-import Login from 'src/components/botaoLogin';
+import MeuPerfil from './meuPerfil';
 
-import TelaPadrao from './telaPadrao';
-
-// import Carrossel from '../carrossel';
-// import GoogleMaps from './googleMap';
-// import Pesquisar from './pesquisar';
-const drawerWidth = 240;
+// const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
     justifyContent: 'space-around',
     backgroundColor: corIgreja.principal,
-    width: '70vw',
+    width: '80vw',
     minWidth: 80,
+    height: 48,
+    marginRight: 0,
   },
   root: {
-    backgroundColor: 'theme.palette.background.dark',
+    backgroundColor: corIgreja.principal2,
     display: 'flex',
     height: '100vh',
     overflow: 'hidden',
@@ -42,10 +36,12 @@ const useStyles = makeStyles((theme) => ({
   root2: {
     backgroundColor: corIgreja.principal,
     boxShadow: 'none',
+    height: 56,
     zIndex: theme.zIndex.drawer + 1,
   },
   toolbar: {
-    minHeight: 56,
+    height: '8vh',
+
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -53,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
   hamburger: {
     cursor: 'pointer',
     height: 28,
+    color: '#fff',
   },
   logo: {
     height: 25,
@@ -80,9 +77,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: +drawerWidth,
-    },
   },
   drawerHeader: {
     display: 'flex',
@@ -113,39 +107,15 @@ const useStyles = makeStyles((theme) => ({
     borderRight: 'none',
   },
 }));
-function HomeIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-    </SvgIcon>
-  );
-}
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={0}>{children}</Box>}
-    </div>
-  );
-}
-
-function QuemSomos({ userIgrejas, title, celulas }) {
+function Perfil({ title, perfilUser }) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const theme = useTheme();
-
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+
+  const [session] = useSession();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const router = useRouter();
 
@@ -153,17 +123,19 @@ function QuemSomos({ userIgrejas, title, celulas }) {
   const handleVoltar = () => {
     setLoading(true);
     router.back();
-  };
 
-  //! open ? setOpen(true) : setOpen(false);
+    // setOpen(false);
+    // window.location.reload();
+  };
 
   const handleDrawerClose = () => {
     if (mobile && open) {
       setOpen(false);
     }
   };
+
   return (
-    <div onLoad={handleDrawerClose}>
+    <div onLoad={handleDrawerClose} translate="no">
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
@@ -172,7 +144,7 @@ function QuemSomos({ userIgrejas, title, celulas }) {
       </Head>
 
       <div className={classes.root}>
-        <AppBar className={classes.root2}>
+        <AppBar className={classes.root2} color="default">
           <Toolbar className={classes.toolbar}>
             <Box display="flex" alignItems="center">
               <Box display="flex" alignItems="center" onClick={handleVoltar}>
@@ -185,55 +157,14 @@ function QuemSomos({ userIgrejas, title, celulas }) {
                 )}
               </Box>
             </Box>
-
-            <Box display="flex">
-              <BottomNavigation
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                showLabels
-                className={classes.rootTopbarIcon}
-              >
-                <BottomNavigationAction
-                  icon={
-                    value === 0 ? (
-                      <HomeIcon sx={{ color: corIgreja.iconeOn }} />
-                    ) : (
-                      <HomeIcon sx={{ color: corIgreja.iconeOff }} />
-                    )
-                  }
-                />
-
-                <BottomNavigationAction
-                  icon={
-                    value === 1 ? (
-                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <CallIcon />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon sx={{ color: corIgreja.iconeOff }}>
-                        <CallIcon />
-                      </SvgIcon>
-                    )
-                  }
-                />
-                <BottomNavigationAction
-                  icon={
-                    value === 2 ? (
-                      <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                        <LocationOnIcon />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon sx={{ color: corIgreja.iconeOff }}>
-                        <LocationOnIcon />
-                      </SvgIcon>
-                    )
-                  }
-                />
-              </BottomNavigation>
+            <Box
+              width="100%"
+              textAlign="center"
+              fontFamily="Fugaz One"
+              color="white"
+            >
+              MEU PERFIL
             </Box>
-            <Login />
           </Toolbar>
         </AppBar>
 
@@ -245,19 +176,11 @@ function QuemSomos({ userIgrejas, title, celulas }) {
           <div className={classes.drawerHeader} />
           {/* {children} */}
 
-          <TabPanel value={value} index={0} className={classes.tabPanel}>
-            <TelaPadrao userIgrejas={userIgrejas} />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <TelaPadrao userIgrejas={userIgrejas} />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <TelaPadrao celulas={celulas} />
-          </TabPanel>
+          <MeuPerfil secao={session} perfilUser={perfilUser} />
         </main>
       </div>
     </div>
   );
 }
 
-export default QuemSomos;
+export default Perfil;

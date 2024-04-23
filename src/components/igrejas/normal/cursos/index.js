@@ -144,7 +144,6 @@ function Cursos({ title }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Box>
         <AppBar className={classes.root2} color="default">
@@ -163,7 +162,7 @@ function Cursos({ title }) {
             </Box>
             <Hidden smDown>
               <Box color="#fff" display="flex" justifyContent="center">
-                <Box>CURSOS IDPB-FILADELFIA</Box>
+                <Box>CURSOS IDPB-IDPB-CELULAS</Box>
               </Box>
             </Hidden>
 
@@ -208,7 +207,7 @@ function Cursos({ title }) {
                   color: '#fff',
                 }}
               >
-                IDPB-FILADELFIA
+                IDPB-IDPB-CELULAS
               </Typography>
             </Box>
 

@@ -5,12 +5,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useSession } from 'next-auth/client';
 import Box from '@material-ui/core/Box';
+import Espera from 'src/utils/espera';
 // import HomeIcon from '@material-ui/icons/Home';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useRouter } from 'next/router';
 import corIgreja from 'src/utils/coresIgreja';
 import Login from 'src/components/botaoLogin';
-import Home from './home';
+
 // import Carrossel from '../carrossel';
 // import GoogleMaps from './googleMap';
 // import Pesquisar from './pesquisar';
@@ -126,11 +127,17 @@ function Pagina({ title }) {
     }
   };
 
-  if (session) {
-    router.push({
-      pathname: '/principal',
-    });
-  }
+  React.useEffect(() => {
+    if (session) {
+      router.push({
+        pathname: '/principal',
+      });
+    } else {
+      router.push({
+        pathname: '/login',
+      });
+    }
+  }, []);
   return (
     <div
       style={{
@@ -144,7 +151,6 @@ function Pagina({ title }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div>
@@ -164,7 +170,7 @@ function Pagina({ title }) {
         </AppBar>
         <main>
           <div className={classes.drawerHeader} />
-          <Home />
+          <Espera descricao="APP-CÉLULAS IDPB" />
         </main>
       </div>
     </div>

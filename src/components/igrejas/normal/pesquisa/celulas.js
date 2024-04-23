@@ -8,6 +8,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip'; // dica ao passar o mouse
 import SearchList from './searchList';
 
+
+
 const useStyles = makeStyles((theme) => ({
   input_Box: {
     marginLeft: 18,
@@ -123,7 +125,7 @@ function BuscarCelulas({ celulas }) {
       <Box display="flex" justifyContent="center">
         <Box className={classes.search2}>
           <Box textAlign="center" mt={5} mb={2}>
-            <img src={corIgreja.logo} alt="Filadelfia" width={100} />
+            <img src={corIgreja.logo} alt="Celulas" width={100} />
           </Box>
           <TextField
             InputProps={{
