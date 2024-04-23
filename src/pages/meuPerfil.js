@@ -1,5 +1,5 @@
 import React from 'react';
-import { Perfil } from 'src/components/igrejas/principal/perfil';
+import Perfil from 'src/components/igrejas/principal/perfil';
 import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import Espera from 'src/utils/espera';
@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/client';
 function meuPerfil({ celulas, rolMembros, lideranca }) {
   const router = useRouter();
   const perfilUser = router.query;
+
   let mudaDados = 'sai';
   if (perfilUser.id) mudaDados = 'entra';
   const [perfilUserF, setPerfilUserF] = React.useState('');
