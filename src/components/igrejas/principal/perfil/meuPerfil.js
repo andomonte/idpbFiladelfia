@@ -70,7 +70,7 @@ function meuPerfil({ secao, perfilUser }) {
         const metadata = {
           type: 'image/png',
         };
-        const nomeFoto = `${perfilUser.Igreja} + ${perfilUser.RolMembro}`;
+        const nomeFoto = `${perfilUser.Igreja}${perfilUser.RolMembro}`;
         const file = new File([data], perfilUser.RolMembro, metadata);
         const dataFile = new FormData();
         dataFile.append('file', file, nomeFoto);

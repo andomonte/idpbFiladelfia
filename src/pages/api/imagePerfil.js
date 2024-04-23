@@ -20,7 +20,7 @@ export default async function handle(req, res) {
       .finally(async () => {
         await prisma.$disconnect();
       });
-
+    console.log('ola tudo certo', foto);
     res.send('ok');
   } catch (errors) {
     console.log('erros', errors);
