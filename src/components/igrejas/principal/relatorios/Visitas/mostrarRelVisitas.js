@@ -94,7 +94,7 @@ theme.typography.hs2 = {
 };
 function RelCelula({ dadosRelVisita, setSendResumo }) {
   const classes = useStyles();
-  console.log('datasrelsi', dadosRelVisita);
+
   //= ================================================================
   //  const InicialNCelula = { label: 'Escolha...', value: 0 };
   const [openObs, setOpenObs] = React.useState(false);

@@ -190,7 +190,6 @@ function PlanMembro({ perfilUser, lideranca, supervisoes }) {
                       width="100%"
                       borderRadius={16}
                     >
-                      {console.log('supervisoes', supervisoes)}
                       <TabRelSuper
                         perfilUser={perfilUser}
                         Mes={contMes}

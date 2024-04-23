@@ -222,7 +222,7 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                       <Box ml={2} color="white">
                         Selecione o Mês
                       </Box>
-                      {console.log('perfilUser', perfilUser)}
+
                       <Grid container item xs={12} spacing={1}>
                         <Grid item xs={perfilUser.Funcao !== 'Membro' ? 8 : 12}>
                           <Paper width="100%" className={classes.paper}>

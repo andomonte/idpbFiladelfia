@@ -556,7 +556,6 @@ export default function TabCelula({ Mes, Ano }) {
                     aria-label="upload picture"
                     component="span"
                     onClick={() => {
-                      console.log('oi nvo');
                       handleShow(1);
                     }}
                   >

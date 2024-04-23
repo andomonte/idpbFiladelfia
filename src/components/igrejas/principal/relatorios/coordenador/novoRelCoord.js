@@ -339,7 +339,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio }) {
       });
     }
   };
-  console.log('data', selectedDate.getFullYear(), selectedDate.getMonth());
+
   const handleDateChange = (date, value) => {
     setInputValue(value);
     setSelectedDate(date);

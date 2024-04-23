@@ -255,7 +255,6 @@ export default function TabCelula({ Mes, Ano }) {
                         color="white"
                         ml={2}
                       >
-                        {console.log('mostrarEvento', mostrarEvento)}
                         {mostrarEvento[index].Publico}{' '}
                         {mostrarEvento[index].Numero !== 0
                           ? mostrarEvento[index].Numero

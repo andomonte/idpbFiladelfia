@@ -3622,19 +3622,7 @@ export default function TabCelula({
           semanaEnviada={pontos.Semana} // semana do ano
           ano={Ano}
         />
-        {console.log(
-          'pontos',
-          pontos,
-          parametros,
-          pontos.Semana,
-          ConverteData2(celula.Data),
-          celulas.filter(
-            (val) =>
-              val.Celula === Number(perfilUser.Celula) &&
-              val.Coordenacao === Number(perfilUser.Coordenacao) &&
-              val.Distrito === Number(perfilUser.Distrito),
-          ),
-        )}
+
         {/* <CalcularPontuacao
           pontos={pontos} // pontos da célula
           celula={celula} // célula selecionada

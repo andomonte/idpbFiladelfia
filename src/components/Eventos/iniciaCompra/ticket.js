@@ -543,7 +543,7 @@ function PesquisaCPF({ dadosInscrito, membros }) {
                             </Box>
                           </Box>
                         </Box>
-                        {console.log('dados', dadosInscrito)}
+
                         <Box
                           display={
                             adultos !== '' && criancas !== '' ? 'flex' : 'none'
