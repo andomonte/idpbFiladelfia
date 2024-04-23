@@ -108,8 +108,6 @@ function Eventos({ title, eventoSelecionado, usuario }) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const handleDrawerClose = () => {
-    // //console.log(mobile);
-
     if (mobile && open) {
       setOpen(false);
     }
