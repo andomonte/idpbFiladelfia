@@ -278,12 +278,12 @@ function Celula({
   const [celulasF, setCelulaF] = React.useState(0);
   // limitar nomes até 30 caracteres ou ultimo espaço antes de 30
   //= ===================================================================
-  const distritosT = distritos?.filter((val) => val.Status);
+  const distritosT = distritos.filter((val) => val.Status);
   const distritoF = [{ Distrito: 0, Distrito_Nome: 'TODOS OS DISTRITOS' }];
-  distritosT?.map((val) => distritoF.push(val));
+  distritosT.map((val) => distritoF.push(val));
 
   React.useEffect(() => {
-    const coordT = coordenacoes?.filter(
+    const coordT = coordenacoes.filter(
       (val) =>
         val.Status &&
         Number(val.Distrito) ===
@@ -641,7 +641,7 @@ function Celula({
                 <Box mt={0} mb={0} width="100%" height="27%">
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display="flex"
@@ -716,7 +716,7 @@ function Celula({
 
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display="flex"
@@ -791,7 +791,7 @@ function Celula({
                   </Box>
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="white"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display="flex"
@@ -870,7 +870,7 @@ function Celula({
                   </Box>
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display="flex"

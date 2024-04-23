@@ -441,7 +441,7 @@ function Celula({
                 <Box mt={0} mb={0} width="100%">
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display={
@@ -546,7 +546,7 @@ function Celula({
 
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display={
@@ -653,7 +653,7 @@ function Celula({
                   </Box>
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display={
@@ -742,7 +742,7 @@ function Celula({
                   </Box>
                   <Box
                     bgcolor={corIgreja.principal}
-                    color="#ffff"
+                    color="#000"
                     justifyContent="center"
                     width="100%"
                     display={

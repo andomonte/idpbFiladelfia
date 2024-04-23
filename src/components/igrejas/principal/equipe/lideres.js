@@ -307,7 +307,7 @@ function Funcao({
             >
               <Box
                 bgcolor={corIgreja.principal}
-                color="#ffff"
+                color="#000"
                 justifyContent="center"
                 width="100%"
                 display={
@@ -411,7 +411,7 @@ function Funcao({
 
               <Box
                 bgcolor={corIgreja.principal}
-                color="#ffff"
+                color="#000"
                 style={{
                   borderBottom: '1px solid #f0f0f0',
                 }}
@@ -521,7 +521,7 @@ function Funcao({
                 <Box
                   bgcolor={corIgreja.principal}
                   borderTop="1px"
-                  color="#ffff"
+                  color="#000"
                   justifyContent="center"
                   width="100%"
                   display="flex"

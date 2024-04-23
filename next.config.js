@@ -19,6 +19,7 @@ const nextConfig = {
     domains: [
       'localhost',
       'idpbamazonas.s3.amazonaws.com',
+      'arquivofiladelfia.s3.amazonaws.com',
       'approomservice.com.br',
       'idpbfiladelfia.com.br',
     ],

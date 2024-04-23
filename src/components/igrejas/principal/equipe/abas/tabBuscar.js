@@ -1531,7 +1531,7 @@ export default function TabCelula({ Mes, Ano, nomeBuscado, perfilUser }) {
           </Box>
         )}
 
-        {perfilUser.Funcao === 'Presidente' ? (
+        {perfilUser.Funcao === 'PastorDistrito' ? (
           <Box
             display="flex"
             justifyContent="center"
