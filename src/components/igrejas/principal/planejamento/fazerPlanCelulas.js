@@ -312,6 +312,7 @@ function RelatorioCelebracao({
   const [openErro, setOpenErro] = React.useState(false);
 
   const dataAtual2 = PegaData(semanaEnviada, AnoPesquisado);
+
   const [checkRelatorio, setCheckRelatorio] = React.useState(true);
   const [selectedDate, setSelectedDate] = React.useState(dataAtual2);
   const [open, setIsPickerOpen] = React.useState(false);
@@ -437,7 +438,10 @@ function RelatorioCelebracao({
         label: relatorio[0].Anfitriao,
         value: 0,
       };
+      // setSelectedDate(relatorio[0);
 
+      setInputValue(moment(new Date(relatorio[0].Data)).format('DD/MM/YYYY'));
+      setSelectedDate(new Date(relatorio[0].Data));
       setValueAnfitriao(newAnfitriao.label);
 
       const newFase = fases.filter((val) => val.label === relatorio[0].Fase);
@@ -599,6 +603,7 @@ function RelatorioCelebracao({
     valueAnfitriao,
     multiplicacao,
   ]);
+
   const handleSalvar = () => {
     if (etapas === 'completo') {
       setCarregando(true);
@@ -1110,32 +1115,6 @@ function RelatorioCelebracao({
                                         display="block"
                                         gutterBottom
                                       >
-                                        Oração
-                                      </Typography>
-                                    </Box>
-                                    <Box className={classes.novoBox} mt={-2}>
-                                      <Select
-                                        value={values4}
-                                        onChange={(e) => {
-                                          setValues4(e);
-                                          setEvangelismo(e.label);
-                                        }}
-                                        options={nomesCelulaParcial}
-                                      />
-                                    </Box>
-                                  </Grid>
-                                  <Grid item xs={12} md={12}>
-                                    <Box
-                                      mt={-1}
-                                      ml={2}
-                                      color="white"
-                                      sx={{ fontSize: 'bold' }}
-                                    >
-                                      <Typography
-                                        variant="caption"
-                                        display="block"
-                                        gutterBottom
-                                      >
                                         Edificação
                                       </Typography>
                                     </Box>
@@ -1162,7 +1141,33 @@ function RelatorioCelebracao({
                                         display="block"
                                         gutterBottom
                                       >
-                                        Lanche
+                                        Compartilhando a visão
+                                      </Typography>
+                                    </Box>
+                                    <Box className={classes.novoBox} mt={-2}>
+                                      <Select
+                                        value={values4}
+                                        onChange={(e) => {
+                                          setValues4(e);
+                                          setEvangelismo(e.label);
+                                        }}
+                                        options={nomesCelulaParcial}
+                                      />
+                                    </Box>
+                                  </Grid>
+                                  <Grid item xs={12} md={12}>
+                                    <Box
+                                      mt={-1}
+                                      ml={2}
+                                      color="white"
+                                      sx={{ fontSize: 'bold' }}
+                                    >
+                                      <Typography
+                                        variant="caption"
+                                        display="block"
+                                        gutterBottom
+                                      >
+                                        Cadeira da Benção
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>

@@ -137,11 +137,28 @@ export default function Demo({
             onChange={(e, rotation2) => setRotation(rotation2)}
           />
         </div>
-        <Box display="flex" justifyContent="center" mt="6vh">
+        <Box width="100%" display="flex" justifyContent="center" mt="6vh">
+          <Button
+            onClick={() => {
+              setOpenCrop(false);
+              setFileImage('');
+            }}
+            variant="contained"
+            style={{
+              width: '50%',
+              background: '#781080',
+              color: 'white',
+              fontFamily: 'Fugaz One',
+            }}
+            classes={{ root: classes.cropButton }}
+          >
+            CANCELAR
+          </Button>
           <Button
             onClick={showCroppedImage}
             variant="contained"
             style={{
+              width: '50%',
               background: '#e0711a',
               color: 'white',
               fontFamily: 'Fugaz One',

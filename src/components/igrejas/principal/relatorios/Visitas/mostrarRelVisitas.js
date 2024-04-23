@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Button, Typography } from '@material-ui/core';
+import { Box, Grid, Paper, Button } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import corIgreja from 'src/utils/coresIgreja';
@@ -6,6 +6,8 @@ import ConverteData from 'src/utils/convData2';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="left" ref={ref} {...props} />
@@ -50,9 +52,49 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
 }));
-
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '9px',
+  '@media (min-width:350px)': {
+    fontSize: '10px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '14px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '16px',
+  },
+};
 function RelCelula({ dadosRelVisita, setSendResumo }) {
   const classes = useStyles();
+  console.log('datasrelsi', dadosRelVisita);
   //= ================================================================
   //  const InicialNCelula = { label: 'Escolha...', value: 0 };
   const [openObs, setOpenObs] = React.useState(false);
@@ -90,32 +132,44 @@ function RelCelula({ dadosRelVisita, setSendResumo }) {
                 <Box
                   color="white"
                   fontFamily="arial black"
-                  fontSize="16px"
+                  fontSize="12px"
                   textAlign="center"
                 >
-                  RELATÓRIO DE VISITAS
+                  {' '}
+                  <ThemeProvider theme={theme}>
+                    <Typography variant="hs2">RELATÓRIO DE VISITAS</Typography>
+                  </ThemeProvider>
                 </Box>
                 ´
                 <Box
-                  color="white"
-                  fontFamily="arial black"
-                  fontSize="16px"
-                  textAlign="center"
-                  mb={5}
-                  mt={-2}
-                >
-                  DO {dadosRelVisita.Funcao.toUpperCase()}(A):
-                </Box>
-                <Box
-                  fontFamily="arial black"
-                  fontSize="16px"
-                  textAlign="center"
-                  mb={5}
-                  mt={-4}
                   color={corIgreja.textoP}
+                  fontFamily="arial black"
+                  fontSize="10px"
+                  display="flex"
+                  justifyContent="center"
+                  mb={5}
                 >
-                  {console.log('dadosRelVisita', dadosRelVisita)}
-                  {dadosRelVisita.Nome.toUpperCase()}
+                  {' '}
+                  <ThemeProvider theme={theme}>
+                    <Typography variant="hs4">
+                      {' '}
+                      {dadosRelVisita.Funcao.toUpperCase()}:
+                    </Typography>
+                  </ThemeProvider>
+                  <Box
+                    color="white"
+                    fontFamily="arial black"
+                    fontSize="12px"
+                    display="flex"
+                    justifyContent="center"
+                    ml={1}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="hs4">
+                        {dadosRelVisita.Nome.toUpperCase()}
+                      </Typography>
+                    </ThemeProvider>
+                  </Box>
                 </Box>
                 <Grid container item xs={12} spacing={0}>
                   <Grid item xs={6}>

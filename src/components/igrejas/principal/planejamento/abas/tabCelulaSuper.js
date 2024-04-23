@@ -15,6 +15,8 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import ConverteData2 from 'src/utils/convData2';
 
+
+
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
 ));
@@ -81,6 +83,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
       const presCelula = sem1.filter(
         (val) =>
           val.Celula === Number(numeroCelulas) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula.length) {
@@ -99,6 +102,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
       const presCelula = sem2.filter(
         (val) =>
           val.Celula === Number(numeroCelulas) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
 
@@ -117,6 +121,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
       const presCelula = sem3.filter(
         (val) =>
           val.Celula === Number(numeroCelulas) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula.length) {
@@ -134,6 +139,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
       const presCelula = sem4.filter(
         (val) =>
           val.Celula === Number(numeroCelulas) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula.length) {
@@ -150,6 +156,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
       const presCelula = sem5.filter(
         (val) =>
           val.Celula === Number(numeroCelulas) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (presCelula.length) {
@@ -446,7 +453,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, numeroCelulas }) {
               <Grid container spacing={2}>
                 <Grid container item xs={12}>
                   <Box ml={1} width="100%" color="white" fontSize="12px">
-                    LANCHE
+                    Cadeira da Bênção
                   </Box>
                 </Grid>
               </Grid>

@@ -291,6 +291,41 @@ function RelCelula({ dadosEvento, setSendResumo }) {
                     </Paper>
                   </Grid>
                 </Box>
+                <Box
+                  flexDirection="column"
+                  display="flex"
+                  justifyContent="center"
+                  width="100%"
+                >
+                  <Box mt="2vh" ml={2} color="white" sx={{ fontSize: 'bold' }}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Responsável do Evento
+                    </Typography>
+                  </Box>
+                  <Grid item xs={12}>
+                    <Paper
+                      style={{
+                        background: '#fafafa',
+                        height: 50,
+                        marginTop: -5,
+                        width: '100%',
+                      }}
+                    >
+                      <Box mt={-0.8} width="100%">
+                        <Box
+                          fontSize="16px"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          height={50}
+                          textAlign="center"
+                        >
+                          {dadosEvento.Responsavel}
+                        </Box>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                </Box>
                 <Grid item container xs={12}>
                   <Grid item xs={12}>
                     <Box className={classes.novoBox} mt="3vh">

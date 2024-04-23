@@ -9,7 +9,7 @@ export default function NestedGrid() {
     <Box display="flex" justifyContent="center" alignItems="center">
       <Box mt={10}>
         <Box textAlign="center" mt={3} mb={2}>
-          <img src={corIgreja.logo} alt="CAFINPI" width={80} />
+          <img src={corIgreja.logo} alt="FILADELFIA" width={80} />
         </Box>
         <Box display="flex" justifyContent="center" alignItems="center">
           <Box

@@ -248,34 +248,54 @@ export default function TabCelula({ Mes, Ano }) {
                       >
                         Para Quem:
                       </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    mt={2}
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="16px"
-                  >
-                    <Box
-                      width="100%"
-                      display="flex"
-                      alignItems="center"
-                      mt={-1}
-                      justifyContent="center"
-                    >
                       <Box
                         fontFamily="arial black"
                         display="flex"
                         justifyContent="flex-start"
                         color="white"
+                        ml={2}
                       >
+                        {console.log('mostrarEvento', mostrarEvento)}
                         {mostrarEvento[index].Publico}{' '}
                         {mostrarEvento[index].Numero !== 0
                           ? mostrarEvento[index].Numero
                           : ''}
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    mt={0}
+                    color="white"
+                    width="100%"
+                    display="flex"
+                    alignItems="center"
+                    fontFamily="arial "
+                    fontSize="12px"
+                  >
+                    <Box
+                      width="100%"
+                      display="flex"
+                      alignItems="center"
+                      mt={2}
+                      ml={5}
+                    >
+                      <Box
+                        display="flex"
+                        justifyContent="flex-start"
+                        color="white"
+                      >
+                        Responsável:
+                      </Box>
+                      <Box
+                        fontFamily="arial black"
+                        display="flex"
+                        justifyContent="flex-start"
+                        color="white"
+                        ml={2}
+                      >
+                        {mostrarEvento[index].Responsavel
+                          ? mostrarEvento[index].Responsavel
+                          : 'Não Informado'}
                       </Box>
                     </Box>
                   </Box>

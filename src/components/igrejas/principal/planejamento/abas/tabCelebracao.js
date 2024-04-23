@@ -51,8 +51,8 @@ export default function TabCelula({
 
   React.useEffect(() => {
     //    setPresentes(setPresentes(dados.length));
-    const qtyPresentes = dados.filter((val) => val.Presenca === 'igreja');
-    const qtyPresentesLive = dados.filter((val) => val.Presenca === 'live');
+    const qtyPresentes = dados?.filter((val) => val.Presenca === 'igreja');
+    const qtyPresentesLive = dados?.filter((val) => val.Presenca === 'live');
 
     setPresentes(qtyPresentes.length);
     setPresentesLive(qtyPresentesLive.length);

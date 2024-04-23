@@ -17,6 +17,7 @@ const handler = async (req, res) => {
               Supervisao: Number(dados.Supervisao),
               Distrito: Number(dados.Distrito),
               Data: dados.Data,
+              CelulaVisitada: dados.CelulaVisitada,
             },
           },
         })

@@ -12,5 +12,7 @@ export default async function handle(req, res) {
     .finally(async () => {
       await prisma.$disconnect();
     });
-  res.send(posts);
+  res.send(
+    JSON.stringify(posts, (_, v) => (typeof v === 'bigint' ? v.toString() : v)),
+  );
 }

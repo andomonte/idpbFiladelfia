@@ -4,10 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
-
 import Meses from 'src/utils/mesesAbrev';
 
 import TabCelulaSuper from './abas/tabCelulaSuper';
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -207,7 +208,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                             />
                           </Box>
                           <Box
-                            width="60%"
+                            width="100%"
                             display="flex"
                             justifyContent="center"
                             alignItems="center"
@@ -269,6 +270,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                 >
                   PLANEJAMENTO DAS CÉLULAS
                 </Box>
+
                 <Box
                   height="85%"
                   minHeight={315}

@@ -189,6 +189,14 @@ export default function TabCelula({
             <TableContainer
               sx={{ background: 'white', width: '100%', height: '90%' }}
             >
+              {console.log(
+                'supervisoes',
+                supervisoes,
+                perfilUser,
+                coordenacoes,
+                distritos,
+                dataEnviada,
+              )}
               {pontosMes.length ? (
                 <Graficos
                   supervisao={supervisoes}

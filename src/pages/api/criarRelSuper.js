@@ -12,6 +12,7 @@ const handler = async (req, res) => {
         .findMany({
           where: {
             AND: {
+              Data: dados.Data,
               Mes: dados.Mes,
               Ano: dados.Ano,
               Supervisao: Number(dados.Supervisao),

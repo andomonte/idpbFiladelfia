@@ -169,6 +169,7 @@ function SelectPerfil({
                 login: 'google',
                 nomeDistrito: newDistrito[0].Distrito_Nome,
               };
+
             if (items.Funcao === 'Secretaria')
               return {
                 Funcao: items.Funcao,

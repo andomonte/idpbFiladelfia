@@ -404,7 +404,12 @@ function RelSuper({ perfilUser, Mes, Ano, dadosRelVisita, setSendResumo }) {
               <Box width="94%">
                 <Grid container item xs={12} spacing={1}>
                   <Grid item xs={12} sm={4}>
-                    <Box mt={0} ml={2} color="white" sx={{ fontSize: 'bold' }}>
+                    <Box
+                      mt={0}
+                      textAlign="center"
+                      color="white"
+                      sx={{ fontSize: 'bold' }}
+                    >
                       <Typography
                         variant="caption"
                         display="block"
@@ -453,7 +458,7 @@ function RelSuper({ perfilUser, Mes, Ano, dadosRelVisita, setSendResumo }) {
                     <Box width="100%" display="flex" justifyContent="center">
                       <Box textAlign="center" width="100%">
                         <Box
-                          textAlign="start"
+                          textAlign="center"
                           width="100%"
                           ml={0}
                           color={corQytCelulas}
@@ -506,7 +511,7 @@ function RelSuper({ perfilUser, Mes, Ano, dadosRelVisita, setSendResumo }) {
                       <Box textAlign="center" width="100%">
                         <Box
                           width="100%"
-                          textAlign="start"
+                          textAlign="center"
                           ml={0}
                           color={corQytLiderados}
                           sx={{ fontSize: 'bold' }}
@@ -733,15 +738,16 @@ function RelSuper({ perfilUser, Mes, Ano, dadosRelVisita, setSendResumo }) {
                       ) : (
                         <Button
                           style={{
-                            background: 'green',
                             color: 'white',
+                            background: 'green',
                             fontFamily: 'arial black',
                             borderRadius: '10px',
+                            width: '100%',
                           }}
                           variant="contained"
                           severity="success"
                           endIcon={
-                            <Oval stroke="white" width={20} height={20} />
+                            <Oval stroke="white" width={25} height={25} />
                           }
                         />
                       )}

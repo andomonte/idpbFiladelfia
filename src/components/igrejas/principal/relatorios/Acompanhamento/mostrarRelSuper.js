@@ -87,6 +87,7 @@ const useStyles = makeStyles(() => ({}));
 
 function RelSuper({ dadosRelVisita, setSendResumo }) {
   const classes = useStyles();
+
   //= ================================================================
   const numeroRelatorio = [
     {
@@ -179,6 +180,28 @@ function RelSuper({ dadosRelVisita, setSendResumo }) {
           ml={0}
           bgcolor={corIgreja.principal}
         >
+          {' '}
+          <Box
+            height="5%"
+            color="white"
+            display="flex"
+            alignItems="end"
+            justifyContent="center"
+          >
+            Relatório do{' '}
+            {dadosRelVisita && dadosRelVisita.Funcao
+              ? dadosRelVisita.Funcao
+              : ''}
+            :
+          </Box>
+          <Box
+            color={corIgreja.textoP}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {dadosRelVisita && dadosRelVisita.Nome ? dadosRelVisita.Nome : ''}
+          </Box>
           <Box height="100%">
             <Box
               height="100%"
@@ -189,26 +212,6 @@ function RelSuper({ dadosRelVisita, setSendResumo }) {
               width="100%"
             >
               <Box width="94%">
-                <Box
-                  fontFamily="Rubik"
-                  fontWeight="bold"
-                  fontSize="14px"
-                  textAlign="center"
-                  color="white"
-                  mb="1vh"
-                >
-                  {dadosRelVisita && dadosRelVisita.Funcao}:
-                </Box>
-                <Box
-                  fontFamily="Rubik"
-                  fontWeight="bold"
-                  fontSize="14px"
-                  textAlign="center"
-                  color={corIgreja.textoP}
-                  mb="2vh"
-                >
-                  {dadosRelVisita && dadosRelVisita.Nome}
-                </Box>
                 <Grid container item xs={12} spacing={1}>
                   <Grid item xs={12}>
                     <Box mt={0} ml={2} color="white" sx={{ fontSize: 'bold' }}>

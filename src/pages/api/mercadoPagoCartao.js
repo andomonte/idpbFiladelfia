@@ -1,7 +1,7 @@
-// import { payment } from 'mercadopago';
-import prisma from 'src/lib/prisma';
+// import { payment } from 'mercadopago';import prisma from 'src/lib/prisma';
 import SendEmail from 'src/utils/sendEmail';
 import cpfMask from 'src/components/mascaras/cpf';
+import prisma from 'src/lib/prisma';
 
 const mercadopago = require('mercadopago');
 
@@ -47,7 +47,7 @@ const handler = async (req, res) => {
 
   const paymentData = {
     transaction_amount: Number(req.body.transactionAmount),
-    notification_url: 'https://www.idpbfiladelfia.com.br/api/notification',
+    notification_url: 'https://www.idpbcastelo.com.br/api/notification',
     token: req.body.token,
     description: req.body.description,
     installments: Number(req.body.installments),

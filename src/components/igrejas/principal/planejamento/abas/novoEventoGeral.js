@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
-
+import CreatableSelect from 'react-select/creatable';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -63,22 +63,48 @@ function createListaMembros(value, label) {
     label,
   };
 }
+const customStyles2 = {
+  control: (provided, state) => ({
+    ...provided,
+    background: '#fff',
+    borderColor: '#9e9e9e',
+    maxHeight: '100px',
+    boxShadow: state.isFocused ? null : null,
+  }),
+
+  valueContainer: (provided) => ({
+    ...provided,
+
+    maxHeight: '90px',
+    padding: '0 6px',
+  }),
+
+  input: (provided) => ({
+    ...provided,
+    margin: '0px',
+  }),
+  indicatorSeparator: () => ({
+    display: 'none',
+  }),
+  indicatorsContainer: (provided) => ({
+    ...provided,
+    height: '30px',
+  }),
+};
+
 export default function TabCelula({
   setOpenNovoEventoGeral,
+  setSendResumo,
   Mes,
   Ano,
   perfilUser,
   lideranca,
+  dadosEvento,
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
   const classes = useStyles();
-
-  const nomesCel = lideranca.filter(
-    (val) =>
-      val.Supervisao === Number(perfilUser.Supervisao) &&
-      val.Distrito === Number(perfilUser.Distrito) &&
-      (val.Funcao === 'Lider' || val.Funcao === 'Supervisor'),
-  );
+  console.log('dadosEventos', dadosEvento);
+  const nomesCel = lideranca.filter((val) => val);
 
   const numberCelulas = nomesCel.map((itens) => itens.Nome);
   const participantes = [...new Set(numberCelulas)];
@@ -101,7 +127,13 @@ export default function TabCelula({
     label: 'Qual o objetivo do evento?',
     value: 0,
   };
+  const valorInicialResp = {
+    label: 'Quem é o responsável',
+    value: 0,
+  };
+
   const [objetivo, setObjetivo] = React.useState(valorInicialOjetivo);
+  const [responsavel, setResponsavel] = React.useState(valorInicialResp);
 
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
 
@@ -119,6 +151,7 @@ export default function TabCelula({
   const objetivoRef = React.useRef();
   const observacoesRef = React.useRef();
   const anfitriaoRef = React.useRef();
+  const responsavelRef = React.useRef();
   const [carregando, setCarregando] = React.useState(false);
 
   const [valueAnfitriao, setValueAnfitriao] = React.useState('');
@@ -207,15 +240,21 @@ export default function TabCelula({
       if (
         inputValue &&
         String(horario.$H).length === 2 &&
-        String(horario.$m).length === 2 &&
         nomeEvento.length &&
         valueAnfitriao.length &&
         objetivo.label !== 'Qual o objetivo do evento?'
       ) {
         setCarregando(true);
         // const nomesMembros = JSON.parse(RelDiscipuladoFinal.NomesMembros);
-        const horaSalva = `${horario.$H}:${horario.$m}`;
+        const horaSalva = `${horario.$H}:${
+          horario.$m === 0 ? '00' : horario.$m
+        }`;
         const newDate = new Date(ConvData1(inputValue));
+        let newResp = '';
+        if (responsavel && responsavel[0] && responsavel[0].label)
+          newResp = responsavel[0].label;
+        if (responsavel && responsavel.label) newResp = responsavel.label;
+
         api
           .post('/api/criarEventoGeral', {
             Data: newDate,
@@ -229,6 +268,7 @@ export default function TabCelula({
             Ano,
             Horario: horaSalva,
             Distrito: Number(perfilUser.Distrito),
+            Responsavel: newResp,
           })
           .then((response) => {
             if (response) {
@@ -236,6 +276,7 @@ export default function TabCelula({
               setCarregando(false);
               zerarValues();
               setOpenNovoEventoGeral(false);
+              setSendResumo(false);
             }
           })
           .catch(() => {
@@ -265,7 +306,7 @@ export default function TabCelula({
           });
           nomeEventoRef.current.focus();
         }
-        if (String(horario.$H).length < 2 || String(horario.$m).length < 2) {
+        if (String(horario.$H).length < 2) {
           toast.error('Didige o Horário do Evento !', {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -279,7 +320,31 @@ export default function TabCelula({
       horarioRef.current.focus();
     }
   };
+  const [inputValue2, setInputValue2] = React.useState('');
 
+  const onBlurValue = () => {
+    if (inputValue2) {
+      const valorFinal = responsavel.length ? responsavel : [];
+      if (valorFinal.length) {
+        const valorArray = [
+          {
+            value: valorFinal.length ? valorFinal.length : 0,
+            label: inputValue2,
+          },
+        ];
+        valorFinal.push(valorArray[0]);
+        setResponsavel(valorFinal);
+      } else {
+        const valorArray = [
+          {
+            value: valorFinal.length ? valorFinal.length : 0,
+            label: inputValue2,
+          },
+        ];
+        setResponsavel(valorArray);
+      }
+    }
+  };
   const bodyShowPlan = (
     <Box width="100vw">
       <Box
@@ -633,7 +698,7 @@ export default function TabCelula({
               <Box
                 height="100%"
                 width="100%"
-                mt={4}
+                mt={8}
                 display="flex"
                 justifyContent="center"
               >
@@ -827,12 +892,14 @@ export default function TabCelula({
                           style={{
                             marginBottom: 15,
                             textAlign: 'center',
+                            width: '100%',
                           }}
                         >
                           <Box display="flex" justifyContent="center">
-                            <Stack spacing={2} sx={{ width: 320 }}>
+                            <Stack spacing={2} sx={{ width: '100%' }}>
                               <TextField
                                 className={classes.tf_m}
+                                autoComplete="false"
                                 inputProps={{
                                   style: {
                                     height: 28,
@@ -850,7 +917,7 @@ export default function TabCelula({
                                 }}
                                 value={valueAnfitriao}
                                 variant="standard"
-                                placeholder="Local do Evento"
+                                placeholder="Onde Será o Evento"
                                 onChange={(e) => {
                                   setValueAnfitriao(e.target.value);
                                 }}
@@ -895,7 +962,45 @@ export default function TabCelula({
                         />
                       </Box>
                     </Grid>
+                    <Grid item xs={12} md={12}>
+                      <Box
+                        mt={1}
+                        ml={2}
+                        color="white"
+                        sx={{ fontSize: 'bold' }}
+                      >
+                        <Typography
+                          variant="caption"
+                          display="block"
+                          gutterBottom
+                        >
+                          Responsável
+                        </Typography>
+                      </Box>
 
+                      <Box className={classes.novoBox} mt={-2}>
+                        <CreatableSelect
+                          ref={responsavelRef}
+                          id="Responsavel"
+                          instanceId
+                          options={nomesCelulaParcial.map((option) => option)}
+                          styles={customStyles2}
+                          value={responsavel}
+                          inputValue={inputValue2}
+                          onInputChange={setInputValue2}
+                          // onMenuClose={onMenuClose}
+                          onBlur={onBlurValue}
+                          onChange={(e) => {
+                            setResponsavel(e);
+
+                            // setCategoria(e);
+                          }}
+                          placeholder={<div>Digite ou Selecione</div>}
+                        >
+                          {nomesCelulaParcial.map((option) => option)}
+                        </CreatableSelect>
+                      </Box>
+                    </Grid>
                     <Grid item xs={5} md={5}>
                       <Button
                         style={{
@@ -910,6 +1015,7 @@ export default function TabCelula({
                         component="a"
                         variant="contained"
                         onClick={() => {
+                          setSendResumo(false);
                           setOpenNovoEventoGeral(false);
                           zerarValues();
                         }}

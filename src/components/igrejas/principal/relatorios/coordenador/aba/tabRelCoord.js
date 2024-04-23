@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 // import PegaSemana from 'src/utils/getSemana';
+import api from 'src/components/services/api';
 import Espera from 'src/utils/espera';
 import useSWR from 'swr';
 import axios from 'axios';
@@ -9,11 +10,55 @@ import { Oval } from 'react-loading-icons';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
-import { MdScreenSearchDesktop } from 'react-icons/md';
+import { MdScreenSearchDesktop, MdDeleteForever } from 'react-icons/md';
 import ConvertData from 'src/utils/convData2';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
-
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '9px',
+  '@media (min-width:350px)': {
+    fontSize: '10px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '14px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '16px',
+  },
+};
 export default function TabCelula({
   setSendResumo,
   perfilUser,
@@ -26,15 +71,16 @@ export default function TabCelula({
 
   const [relEncontrado, setRelEncontrado] = React.useState([]);
   const [rel, setRel] = React.useState('nada');
-  const [presentes, setPresentes] = React.useState('');
-
+  const [loading, setLoading] = React.useState(false);
+  const [idDeletar, setIdDeletar] = React.useState('');
+  const [openDialog, setOpenDialog] = React.useState(false);
   //  const [openRelatorio, setOpenRelatorio] = React.useState(false);
 
   // para usar semanas
 
-  const url1 = `/api/consultaRelatorioSupervisao/${Mes + 1}/${Ano}`;
+  const url1 = `/api/consultaRelatorioSupervisao/${Mes}/${Ano}`;
 
-  const { data: sem1, errorSem1 } = useSWR(url1, fetcher);
+  const { data: sem1, errorSem1, mutate } = useSWR(url1, fetcher);
 
   React.useEffect(() => {
     setRel('nada');
@@ -42,8 +88,9 @@ export default function TabCelula({
 
     if (sem1) {
       setRel(sem1);
-      if (sem1 && sem1[0]) {
-        const listaRelSuper = sem1.filter(
+
+      if (sem1 && sem1.length && sem1[0].Nome) {
+        const listaRelSuper = sem1?.filter(
           (val) =>
             Number(val.Coordenacao) === Number(perfilUser.Coordenacao) &&
             Number(val.Distrito) === Number(perfilUser.Distrito) &&
@@ -66,15 +113,37 @@ export default function TabCelula({
     return 0;
   }, [sem1]);
 
+  const handleDelete = (row) => {
+    if (row.id) {
+      setOpenDialog(true);
+      setIdDeletar(row.id);
+    }
+  };
+  const handleConfirmeDelete = () => {
+    api
+      .post('/api/deletarRelAcompanhamento', {
+        id: idDeletar,
+      })
+      .then((response) => {
+        if (response) {
+          setLoading(false);
+          toast.info('Relatório Deletado !', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          mutate(url1);
+          setSendResumo(false);
+          setOpenDialog(false);
+        }
+      })
+      .catch(() => {
+        toast.error('Erro ao Atualizar Dados!,tente Novamente', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setLoading(false);
+      });
+  };
   //= ==================================================================
 
-  React.useEffect(() => {
-    if (relEncontrado.length) {
-      const obj = relEncontrado[0].Presentes;
-
-      setPresentes(obj);
-    }
-  }, [relEncontrado]);
   return (
     <Box height="100%">
       <Box
@@ -117,146 +186,332 @@ export default function TabCelula({
           VER
         </Box>
       </Box>
-
-      {rel !== 'nada' ? (
-        <TableContainer sx={{ maxHeight: 290 }}>
-          {relEncontrado && Object.keys(relEncontrado).length > 0 ? (
-            <Box>
-              {relEncontrado.map((row, index) => (
-                <Box
-                  mt={0}
-                  display="flex"
-                  alignItems="center"
-                  key={row.id}
-                  height={58}
-                >
-                  <Box
-                    sx={{
-                      fontFamily: 'arial black',
-                      fontSize: '14px',
-                      borderBottom: '1px solid #000',
-                    }}
-                    height="100%"
-                    width="100%"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
+      <ThemeProvider theme={theme}>
+        <Typography variant="hs4">
+          {rel !== 'nada' ? (
+            <TableContainer sx={{ maxHeight: 290 }}>
+              {relEncontrado && Object.keys(relEncontrado).length > 0 ? (
+                <Box>
+                  {relEncontrado.map((row, index) => (
                     <Box
+                      mt={0}
                       display="flex"
-                      justifyContent="center"
                       alignItems="center"
-                      height="100%"
-                      fontSize="12px"
-                      textAlign="center"
-                      width="25%"
+                      key={row.id}
+                      height={58}
                     >
-                      {relEncontrado[index]
-                        ? ConvertData(relEncontrado[index].Data) // relEncontrado[index].CelulaVisitada.slice(8, 11)
-                        : '-'}
-                    </Box>
+                      <Box
+                        sx={{
+                          fontFamily: 'arial black',
 
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      flexDirection="column"
-                      height="100%"
-                      textAlign="center"
-                      width="60%"
-                      sx={{
-                        borderRight: '1px solid #000',
-                        borderLeft: '1px solid #000',
-                      }}
-                    >
-                      {relEncontrado[index] ? (
-                        <Box color="blue" display="flex">
-                          <Box>
-                            {relEncontrado !== '' && perfilUser.Coordenacao ? (
-                              <Box>
-                                {
-                                  coordenacoes.filter(
-                                    (val) =>
-                                      Number(val.Coordenacao) ===
-                                      Number(relEncontrado[0].Coordenacao),
-                                  )[0].Coordenacao_Nome
-                                }
-                              </Box>
-                            ) : (
-                              ''
-                            )}
+                          borderBottom: '1px solid #000',
+                        }}
+                        height="100%"
+                        width="100%"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box width="25%">
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="100%"
+                            textAlign="center"
+                            width="100%"
+                          >
+                            {relEncontrado[index]
+                              ? ConvertData(relEncontrado[index].Data) // relEncontrado[index].CelulaVisitada.slice(8, 11)
+                              : '-'}
                           </Box>
                         </Box>
-                      ) : (
-                        ''
-                      )}
-                    </Box>
-                    <Box
-                      height="100%"
-                      display="flex"
-                      justifyContent="center"
-                      textAlign="center"
-                      alignItems="center"
-                      width="15%"
-                    >
-                      {relEncontrado[index].Data ? (
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                          onClick={() => {
-                            setDadosRelVisita(relEncontrado[index]);
-                            setSendResumo(true);
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          height="100%"
+                          textAlign="center"
+                          width="60%"
+                          sx={{
+                            borderRight: '1px solid #000',
+                            borderLeft: '1px solid #000',
                           }}
                         >
-                          <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                            <MdScreenSearchDesktop size={25} color="green" />
-                          </SvgIcon>
-                        </IconButton>
-                      ) : (
-                        '-'
-                      )}
+                          <Box
+                            display="flex"
+                            justifyContent="start"
+                            alignItems="center"
+                            height="100%"
+                            color="red"
+                            width="20%"
+                            onClick={() => handleDelete(row)}
+                          >
+                            <MdDeleteForever size={20} />
+                          </Box>
+                          {relEncontrado[index] ? (
+                            <Box color="blue" display="flex">
+                              <Box>
+                                {relEncontrado !== '' &&
+                                perfilUser.Coordenacao ? (
+                                  <Box>
+                                    {
+                                      coordenacoes?.filter(
+                                        (val) =>
+                                          Number(val.Coordenacao) ===
+                                          Number(relEncontrado[0].Coordenacao),
+                                      )[0].Coordenacao_Nome
+                                    }
+                                  </Box>
+                                ) : (
+                                  ''
+                                )}
+                              </Box>
+                            </Box>
+                          ) : (
+                            ''
+                          )}
+                        </Box>
+                        <Box
+                          height="100%"
+                          display="flex"
+                          justifyContent="center"
+                          textAlign="center"
+                          alignItems="center"
+                          width="15%"
+                        >
+                          {relEncontrado[index].Data ? (
+                            <IconButton
+                              color="primary"
+                              aria-label="upload picture"
+                              component="span"
+                              onClick={() => {
+                                setDadosRelVisita(relEncontrado[index]);
+                                setSendResumo(true);
+                              }}
+                            >
+                              <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                                <MdScreenSearchDesktop
+                                  size={25}
+                                  color="green"
+                                />
+                              </SvgIcon>
+                            </IconButton>
+                          ) : (
+                            '-'
+                          )}
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
+                  ))}
                 </Box>
-              ))}
-            </Box>
+              ) : (
+                <Box
+                  height="30vh"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  fontFamily="Fugaz One"
+                >
+                  SEM RELATÓRIOS
+                </Box>
+              )}
+            </TableContainer>
           ) : (
             <Box
-              height="30vh"
-              fontSize="16px"
               display="flex"
               justifyContent="center"
               alignItems="center"
-              fontFamily="Fugaz One"
+              height="80%"
+              textAlign="center"
+              width="100%"
             >
-              SEM RELATÓRIOS
+              <Box>
+                <Box fontFamily="arial black" mb={5} mt={-2} textAlign="center">
+                  Buscando Dados
+                </Box>
+                <Oval stroke="blue" width={50} height={50} />
+              </Box>
             </Box>
-          )}
-        </TableContainer>
-      ) : (
+          )}{' '}
+        </Typography>
+      </ThemeProvider>
+      <Dialog fullScreen open={openDialog}>
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="80%"
-          textAlign="center"
+          mt={0}
           width="100%"
+          height="100%"
         >
-          <Box>
-            <Box
-              fontSize="16px"
-              fontFamily="arial black"
-              mb={5}
-              mt={-2}
-              textAlign="center"
-            >
-              Buscando Dados
+          <Box
+            width="100%"
+            height="100%"
+            mt={0}
+            justifyContent="center"
+            display="flex"
+          >
+            <Box width="100%">
+              <Box
+                display="flex"
+                justifyContent="center"
+                flexDirection="row"
+                alignItems="center"
+                height="100%"
+              >
+                <Box color="black">
+                  <Box display="flex" justifyContent="center">
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                      style={{
+                        fontSize: '16px',
+
+                        fontWeight: 'bold',
+                        fontFamily: 'arial black',
+                      }}
+                    >
+                      ATENÇÃO !!!
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    width="100%"
+                    mt={3}
+                    sx={{ fontSize: 'bold' }}
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                      style={{
+                        fontSize: '15px',
+
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      DESEJA REALMENTE DELETAR
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    width="100%"
+                    mt={0}
+                    sx={{ fontSize: 'bold' }}
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                      style={{
+                        fontSize: '15px',
+
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      ESSE RELATÓRIO
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    width="100%"
+                    mt={0}
+                    sx={{ fontSize: 'bold' }}
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                      style={{
+                        fontSize: '15px',
+
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      SE SIM, PRESSIONE DELETE
+                    </Typography>
+                  </Box>
+
+                  <Box mt={5} display="flex" justifyContent="center">
+                    <Box
+                      mt={0}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        id="reload"
+                        onClick={() => {
+                          setOpenDialog(false);
+                        }}
+                        style={{
+                          fontFamily: 'Fugaz One',
+                          background: 'blue',
+                          color: 'white',
+                          width: '120px',
+                        }}
+                      >
+                        VOLTAR
+                      </Button>
+                    </Box>
+                    <Box
+                      ml={5}
+                      mt={0}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        id="reload"
+                        onClick={() => {
+                          setLoading(true);
+                          handleConfirmeDelete();
+                        }}
+                        style={{
+                          fontFamily: 'Fugaz One',
+                          background: 'red',
+                          color: 'white',
+                          width: '120px',
+                        }}
+                      >
+                        {loading ? (
+                          <Box display="flex" alignItems="center">
+                            <Oval stroke="white" width={30} height={30} />
+                          </Box>
+                        ) : (
+                          'DELETAR'
+                        )}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
             </Box>
-            <Oval stroke="blue" width={50} height={50} />
           </Box>
         </Box>
-      )}
+      </Dialog>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Box>
   );
 }

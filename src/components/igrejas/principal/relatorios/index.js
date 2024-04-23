@@ -23,17 +23,12 @@ import corIgreja from 'src/utils/coresIgreja';
 import Acompanhamento from './Acompanhamento/home';
 import Visitas from './Visitas/home';
 import Presidente from './feitoPeloLider';
-
 import RelCelula from './RelatorioCelulas';
 import RelVisitasSuper from './relVisitaSuper';
 import RelCoord from './relCoord';
-import RelDistrito from './relDistrito';
 import RelSuper from './relSuper';
 import RelSuperCoord from './relSuperCoord';
-import RelSuperDistrito from './relSuperDistrito';
-import RelCelulaSup from './relCelulaSup';
-import RelCelulaCoord from './relCelulaCoord';
-import RelCelulaDistrito from './relCelulaDistrito';
+
 import Padrao from './abas/telaPadrao';
 
 // const drawerWidth = 240;
@@ -370,7 +365,7 @@ function Relatorios({
                         ? { color: corIgreja.iconeOn, fontSize: '18px' }
                         : { color: '#eeeeee', fontSize: '18px' }
                     }
-                    label="Celula"
+                    label="Célula"
                     icon={
                       value === 0 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -389,7 +384,7 @@ function Relatorios({
                         ? { color: corIgreja.iconeOn, fontSize: '18px' }
                         : { color: '#eeeeee', fontSize: '18px' }
                     }
-                    label="Supervisão"
+                    label="Acompanhamento"
                     icon={
                       value === 1 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -408,7 +403,7 @@ function Relatorios({
                         ? { color: corIgreja.iconeOn, fontSize: '12px' }
                         : { color: '#eeeeee', fontSize: '12px' }
                     }
-                    label="Coordenac."
+                    label="Visitas"
                     icon={
                       value === 2 ? (
                         <SvgIcon sx={{ color: corIgreja.iconeOn }}>
@@ -512,45 +507,16 @@ function Relatorios({
                     dataEscolhida={dataEscolhida}
                     secao={session}
                     rolMembros={rolMembros}
+                    celulas={celulas}
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    parametros={parametros}
                   />
                 ) : null}
 
                 {perfilUser.Funcao === 'Secretaria' ? <Padrao /> : null}
                 {perfilUser.Funcao === 'Supervisor' ? (
-                  <RelCelulaSup
-                    perfilUser={perfilUser}
-                    setDataEscolhida={setDataEscolhida}
-                    dataEscolhida={dataEscolhida}
-                    secao={session}
-                    rolMembros={rolMembros}
-                    lideranca={lideranca}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Coordenador' ? (
-                  <RelCelulaCoord
-                    perfilUser={perfilUser}
-                    setDataEscolhida={setDataEscolhida}
-                    dataEscolhida={dataEscolhida}
-                    secao={session}
-                    rolMembros={rolMembros}
-                    lideranca={lideranca}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'PastorDistrito' ? (
-                  <RelCelulaDistrito
-                    distritos={distritos}
-                    coordenacoes={coordenacoes}
-                    supervisoes={supervisoes}
-                    perfilUser={perfilUser}
-                    setDataEscolhida={setDataEscolhida}
-                    dataEscolhida={dataEscolhida}
-                    secao={session}
-                    rolMembros={rolMembros}
-                    lideranca={lideranca}
-                    celulas={celulas}
-                  />
-                ) : null}
-                {perfilUser.Funcao === 'Presidente' ? (
                   <Presidente
                     distritos={distritos}
                     coordenacoes={coordenacoes}
@@ -562,6 +528,51 @@ function Relatorios({
                     rolMembros={rolMembros}
                     lideranca={lideranca}
                     celulas={celulas}
+                    parametros={parametros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Coordenador' ? (
+                  <Presidente
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    perfilUser={perfilUser}
+                    setDataEscolhida={setDataEscolhida}
+                    dataEscolhida={dataEscolhida}
+                    secao={session}
+                    rolMembros={rolMembros}
+                    lideranca={lideranca}
+                    celulas={celulas}
+                    parametros={parametros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'PastorDistrito' ? (
+                  <Presidente
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    perfilUser={perfilUser}
+                    setDataEscolhida={setDataEscolhida}
+                    dataEscolhida={dataEscolhida}
+                    secao={session}
+                    rolMembros={rolMembros}
+                    lideranca={lideranca}
+                    celulas={celulas}
+                    parametros={parametros}
+                  />
+                ) : null}
+                {perfilUser.Funcao === 'Presidente' ? (
+                  <Presidente
+                    perfilUser={perfilUser}
+                    setDataEscolhida={setDataEscolhida}
+                    dataEscolhida={dataEscolhida}
+                    secao={session}
+                    rolMembros={rolMembros}
+                    lideranca={lideranca}
+                    celulas={celulas}
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
                     parametros={parametros}
                   />
                 ) : null}
@@ -580,6 +591,7 @@ function Relatorios({
                     secao={session}
                     rolMembros={rolMembros}
                     lideranca={lideranca}
+                    supervisoes={supervisoes}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'Coordenador' ? (
@@ -588,18 +600,22 @@ function Relatorios({
                     setDataEscolhida={setDataEscolhida}
                     dataEscolhida={dataEscolhida}
                     secao={session}
+                    distritos={distritos}
+                    supervisoes={supervisoes}
                     rolMembros={rolMembros}
                     lideranca={lideranca}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'PastorDistrito' ? (
-                  <RelSuperDistrito
+                  <Acompanhamento
                     perfilUser={perfilUser}
-                    setDataEscolhida={setDataEscolhida}
-                    dataEscolhida={dataEscolhida}
-                    secao={session}
-                    rolMembros={rolMembros}
                     lideranca={lideranca}
+                    rolMembros={rolMembros}
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    celulas={celulas}
+                    igreja={igreja}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'Presidente' ? (
@@ -629,6 +645,7 @@ function Relatorios({
                 secao={session}
                 rolMembros={rolMembros}
                 lideranca={lideranca}
+                supervisoes={supervisoes}
               />
             ) : null}
             {perfilUser.Funcao === 'Coordenador' ? (
@@ -637,19 +654,23 @@ function Relatorios({
                 setDataEscolhida={setDataEscolhida}
                 dataEscolhida={dataEscolhida}
                 secao={session}
+                distritos={distritos}
+                supervisoes={supervisoes}
                 rolMembros={rolMembros}
                 lideranca={lideranca}
                 coordenacoes={coordenacoes}
               />
             ) : null}
             {perfilUser.Funcao === 'PastorDistrito' ? (
-              <RelDistrito
+              <Visitas
                 perfilUser={perfilUser}
-                setDataEscolhida={setDataEscolhida}
-                dataEscolhida={dataEscolhida}
-                secao={session}
-                rolMembros={rolMembros}
                 lideranca={lideranca}
+                rolMembros={rolMembros}
+                distritos={distritos}
+                coordenacoes={coordenacoes}
+                supervisoes={supervisoes}
+                celulas={celulas}
+                igreja={igreja}
               />
             ) : null}
             {perfilUser.Funcao === 'Presidente' ? (

@@ -420,7 +420,8 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
       const newValues2 = nomesCelulaParcial.filter(
         (val) => val.label === relatorio[0].Exaltacao,
       );
-
+      setInputValue(moment(new Date(relatorio[0].Data)).format('DD/MM/YYYY'));
+      setSelectedDate(new Date(relatorio[0].Data));
       setExaltacao(relatorio[0].Exaltacao);
       setValues2(newValues2[0]);
       setMultiplicacao(relatorio[0].Multiplicacao);
@@ -1195,7 +1196,7 @@ function RelatorioCelebracao({ rolMembros, perfilUser }) {
                                         display="block"
                                         gutterBottom
                                       >
-                                        LANCHE
+                                        Cadeira da Bênção
                                       </Typography>
                                     </Box>
                                     <Box className={classes.novoBox} mt={-2}>

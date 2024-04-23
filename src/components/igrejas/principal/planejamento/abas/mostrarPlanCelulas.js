@@ -4,8 +4,6 @@ import Stack from '@mui/material/Stack';
 import corIgreja from 'src/utils/coresIgreja';
 import TableContainer from '@mui/material/TableContainer';
 
-import PegaData from 'src/utils/getDataQuarta';
-
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Erros from 'src/utils/erros';
@@ -217,8 +215,7 @@ const useStyles = makeStyles((theme) => ({
 
 function RelatorioCelebracao({
   dadosSem,
-  semanaEnviada,
-  AnoPesquisado,
+
   setOpenPlan,
 }) {
   //  const classes = useStyles();
@@ -253,7 +250,7 @@ function RelatorioCelebracao({
   const [openErro, setOpenErro] = React.useState(false);
 
   const [inputValue] = React.useState(
-    moment(PegaData(semanaEnviada, AnoPesquisado)).format('DD/MM/YYYY'),
+    moment(new Date(dadosSem.Data)).format('DD/MM/YYYY'),
   );
 
   return (
@@ -744,7 +741,7 @@ function RelatorioCelebracao({
                                       display="block"
                                       gutterBottom
                                     >
-                                      LANCHE
+                                      Cadeira da Bênção
                                     </Typography>
                                   </Box>
                                   <Box className={classes.novoBox} mt={-1.8}>

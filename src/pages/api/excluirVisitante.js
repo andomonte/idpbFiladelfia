@@ -14,7 +14,7 @@ export default async function handle(req, res) {
       });
     res.status(200).send(post);
   } catch (errors) {
-    // console.log(errors);
+    console.log(errors);
     res.status(400).send(errors);
   }
 }

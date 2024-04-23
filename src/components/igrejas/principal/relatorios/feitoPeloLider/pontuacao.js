@@ -107,7 +107,6 @@ export default function Pontuacao({
     }
 
     let result = 0;
-
     for (let i = result + 1; lastSun - firstSun > 0; i += 1) {
       lastSun.setDate(lastSun.getDate() - 7);
       if (i > 52) i = 1;

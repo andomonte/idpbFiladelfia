@@ -39,7 +39,7 @@ const handler = async (req, res) => {
   const celular = req.body.fone;
   const paymentData = {
     transaction_amount: Number(req.body.transactionAmount),
-    notification_url: 'https://www.idpbfiladelfia.com.br/api/notification',
+    notification_url: 'https://www.idpbcastelo.com.br/api/notification',
     description: req.body.description,
     //    date_of_expiration: expirationDate,
     payment_method_id: 'bolbradesco',

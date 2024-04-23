@@ -4,18 +4,16 @@ import { MdCreateNewFolder } from 'react-icons/md';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
-
 import Meses from 'src/utils/mesesAbrev';
 import TamanhoJanela from 'src/utils/getSize';
-import NovoRelatorio from 'src/components/igrejas/principal/relatorios/supervisor/novoRelSuper';
-import MostrarRelatorio from 'src/components/igrejas/principal/relatorios/supervisor/aba/editarRelSuper';
-import TabRelSuper from './supervisor/aba/tabRelSuper';
+import NovoRelatorio from 'src/components/igrejas/principal/relatorios/coordenador/novoRelCoord';
+import MostrarRelatorio from 'src/components/igrejas/principal/relatorios/coordenador/editarRelCoord';
 
-
+import TabRelSuper from './supervisor/tabRelSuper';
 
 const janela = TamanhoJanela();
 
-function PlanMembro({ perfilUser, lideranca }) {
+function PlanMembro({ perfilUser, lideranca, supervisoes }) {
   //= ================================================================
   const mes = Meses();
   const d = new Date();
@@ -170,37 +168,14 @@ function PlanMembro({ perfilUser, lideranca }) {
                       </Grid>
                     </Grid>
                   </Box>
-                  <Box mt={1} width="96%" ml={1}>
-                    <Grid container item xs={12} spacing={1}>
-                      <Grid item xs={12}>
-                        <Box
-                          mt="4vh"
-                          borderRadius={5}
-                          height={20}
-                          width="100%"
-                          display="flex"
-                        >
-                          <Box
-                            width="100%"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            color="white"
-                            sx={{ fontSize: '18px', fontFamily: 'Fugaz One' }}
-                          >
-                            RELATÓRIO DO SUPERVISOR
-                          </Box>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
+
                   <Box
                     mt={4}
                     style={{
                       borderBottomLeftRadius: '16px',
                       borderBottomRightRadius: '16px',
                     }}
-                    height={janela.height > 570 ? '74%' : '70%'}
+                    height={janela.height > 570 ? '84%' : '80%'}
                     minWidth={300}
                     display="flex"
                     justifyContent="center"
@@ -215,6 +190,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                       width="100%"
                       borderRadius={16}
                     >
+                      {console.log('supervisoes', supervisoes)}
                       <TabRelSuper
                         perfilUser={perfilUser}
                         Mes={contMes}
@@ -222,6 +198,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                         lideranca={lideranca}
                         setSendResumo={setSendResumo}
                         setDadosRelVisita={setDadosRelVisita}
+                        supervisoes={supervisoes}
                       />
                     </Box>
                   </Box>
@@ -230,25 +207,29 @@ function PlanMembro({ perfilUser, lideranca }) {
             </Box>
           ) : (
             <Box>
-              <MostrarRelatorio
-                dadosRelVisita={dadosRelVisita}
-                perfilUser={perfilUser}
-                Mes={contMes}
-                Ano={contAno}
-                setSendResumo={setSendResumo}
-                lideranca={lideranca}
-              />
+              <Box>
+                <MostrarRelatorio
+                  dadosRelVisita={dadosRelVisita}
+                  perfilUser={perfilUser}
+                  Mes={contMes}
+                  Ano={contAno}
+                  setSendResumo={setSendResumo}
+                  lideranca={lideranca}
+                />
+              </Box>
             </Box>
           )}
         </Box>
       ) : (
-        <NovoRelatorio
-          perfilUser={perfilUser}
-          setOpenNovoRelatorio={setOpenNovoRelatorio}
-          lideranca={lideranca}
-          Mes={contMes}
-          Ano={contAno}
-        />
+        <Box>
+          <NovoRelatorio
+            perfilUser={perfilUser}
+            setOpenNovoRelatorio={setOpenNovoRelatorio}
+            lideranca={lideranca}
+            Mes={contMes}
+            Ano={contAno}
+          />
+        </Box>
       )}
     </Box>
   );

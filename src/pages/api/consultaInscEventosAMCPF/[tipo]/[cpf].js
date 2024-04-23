@@ -34,6 +34,6 @@ export default async function handle(req, res) {
 
     res.json(posts);
   } catch (error) {
-    console.log(error);
+    console.log('olha o error', error);
   }
 }

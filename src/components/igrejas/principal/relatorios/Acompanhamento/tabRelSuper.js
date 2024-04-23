@@ -11,50 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import ConvertData from 'src/utils/convData2';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
-const theme = createTheme();
-theme.typography.hs4 = {
-  fontSize: '8px',
-  '@media (min-width:360px)': {
-    fontSize: '10px',
-  },
-  '@media (min-width:400px)': {
-    fontSize: '11px',
-  },
-  '@media (min-width:500px)': {
-    fontSize: '12px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '13px',
-  },
-};
-theme.typography.hs3 = {
-  fontSize: '9px',
-  '@media (min-width:360px)': {
-    fontSize: '11px',
-  },
-  '@media (min-width:400px)': {
-    fontSize: '12px',
-  },
-  '@media (min-width:500px)': {
-    fontSize: '13px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '14px',
-  },
-};
-theme.typography.hs2 = {
-  fontSize: '12px',
-  '@media (min-width:400px)': {
-    fontSize: '12px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '12px',
-  },
-};
+
 export default function TabCelula({
   setSendResumo,
   supervisoes,
@@ -160,7 +119,7 @@ export default function TabCelula({
       </Box>
 
       {rel !== 'nada' ? (
-        <TableContainer sx={{ height: '48vh' }}>
+        <TableContainer sx={{ maxHeight: 290 }}>
           {relEncontrado && Object.keys(relEncontrado).length > 0 ? (
             <Box>
               {relEncontrado.map((row, index) => (
@@ -212,33 +171,27 @@ export default function TabCelula({
                     >
                       {relEncontrado[index] ? (
                         <Box color="blue" display="flex">
-                          <ThemeProvider theme={theme}>
-                            <Typography variant="hs3">
+                          <Box>
+                            {relEncontrado[index].Supervisao !== '' &&
+                            supervisoes.filter(
+                              (val) =>
+                                Number(val.Supervisao) ===
+                                Number(relEncontrado[index].Supervisao),
+                            ).length ? (
                               <Box>
-                                {relEncontrado[index].Supervisao !== '' &&
-                                supervisoes.filter(
-                                  (val) =>
-                                    Number(val.Supervisao) ===
-                                    Number(relEncontrado[index].Supervisao),
-                                ).length ? (
-                                  <Box>
-                                    {relEncontrado[index].Supervisao} -{' '}
-                                    {
-                                      supervisoes.filter(
-                                        (val) =>
-                                          Number(val.Supervisao) ===
-                                          Number(
-                                            relEncontrado[index].Supervisao,
-                                          ),
-                                      )[0].Supervisao_Nome
-                                    }
-                                  </Box>
-                                ) : (
-                                  ''
-                                )}
+                                {relEncontrado[index].Supervisao} -{' '}
+                                {supervisoes
+                                  .filter(
+                                    (val) =>
+                                      Number(val.Supervisao) ===
+                                      Number(relEncontrado[index].Supervisao),
+                                  )[0]
+                                  .Supervisao_Nome.toLocaleUpperCase()}
                               </Box>
-                            </Typography>
-                          </ThemeProvider>
+                            ) : (
+                              ''
+                            )}
+                          </Box>
                         </Box>
                       ) : (
                         ''

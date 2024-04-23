@@ -16,7 +16,16 @@ import Meses from 'src/utils/meses';
 
 import TabBuscaCelula from './abas/tabBuscaCelula';
 
-function PlanMembro({ perfilUser, rolMembros, visitantes }) {
+function PlanMembro({
+  perfilUser,
+  rolMembros,
+  visitantes,
+  celulas,
+  distritos,
+  coordenacoes,
+  supervisoes,
+  parametros,
+}) {
   //= ================================================================
   const mes = Meses();
   const d = new Date();
@@ -183,6 +192,11 @@ function PlanMembro({ perfilUser, rolMembros, visitantes }) {
                     Mes={contMes}
                     Ano={contAno}
                     rolMembros={rolMembros}
+                    celulas={celulas}
+                    distritos={distritos}
+                    coordenacoes={coordenacoes}
+                    supervisoes={supervisoes}
+                    parametros={parametros}
                   />
                 </Box>
               </Box>

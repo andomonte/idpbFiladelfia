@@ -11,9 +11,50 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import ConvertData from 'src/utils/convData2';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
-
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '9px',
+  '@media (min-width:350px)': {
+    fontSize: '10px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '14px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '16px',
+  },
+};
 export default function TabCelula({
   setSendResumo,
   supervisoes,
@@ -117,159 +158,159 @@ export default function TabCelula({
           VER
         </Box>
       </Box>
+      <ThemeProvider theme={theme}>
+        <Typography variant="hs4">
+          {rel !== 'nada' ? (
+            <TableContainer sx={{ maxHeight: 290 }}>
+              {relEncontrado && Object.keys(relEncontrado).length > 0 ? (
+                <Box>
+                  {relEncontrado.map((row, index) => (
+                    <Box
+                      mt={0}
+                      display="flex"
+                      alignItems="center"
+                      key={row.id}
+                      height={58}
+                    >
+                      <Box
+                        sx={{
+                          fontFamily: 'arial black',
 
-      {rel !== 'nada' ? (
-        <TableContainer sx={{ maxHeight: 290 }}>
-          {relEncontrado && Object.keys(relEncontrado).length > 0 ? (
-            <Box>
-              {relEncontrado.map((row, index) => (
-                <Box
-                  mt={0}
-                  display="flex"
-                  alignItems="center"
-                  key={row.id}
-                  height={58}
-                >
-                  <Box
-                    sx={{
-                      fontFamily: 'arial black',
-                      fontSize: '14px',
-                      borderBottom: '1px solid #000',
-                    }}
-                    height="100%"
-                    width="100%"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      height="100%"
-                      fontSize="12px"
-                      textAlign="center"
-                      width="25%"
-                    >
-                      {relEncontrado[index]
-                        ? ConvertData(relEncontrado[index].Data) // relEncontrado[index].CelulaVisitada.slice(8, 11)
-                        : '-'}
-                    </Box>
+                          borderBottom: '1px solid #000',
+                        }}
+                        height="100%"
+                        width="100%"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          height="100%"
+                          textAlign="center"
+                          width="25%"
+                        >
+                          {relEncontrado[index]
+                            ? ConvertData(relEncontrado[index].Data) // relEncontrado[index].CelulaVisitada.slice(8, 11)
+                            : '-'}
+                        </Box>
 
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      flexDirection="column"
-                      height="100%"
-                      textAlign="center"
-                      width="60%"
-                      sx={{
-                        borderRight: '1px solid #000',
-                        borderLeft: '1px solid #000',
-                      }}
-                    >
-                      {relEncontrado[index] ? (
-                        <Box color="blue" display="flex">
-                          <Box>
-                            {relEncontrado[index].Supervisao !== '' &&
-                            supervisoes.filter(
-                              (val) =>
-                                Number(val.Supervisao) ===
-                                Number(relEncontrado[index].Supervisao),
-                            ).length ? (
-                              <Box>
-                                {relEncontrado[index].Supervisao} -{' '}
-                                {
-                                  supervisoes.filter(
-                                    (val) =>
-                                      Number(val.Supervisao) ===
-                                      Number(relEncontrado[index].Supervisao),
-                                  )[0].Supervisao_Nome
-                                }
-                              </Box>
-                            ) : (
-                              ''
-                            )}
-                          </Box>
-                        </Box>
-                      ) : (
-                        ''
-                      )}
-                      {relEncontrado[index].Progresso ? (
-                        <Box color="#ba68c8" display="flex">
-                          {relEncontrado[index].Progresso}%
-                        </Box>
-                      ) : (
-                        ''
-                      )}
-                    </Box>
-                    <Box
-                      height="100%"
-                      display="flex"
-                      justifyContent="center"
-                      textAlign="center"
-                      alignItems="center"
-                      width="15%"
-                    >
-                      {relEncontrado[index].Data ? (
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                          onClick={() => {
-                            setDadosRelVisita(relEncontrado[index]);
-                            setSendResumo(true);
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          flexDirection="column"
+                          height="100%"
+                          textAlign="center"
+                          width="60%"
+                          sx={{
+                            borderRight: '1px solid #000',
+                            borderLeft: '1px solid #000',
                           }}
                         >
-                          <SvgIcon sx={{ color: corIgreja.iconeOn }}>
-                            <MdScreenSearchDesktop size={25} color="green" />
-                          </SvgIcon>
-                        </IconButton>
-                      ) : (
-                        '-'
-                      )}
+                          {relEncontrado[index] ? (
+                            <Box color="blue" display="flex">
+                              <Box>
+                                {relEncontrado[index].Supervisao !== '' &&
+                                supervisoes.filter(
+                                  (val) =>
+                                    Number(val.Supervisao) ===
+                                    Number(relEncontrado[index].Supervisao),
+                                ).length ? (
+                                  <Box>
+                                    {relEncontrado[index].Supervisao} -{' '}
+                                    {supervisoes
+                                      .filter(
+                                        (val) =>
+                                          Number(val.Supervisao) ===
+                                          Number(
+                                            relEncontrado[index].Supervisao,
+                                          ),
+                                      )[0]
+                                      .Supervisao_Nome.toLocaleUpperCase()}
+                                  </Box>
+                                ) : (
+                                  ''
+                                )}
+                              </Box>
+                            </Box>
+                          ) : (
+                            ''
+                          )}
+                          {relEncontrado[index].Progresso ? (
+                            <Box color="#ba68c8" display="flex">
+                              {relEncontrado[index].Progresso}%
+                            </Box>
+                          ) : (
+                            ''
+                          )}
+                        </Box>
+                        <Box
+                          height="100%"
+                          display="flex"
+                          justifyContent="center"
+                          textAlign="center"
+                          alignItems="center"
+                          width="15%"
+                        >
+                          {relEncontrado[index].Data ? (
+                            <IconButton
+                              color="primary"
+                              aria-label="upload picture"
+                              component="span"
+                              onClick={() => {
+                                setDadosRelVisita(relEncontrado[index]);
+                                setSendResumo(true);
+                              }}
+                            >
+                              <SvgIcon sx={{ color: corIgreja.iconeOn }}>
+                                <MdScreenSearchDesktop
+                                  size={25}
+                                  color="green"
+                                />
+                              </SvgIcon>
+                            </IconButton>
+                          ) : (
+                            '-'
+                          )}
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
+                  ))}
                 </Box>
-              ))}
-            </Box>
+              ) : (
+                <Box
+                  height="38vh"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  fontFamily="Fugaz One"
+                >
+                  SEM RELATÓRIOS
+                </Box>
+              )}
+            </TableContainer>
           ) : (
             <Box
-              height="38vh"
-              fontSize="16px"
               display="flex"
               justifyContent="center"
               alignItems="center"
-              fontFamily="Fugaz One"
+              height="50vh"
+              textAlign="center"
+              width="100%"
             >
-              SEM RELATÓRIOS
+              <Box>
+                <Box fontFamily="arial black" mb={5} mt={-2} textAlign="center">
+                  Buscando Dados
+                </Box>
+                <Oval stroke="blue" width={50} height={50} />
+              </Box>
             </Box>
           )}
-        </TableContainer>
-      ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="50vh"
-          textAlign="center"
-          width="100%"
-        >
-          <Box>
-            <Box
-              fontSize="16px"
-              fontFamily="arial black"
-              mb={5}
-              mt={-2}
-              textAlign="center"
-            >
-              Buscando Dados
-            </Box>
-            <Oval stroke="blue" width={50} height={50} />
-          </Box>
-        </Box>
-      )}
+        </Typography>
+      </ThemeProvider>
     </Box>
   );
 }

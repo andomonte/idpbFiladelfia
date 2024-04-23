@@ -25,10 +25,10 @@ import PlanCelulaDistrito from './planejamentoCelulaDistrito';
 import PlanCelulaIgreja from './planejamentoCelulaIgreja';
 import PlanEventos from './planejamentoEventos';
 import PlanEventosGeral from './planejamentoEventosGeral';
-import PlanEventosMembros from './planejamentoEventosMembros';
 import PlanCelulaMembro from './planejamentoCelulaMembro';
 import Calendario from './calendario';
 import Padrao from './telaPadrao';
+
 // const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
@@ -156,7 +156,6 @@ function AtualizarDados({ title, celulas, rolMembros, perfilUser, lideranca }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div>
@@ -316,10 +315,11 @@ function AtualizarDados({ title, celulas, rolMembros, perfilUser, lideranca }) {
             {session && (
               <Box>
                 {perfilUser.Funcao === 'Membro' ? (
-                  <PlanEventosMembros
+                  <PlanEventosGeral
                     perfilUser={perfilUser}
                     secao={session}
-                    rolMembros={rolMembros}
+                    lideranca={lideranca}
+                    celulas={celulas}
                   />
                 ) : null}
                 {perfilUser.Funcao === 'Lider' ? (

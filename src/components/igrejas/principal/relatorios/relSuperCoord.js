@@ -6,17 +6,22 @@ import IconButton from '@mui/material/IconButton';
 import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
 
 import MostrarRelatorioGeral from 'src/components/igrejas/principal/relatorios/supervisor/mostrarRelSuper';
-import MostrarRelatorioVisita from 'src/components/igrejas/principal/relatorios/coordenador/mostrarRelVisitaCoord';
 
 import Meses from 'src/utils/mesesAbrev';
 import TamanhoJanela from 'src/utils/getSize';
-import TabRelSuperGeral from './coordenador/aba/tabRelSuperCoord';
-import TabRelSuperVisita from './coordenador/aba/tabRelVisitaCoord';
+import MostrarRelatorioVisita from './Visitas/mostrarRelVisitas';
+import TabRelSuperGeral from './Visitas/tabRelSuper';
+import TabRelSuperVisita from './Visitas/tabRelVisita';
 
 const janela = TamanhoJanela();
 
-function PlanMembro({ perfilUser, lideranca }) {
+function PlanMembro({ perfilUser, lideranca, distritos, supervisoes }) {
   //= ================================================================
+
+  const distritoF = distritos.filter(
+    (val) => val.Distrito === Number(perfilUser.Distrito),
+  );
+
   const mes = Meses();
   const d = new Date();
   const mesAtual = Number(d.getMonth());
@@ -120,7 +125,7 @@ function PlanMembro({ perfilUser, lideranca }) {
               >
                 <Box width="96%" mt={-1} ml={1}>
                   <Grid container item xs={12} spacing={1}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                       <Box width="100%" height={40} display="flex">
                         <Box
                           width="20%"
@@ -169,28 +174,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                         </Box>
                       </Box>
                     </Grid>
-                    <Grid item xs={6}>
-                      <Box
-                        borderRadius={5}
-                        height={40}
-                        width="100%"
-                        display="flex"
-                        fontSize="16px"
-                      >
-                        <Box
-                          width="80%"
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                          fontSize="16px"
-                          color="white"
-                          sx={{ fontFamily: 'Fugaz One' }}
-                        >
-                          <Box mr={2}>Coord. </Box>
-                          {perfilUser.Coordenacao}
-                        </Box>
-                      </Box>
-                    </Grid>
+                    <Grid item xs={6} />
                   </Grid>
                 </Box>
                 <Box mt={1} width="96%" ml={1}>
@@ -279,20 +263,22 @@ function PlanMembro({ perfilUser, lideranca }) {
                   >
                     {contTipo ? (
                       <TabRelSuperGeral
-                        numeroSuper={perfilUser.Coordenacao}
+                        numeroCoord={Number(perfilUser.Coordenacao)}
                         Mes={contMes}
                         Ano={contAno}
                         perfilUser={perfilUser}
                         lideranca={lideranca}
+                        supervisoes={supervisoes}
                         setSendResumo={setSendResumo}
                         setDadosRelVisita={setDadosRelVisita}
+                        distrito={distritoF[0].Distrito}
                       />
                     ) : (
                       <TabRelSuperVisita
-                        perfilUser={perfilUser}
+                        distrito={distritoF[0].Distrito}
                         Mes={contMes}
                         Ano={contAno}
-                        numeroSuper={perfilUser.Coordenacao}
+                        numeroCoord={perfilUser.Coordenacao}
                         lideranca={lideranca}
                         setSendResumo={setSendResumo}
                         setDadosRelVisita={setDadosRelVisita}

@@ -18,8 +18,6 @@ export default function Grafico({
   const pontosCelula = pontosCelulas?.filter(
     (val) => val.Celula === dados.Celula,
   );
-  const qytSemanas =
-    pontosCelula.length < 2 ? pontosCelula.length : pontosCelula.length;
 
   const detalhesPontos = [];
   const pontosTotal = [];
@@ -131,31 +129,6 @@ export default function Grafico({
   });
   const labelData2Final = labelData2?.map((val) => val.label);
   const valorData2 = pontosMes.map((val) => val.TotalRank);
-  //-----------------------------------------------------
-  const vDesejadoParametros =
-    RelatorioDesejado +
-    PlanejamentoDesejado +
-    presCelulaDesejado +
-    presCelebracaoDesejado +
-    discipulado +
-    leitura +
-    visCelulaDesejado +
-    visCelebracaoDesejado +
-    visitasLider +
-    eventos;
-
-  pontosMes?.map((val, i) => {
-    if (val.Semana) {
-      labelData2[i] = createLabelData2(`Sem - ${val.Semana}`, val.Semana);
-    }
-
-    return 0;
-  });
-
-  const valorData2Parametros = pontosMes?.map(
-    () => Number(vDesejadoParametros) / qytSemanas,
-  );
-
   const data2 = {
     labels: labelData2Final,
     datasets: [
@@ -179,13 +152,6 @@ export default function Grafico({
         pointRadius: 1,
         pointHitRadius: 10,
         data: valorData2,
-      },
-      {
-        type: 'line',
-        label: 'Pontos Desejado',
-        data: valorData2Parametros,
-        borderColor: 'rgb(255, 99, 132)',
-        fill: false,
       },
     ],
   };

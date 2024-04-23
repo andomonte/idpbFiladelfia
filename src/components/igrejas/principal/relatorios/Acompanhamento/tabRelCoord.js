@@ -11,50 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import SvgIcon from '@mui/material/SvgIcon';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import ConvertData from 'src/utils/convData2';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
-const theme = createTheme();
-theme.typography.hs4 = {
-  fontSize: '8px',
-  '@media (min-width:360px)': {
-    fontSize: '10px',
-  },
-  '@media (min-width:400px)': {
-    fontSize: '11px',
-  },
-  '@media (min-width:500px)': {
-    fontSize: '12px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '13px',
-  },
-};
-theme.typography.hs3 = {
-  fontSize: '9px',
-  '@media (min-width:360px)': {
-    fontSize: '11px',
-  },
-  '@media (min-width:400px)': {
-    fontSize: '12px',
-  },
-  '@media (min-width:500px)': {
-    fontSize: '13px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '14px',
-  },
-};
-theme.typography.hs2 = {
-  fontSize: '12px',
-  '@media (min-width:400px)': {
-    fontSize: '12px',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '12px',
-  },
-};
+
 export default function TabCelula({
   setSendResumo,
   coordenacoes,
@@ -151,12 +110,8 @@ export default function TabCelula({
           height="100%"
           textAlign="center"
           width="60%"
-          sx={{
-            borderRight: '1px solid #000',
-            borderLeft: '1px solid #000',
-          }}
         >
-          RELATÓRIO
+          COORDENAÇÃO
         </Box>
         <Box textAlign="center" width="15%">
           VER
@@ -216,33 +171,27 @@ export default function TabCelula({
                     >
                       {relEncontrado[index] ? (
                         <Box color="blue" display="flex">
-                          <ThemeProvider theme={theme}>
-                            <Typography variant="hs3">
+                          <Box>
+                            {relEncontrado[index].Coordenacao !== '' &&
+                            coordenacoes.filter(
+                              (val) =>
+                                Number(val.Coordenacao) ===
+                                Number(relEncontrado[index].Coordenacao),
+                            ).length ? (
                               <Box>
-                                {relEncontrado[index].Coordenacao !== '' &&
-                                coordenacoes.filter(
-                                  (val) =>
-                                    Number(val.Coordenacao) ===
-                                    Number(relEncontrado[index].Coordenacao),
-                                ).length ? (
-                                  <Box>
-                                    {relEncontrado[index].Coordenacao} -{' '}
-                                    {
-                                      coordenacoes.filter(
-                                        (val) =>
-                                          Number(val.Coordenacao) ===
-                                          Number(
-                                            relEncontrado[index].Coordenacao,
-                                          ),
-                                      )[0].Coordenacao_Nome
-                                    }
-                                  </Box>
-                                ) : (
-                                  ''
-                                )}
+                                {relEncontrado[index].Coordenacao} -{' '}
+                                {
+                                  coordenacoes.filter(
+                                    (val) =>
+                                      Number(val.Coordenacao) ===
+                                      Number(relEncontrado[index].Coordenacao),
+                                  )[0].Coordenacao_Nome
+                                }
                               </Box>
-                            </Typography>
-                          </ThemeProvider>
+                            ) : (
+                              ''
+                            )}
+                          </Box>
                         </Box>
                       ) : (
                         ''

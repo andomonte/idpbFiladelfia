@@ -2,7 +2,6 @@ import { Box, Avatar } from '@material-ui/core';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import corIgreja from 'src/utils/coresIgreja';
-
 import '@fontsource/rubik';
 import api from 'src/components/services/api';
 import { styled } from '@mui/material/styles';
@@ -71,56 +70,26 @@ function meuPerfil({ secao, perfilUser }) {
         const metadata = {
           type: 'image/png',
         };
-        const dataAtual = new Date();
-        const dia = dataAtual.getDate();
-        const mes = dataAtual.getMonth() + 1;
-        const ano = dataAtual.getFullYear();
-        const horas = dataAtual.getHours();
-        const minutos = dataAtual.getMinutes();
-        const segundos = dataAtual.getSeconds();
-
-        const nomeFoto = perfilUser.RolMembro;
-        const nomeFoto2 =
-          perfilUser.RolMembro + dia + mes + ano + horas + minutos + segundos;
+        const nomeFoto = `${perfilUser.Igreja} + ${perfilUser.RolMembro}`;
         const file = new File([data], perfilUser.RolMembro, metadata);
         const dataFile = new FormData();
         dataFile.append('file', file, nomeFoto);
-
-        const dataFile2 = new FormData();
-        //      dataFile.append('file', uploadedFile[0], nomeFoto);
-
-        dataFile2.append('file', file, nomeFoto2);
-
-        /*  const fotoDeletarFim = fotoDeletar.substr(
-          fotoDeletar.indexOf(perfilUser.RolMembro),
-          fotoDeletar.length,
-        ); */
-
-        /*  api
-          .post('/api/delFoto', { dados: fotoDeletarFim })
-          .then((responses) => {
-            if (responses) {
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          }); */
-
         api
           .post('/api/fotos', dataFile)
+
           .then((responses) => {
             if (responses) {
               api
                 .post('/api/imagePerfil', {
                   RolMembro: perfilUser.RolMembro,
-                  fileImage: `https://arquivoFiladelfia.s3.amazonaws.com/membros/${nomeFoto}`,
+                  fileImage: `https://idpbamazonas.s3.amazonaws.com/membros/${nomeFoto}`,
                   // urlImage -> esse urlImage é o da imagem selecionada já em blob
                 })
                 .then((response2) => {
                   if (response2) {
                     const valPerfil = {
                       ...perfilUser,
-                      foto: `https://arquivoFiladelfia.s3.amazonaws.com/membros/${nomeFoto}`,
+                      foto: response2.data.foto,
                     };
 
                     sessionStorage.setItem(
@@ -144,7 +113,6 @@ function meuPerfil({ secao, perfilUser }) {
       console.log(err);
     }
   };
-
   const atualizarImagem = async () => {
     if (upLoadFile) {
       await process(fileImage);
@@ -264,15 +232,12 @@ function meuPerfil({ secao, perfilUser }) {
                               }
                             }}
                           />
+
                           <Avatar
                             style={{ width: 150, height: 150 }}
                             alt="nome"
                             ord="123456789?"
-                            src={
-                              fileImage !== '' && fileImage !== null
-                                ? fileImage
-                                : null
-                            }
+                            src={fileImage || ''}
                           >
                             {fileImage === '' || fileImage === null ? (
                               <IconButton
@@ -333,7 +298,7 @@ function meuPerfil({ secao, perfilUser }) {
                           fontSize="16px"
                           color="white"
                         >
-                          {secao.user.name.toUpperCase()}
+                          {secao && secao.user.name.toUpperCase()}
                         </Box>
                         <Box
                           display="flex"
@@ -353,7 +318,7 @@ function meuPerfil({ secao, perfilUser }) {
                               fontSize: '12px',
                             }}
                           >
-                            {perfilUser.Celula}{' '}
+                            {perfilUser.Celula}
                           </Box>
                         </Box>
                         <Box

@@ -23,7 +23,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 const theme2 = createTheme();
-theme2.typography.h4 = {
+theme2.typography.hs4 = {
   fontWeight: 'normal',
 
   fontSize: '9px',
@@ -34,7 +34,7 @@ theme2.typography.h4 = {
     fontSize: '11px',
   },
 };
-theme2.typography.h3 = {
+theme2.typography.hs3 = {
   fontWeight: 'normal',
 
   fontSize: '11px',
@@ -45,7 +45,7 @@ theme2.typography.h3 = {
     fontSize: '12px',
   },
 };
-theme2.typography.h2 = {
+theme2.typography.hs2 = {
   fontWeight: 'normal',
 
   fontSize: '13px',
@@ -194,7 +194,7 @@ function createAvaliacoes(relatorios, planejamentos, mentoriamentos) {
   return { relatorios, planejamentos, mentoriamentos };
 }
 
-function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
+function RelSuper({ perfilUser, setOpenNovoRelatorio }) {
   const classes = useStyles();
   //= ================================================================
   const numeroRelatorio = [
@@ -268,8 +268,8 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
         Avaliacoes: JSON.stringify(Avaliacoes),
         MembrosVisitados: Number(qytMembrosVisitados),
         Presentes: observacoes,
-        Mes,
-        Ano,
+        Mes: selectedDate.getMonth(),
+        Ano: selectedDate.getFullYear(),
       })
       .then((response) => {
         if (response) {
@@ -339,7 +339,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
       });
     }
   };
-
+  console.log('data', selectedDate.getFullYear(), selectedDate.getMonth());
   const handleDateChange = (date, value) => {
     setInputValue(value);
     setSelectedDate(date);
@@ -354,6 +354,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
 
   const handleDateClick = () => {
     //   setSelectedDate();
+
     setIsPickerOpen(true);
   };
 
@@ -449,7 +450,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                           sx={{ fontSize: 'bold' }}
                         >
                           <ThemeProvider theme={theme2}>
-                            <Typography noWrap variant="h3">
+                            <Typography noWrap variant="hs3">
                               Qty de Células visitadas
                             </Typography>
                           </ThemeProvider>
@@ -501,7 +502,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                           sx={{ fontSize: 'bold' }}
                         >
                           <ThemeProvider theme={theme2}>
-                            <Typography noWrap variant="h3">
+                            <Typography noWrap variant="hs3">
                               Qyt de Membros visitados
                             </Typography>
                           </ThemeProvider>
@@ -552,7 +553,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                   mt="4vh"
                   mb="2vh"
                 >
-                  SEU DESEMPELHO QUANTO À
+                  SEU DESEMPENHO QUANTO À
                 </Box>
                 <TableContainer
                   sx={{
@@ -564,7 +565,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                   <Box width="100%">
                     <Box color={corAvalRelatorios} mt="1vh" ml={2} width="90%">
                       <ThemeProvider theme={theme2}>
-                        <Typography variant="h2">
+                        <Typography variant="hs2">
                           Avaliação dos Relatórios de supervisão e visitas
                           feitas pelo Supervisor
                         </Typography>
@@ -597,7 +598,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                       width="90%"
                     >
                       <ThemeProvider theme={theme2}>
-                        <Typography variant="h2">
+                        <Typography variant="hs2">
                           Orientação e Auxílio às necessdiades detectadas na
                           supervisão e nas células
                         </Typography>
@@ -625,7 +626,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                   <Box width="100%">
                     <Box mt="2vh" ml={2} width="90%" color={corAvalDiscipulado}>
                       <ThemeProvider theme={theme2}>
-                        <Typography variant="h2">
+                        <Typography variant="hs2">
                           Mentoriamento e pastoreio da equipe de Supervisores e
                           líderes
                         </Typography>
@@ -663,7 +664,7 @@ function RelSuper({ perfilUser, setOpenNovoRelatorio, Mes, Ano }) {
                     <Box width="100%">
                       <Box color={corObs} mt="4vh" ml={2} width="90%">
                         <ThemeProvider theme={theme2}>
-                          <Typography variant="h2">
+                          <Typography variant="hs2">
                             Necessidades detectadas nesse período
                           </Typography>
                         </ThemeProvider>

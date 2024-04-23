@@ -4,6 +4,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import DateFnsUtils from '@date-io/date-fns';
 import Dialog from '@mui/material/Dialog';
 import List from '@mui/material/List';
+import Stack from '@mui/material/Stack';
 import ConverteData from 'src/utils/dataMMDDAAAA';
 import ConverteData2 from 'src/utils/convData2';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
@@ -24,11 +25,10 @@ import {
   TextField,
   Paper,
 } from '@material-ui/core';
-import Autocomplete from '@mui/material/Autocomplete';
-import Stack from '@mui/material/Stack';
+
 import PegaSemana from 'src/utils/getSemana';
 import Espera from 'src/utils/espera';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import axios from 'axios';
 import api from 'src/components/services/api';
 
@@ -78,25 +78,10 @@ function compare(a, b) {
   return true;
 }
 
-function createListaMembros(value, label) {
-  return {
-    value,
-    label,
-  };
-}
-export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
+export default function TabCelula({ Mes, Ano, perfilUser }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
   const classes = useStyles();
   const [openPlan, setOpenPlan] = React.useState(false);
-
-  const nomesCel = rolMembros.filter(
-    (val) =>
-      val.Celula === Number(perfilUser.Celula) &&
-      val.Distrito === Number(perfilUser.Distrito),
-  );
-  const nomesCelulaParcial = nomesCel.map((rol) =>
-    createListaMembros(rol.id, rol.Nome),
-  );
 
   const fases = [
     { label: 'Integrar na Visão', value: 1 },
@@ -139,7 +124,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
 
   const [observacoes, setObservacoes] = React.useState('');
   const [valueAnfitriao, setValueAnfitriao] = React.useState('');
-  const [inputValor, setInputValor] = React.useState('');
+
   const url1 = `/api/consultaPlanejamentoEventos/${Mes}/${Ano}`;
 
   const timeElapsed2 = Date.now();
@@ -150,9 +135,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   );
   const [isPickerOpen, setIsPickerOpen] = React.useState(false);
 
-  const { data: sem1, errorSem1 } = useSWR(url1, fetcher, {
-    refreshInterval: 1000,
-  });
+  const { data: sem1, errorSem1, mutate } = useSWR(url1, fetcher);
 
   React.useEffect(() => {
     mutate(url1);
@@ -160,8 +143,8 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   }, [semana]);
 
   React.useEffect(() => {
-    if (sem1 && sem1.length) {
-      const planEventosCelula = sem1.filter(
+    if (sem1 && sem1.length && sem1[0].Celula) {
+      const planEventosCelula = sem1?.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
           Ano === new Date(val.Data).getFullYear() &&
@@ -171,7 +154,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
         const planOrdenado = planEventosCelula.sort(compare);
         setDataSem1(planOrdenado);
       }
-    }
+    } else setDataSem1([]);
     if (errorSem1) return <div>An error occured.</div>;
 
     if (!sem1) return <Espera descricao="Buscando os Dados" />;
@@ -253,7 +236,6 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       if (
         inputValue &&
         String(horario.$H).length === 2 &&
-        String(horario.$m).length === 2 &&
         nomeEvento.length &&
         valueAnfitriao.length &&
         objetivo.label !== 'Qual o objetivo do evento?' &&
@@ -325,7 +307,8 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
           });
           nomeEventoRef.current.focus();
         }
-        if (String(horario.$H).length < 2 || String(horario.$m).length < 2) {
+
+        if (String(horario.$H).length < 2 || String(horario.$m).length < 1) {
           toast.error('Didige o Horário do Evento !', {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -622,6 +605,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                             InputLabelProps={{
                               shrink: true,
                             }}
+                            autoComplete="false"
                             value={nomeEvento}
                             variant="standard"
                             placeholder="Título do Evento"
@@ -656,50 +640,40 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                             style={{
                               marginBottom: 15,
                               textAlign: 'center',
+                              width: '100%',
                             }}
                           >
                             <Box display="flex" justifyContent="center">
-                              <Stack spacing={2} sx={{ width: 320 }}>
-                                <Autocomplete
-                                  style={{
-                                    width: '99%',
-                                    marginTop: 10,
-                                    textAlign: 'center',
+                              <Stack spacing={2} sx={{ width: '100%' }}>
+                                <TextField
+                                  className={classes.tf_m}
+                                  autoComplete="false"
+                                  inputProps={{
+                                    style: {
+                                      height: 28,
+                                      borderRadius: 5,
+                                      textAlign: 'center',
+                                      WebkitBoxShadow:
+                                        '0 0 0 1000px #fafafa  inset',
+                                    },
                                   }}
                                   id="LocalEvento"
-                                  freeSolo
-                                  value={valueAnfitriao}
-                                  onChange={(_, newValue) => {
-                                    if (newValue) {
-                                      setValueAnfitriao(newValue);
-                                    } else setValueAnfitriao('');
+                                  // label="Matricula"
 
-                                    if (newValue) objetivoRef.current.focus();
+                                  InputLabelProps={{
+                                    shrink: true,
                                   }}
-                                  selectOnFocus
-                                  inputValue={inputValor}
-                                  onInputChange={(_, newInputValue) => {
-                                    if (newInputValue !== '') {
-                                      setInputValor(
-                                        newInputValue.toUpperCase(),
-                                      );
-                                      setValueAnfitriao(
-                                        newInputValue.toUpperCase(),
-                                      );
-                                    } else setInputValor('');
+                                  value={valueAnfitriao}
+                                  variant="standard"
+                                  placeholder="Onde Será o Evento"
+                                  onChange={(e) => {
+                                    setValueAnfitriao(e.target.value);
                                   }}
-                                  options={nomesCelulaParcial.map(
-                                    (option) => option.label,
-                                  )}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      className={classes.textField}
-                                      {...params}
-                                      inputRef={anfitriaoRef}
-                                      onKeyDown={handleEnter}
-                                      placeholder="Onde será o Evento"
-                                    />
-                                  )}
+                                  onFocus={(e) => {
+                                    setValueAnfitriao(e.target.value);
+                                  }}
+                                  onKeyDown={handleEnter}
+                                  inputRef={anfitriaoRef}
                                 />
                               </Stack>
                             </Box>
@@ -771,7 +745,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                               marginTop: -5,
                               textAlign: 'center',
                               width: '98%',
-                              // height: 80,
+                              minHeight: 70,
                               borderRadius: 15,
                               border: '1px solid #000',
                               resize: 'vertical',
@@ -1070,50 +1044,40 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
                             style={{
                               marginBottom: 15,
                               textAlign: 'center',
+                              width: '100%',
                             }}
                           >
                             <Box display="flex" justifyContent="center">
-                              <Stack spacing={2} sx={{ width: 320 }}>
-                                <Autocomplete
-                                  style={{
-                                    width: '99%',
-                                    marginTop: 10,
-                                    textAlign: 'center',
+                              <Stack spacing={2} sx={{ width: '100%' }}>
+                                <TextField
+                                  className={classes.tf_m}
+                                  autoComplete="false"
+                                  inputProps={{
+                                    style: {
+                                      height: 28,
+                                      borderRadius: 5,
+                                      textAlign: 'center',
+                                      WebkitBoxShadow:
+                                        '0 0 0 1000px #fafafa  inset',
+                                    },
                                   }}
                                   id="LocalEvento"
-                                  freeSolo
-                                  value={valueAnfitriao}
-                                  onChange={(_, newValue) => {
-                                    if (newValue) {
-                                      setValueAnfitriao(newValue);
-                                    } else setValueAnfitriao('');
+                                  // label="Matricula"
 
-                                    if (newValue) objetivoRef.current.focus();
+                                  InputLabelProps={{
+                                    shrink: true,
                                   }}
-                                  selectOnFocus
-                                  inputValue={inputValor}
-                                  onInputChange={(_, newInputValue) => {
-                                    if (newInputValue !== '') {
-                                      setInputValor(
-                                        newInputValue.toUpperCase(),
-                                      );
-                                      setValueAnfitriao(
-                                        newInputValue.toUpperCase(),
-                                      );
-                                    } else setInputValor('');
+                                  value={valueAnfitriao}
+                                  variant="standard"
+                                  placeholder="Onde Será o Evento"
+                                  onChange={(e) => {
+                                    setValueAnfitriao(e.target.value);
                                   }}
-                                  options={nomesCelulaParcial.map(
-                                    (option) => option.label,
-                                  )}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      className={classes.textField}
-                                      {...params}
-                                      inputRef={anfitriaoRef}
-                                      onKeyDown={handleEnter}
-                                      placeholder="Onde será o Evento"
-                                    />
-                                  )}
+                                  onFocus={(e) => {
+                                    setValueAnfitriao(e.target.value);
+                                  }}
+                                  onKeyDown={handleEnter}
+                                  inputRef={anfitriaoRef}
                                 />
                               </Stack>
                             </Box>

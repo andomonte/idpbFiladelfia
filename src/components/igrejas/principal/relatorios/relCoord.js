@@ -8,7 +8,11 @@ import Meses from 'src/utils/mesesAbrev';
 import TamanhoJanela from 'src/utils/getSize';
 import NovoRelatorio from 'src/components/igrejas/principal/relatorios/coordenador/novoRelCoord';
 import MostrarRelatorio from 'src/components/igrejas/principal/relatorios/coordenador/editarRelCoord';
+import NovoRelatorioVisita from 'src/components/igrejas/principal/relatorios/coordenador/novoRelVisita';
+import MostrarRelatorioVisita from 'src/components/igrejas/principal/relatorios/coordenador/editarRelVisita';
+
 import TabRelCoordenador from './coordenador/aba/tabRelCoord';
+import TabRelSuperVisita from './Visitas/tabRelVisitaCoord';
 
 const janela = TamanhoJanela();
 
@@ -56,7 +60,24 @@ function PlanMembro({ perfilUser, lideranca, coordenacoes }) {
     }
     setContMes(contMesAtual);
   };
+  const tipo = ['Visita', 'Coordenação'];
+  const [contTipo, setContTipo] = React.useState(0);
+  const handleIncTipo = () => {
+    let contTipoAtual = contTipo + 1;
 
+    if (contTipoAtual > 1) {
+      contTipoAtual = 0;
+    }
+    setContTipo(contTipoAtual);
+  };
+  const handleDecTipo = () => {
+    let contTipoAtual = contTipo - 1;
+
+    if (contTipoAtual < 0) {
+      contTipoAtual = 1;
+    }
+    setContTipo(contTipoAtual);
+  };
   return (
     <Box
       display="flex"
@@ -178,13 +199,53 @@ function PlanMembro({ perfilUser, lideranca, coordenacoes }) {
                           display="flex"
                         >
                           <Box
+                            width="20%"
+                            display="flex"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                          >
+                            <IconButton
+                              color="primary"
+                              aria-label="upload picture"
+                              component="span"
+                              onClick={() => {
+                                handleDecTipo();
+                              }}
+                            >
+                              <BiCaretLeft
+                                size={35}
+                                color={corIgreja.principal2}
+                              />
+                            </IconButton>
+                          </Box>
+                          <Box
                             width="100%"
                             display="flex"
                             justifyContent="center"
                             alignItems="center"
                             sx={{ fontSize: '14px', fontFamily: 'arial black' }}
                           >
-                            RELATÓRIO DO COORDENADOR
+                            Relatório de {tipo[contTipo]}
+                          </Box>
+                          <Box
+                            width="10%"
+                            display="flex"
+                            justifyContent="flex-end"
+                            alignItems="center"
+                          >
+                            <IconButton
+                              color="primary"
+                              aria-label="upload picture"
+                              component="span"
+                              onClick={() => {
+                                handleIncTipo();
+                              }}
+                            >
+                              <BiCaretRight
+                                size={35}
+                                color={corIgreja.principal2}
+                              />
+                            </IconButton>
                           </Box>
                         </Box>
                       </Grid>
@@ -211,15 +272,27 @@ function PlanMembro({ perfilUser, lideranca, coordenacoes }) {
                       width="100%"
                       borderRadius={16}
                     >
-                      <TabRelCoordenador
-                        perfilUser={perfilUser}
-                        Mes={contMes}
-                        Ano={contAno}
-                        lideranca={lideranca}
-                        setSendResumo={setSendResumo}
-                        setDadosRelVisita={setDadosRelVisita}
-                        coordenacoes={coordenacoes}
-                      />
+                      {contTipo ? (
+                        <TabRelCoordenador
+                          perfilUser={perfilUser}
+                          Mes={contMes}
+                          Ano={contAno}
+                          lideranca={lideranca}
+                          setSendResumo={setSendResumo}
+                          setDadosRelVisita={setDadosRelVisita}
+                          coordenacoes={coordenacoes}
+                        />
+                      ) : (
+                        <TabRelSuperVisita
+                          distrito={Number(perfilUser.Distrito)}
+                          Mes={contMes}
+                          Ano={contAno}
+                          numeroCoord={perfilUser.Coordenacao}
+                          lideranca={lideranca}
+                          setSendResumo={setSendResumo}
+                          setDadosRelVisita={setDadosRelVisita}
+                        />
+                      )}
                     </Box>
                   </Box>
                 </Box>
@@ -227,25 +300,50 @@ function PlanMembro({ perfilUser, lideranca, coordenacoes }) {
             </Box>
           ) : (
             <Box>
-              <MostrarRelatorio
-                dadosRelVisita={dadosRelVisita}
-                perfilUser={perfilUser}
-                Mes={contMes}
-                Ano={contAno}
-                setSendResumo={setSendResumo}
-                lideranca={lideranca}
-              />
+              <Box>
+                {contTipo ? (
+                  <MostrarRelatorio
+                    dadosRelVisita={dadosRelVisita}
+                    perfilUser={perfilUser}
+                    Mes={contMes}
+                    Ano={contAno}
+                    setSendResumo={setSendResumo}
+                    lideranca={lideranca}
+                  />
+                ) : (
+                  <MostrarRelatorioVisita
+                    dadosRelVisita={dadosRelVisita}
+                    perfilUser={perfilUser}
+                    lideranca={lideranca}
+                    Mes={contMes}
+                    Ano={contAno}
+                    setSendResumo={setSendResumo}
+                  />
+                )}
+              </Box>
             </Box>
           )}
         </Box>
       ) : (
-        <NovoRelatorio
-          perfilUser={perfilUser}
-          setOpenNovoRelatorio={setOpenNovoRelatorio}
-          lideranca={lideranca}
-          Mes={contMes}
-          Ano={contAno}
-        />
+        <Box>
+          {contTipo ? (
+            <NovoRelatorio
+              perfilUser={perfilUser}
+              setOpenNovoRelatorio={setOpenNovoRelatorio}
+              lideranca={lideranca}
+              Mes={contMes}
+              Ano={contAno}
+            />
+          ) : (
+            <NovoRelatorioVisita
+              perfilUser={perfilUser}
+              setOpenNovoRelatorio={setOpenNovoRelatorio}
+              lideranca={lideranca}
+              Mes={contMes}
+              Ano={contAno}
+            />
+          )}
+        </Box>
       )}
     </Box>
   );

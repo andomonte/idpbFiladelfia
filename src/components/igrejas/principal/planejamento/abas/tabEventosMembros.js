@@ -86,6 +86,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
   const nomesCel = rolMembros.filter(
     (val) =>
       val.Celula === Number(perfilUser.Celula) &&
+      Ano === new Date(val.Data).getFullYear() &&
       val.Distrito === Number(perfilUser.Distrito),
   );
   const nomesCelulaParcial = nomesCel.map((rol) =>
@@ -152,6 +153,7 @@ export default function TabCelula({ Mes, Ano, perfilUser, rolMembros }) {
       const planEventosCelula = sem1.filter(
         (val) =>
           val.Celula === Number(perfilUser.Celula) &&
+          Ano === new Date(val.Data).getFullYear() &&
           val.Distrito === Number(perfilUser.Distrito),
       );
       if (planEventosCelula.length) {

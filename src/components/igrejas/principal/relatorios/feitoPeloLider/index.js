@@ -82,6 +82,7 @@ function RelCelula({
 }) {
   //= ================================================================
   const mes = Meses();
+  const novaCoord = OrdenarCoordenacoes(coordenacoes);
 
   const dataAtual = new Date(); // new Date();
   const mesAtual = Number(dataAtual.getMonth());
@@ -100,7 +101,7 @@ function RelCelula({
   const [celulaSetor, setCelulaSetor] = React.useState(0);
   const [setor, setSetor] = React.useState(0);
   //= ========================================================
-  let newContDistrito = 0;
+  let newContDistrito = 1;
   let newContCoord = 0;
 
   if (perfilUser.Funcao === 'PastorDistrito') {
@@ -113,13 +114,15 @@ function RelCelula({
   }
 
   if (perfilUser.Funcao === 'Coordenador') {
+    newContDistrito = 1;
+    newContCoord = 0;
     distritos.map((val, index) => {
       if (Number(val.Distrito) === Number(perfilUser.Distrito)) {
         newContDistrito = index + 1;
       }
       return 0;
     });
-    coordenacoes.map((val, index) => {
+    novaCoord.map((val, index) => {
       if (
         Number(val.Distrito) === Number(perfilUser.Distrito) &&
         Number(val.Coordenacao) === Number(perfilUser.Coordenacao)
@@ -131,14 +134,21 @@ function RelCelula({
   }
 
   if (perfilUser.Funcao === 'Supervisor') {
+    newContDistrito = 1;
+    newContCoord = 0;
+
     distritos.map((val, index) => {
       if (Number(val.Distrito) === Number(perfilUser.Distrito)) {
         newContDistrito = index + 1;
       }
       return 0;
     });
-    coordenacoes.map((val, index) => {
-      if (Number(val.Coordenacao) === Number(perfilUser.Coordenacao)) {
+
+    novaCoord.map((val, index) => {
+      if (
+        Number(val.Distrito) === Number(perfilUser.Distrito) &&
+        Number(val.Coordenacao) === Number(perfilUser.Coordenacao)
+      ) {
         newContCoord = index + 1;
       }
       return 0;
@@ -156,26 +166,28 @@ function RelCelula({
       }
       return 0;
     });
-    coordenacoes.map((val, index) => {
+    novaCoord.map((val, index) => {
       if (Number(val.Coordenacao) === Number(perfilUser.Coordenacao)) {
         newContCoord = index + 1;
       }
       return 0;
     });
   }
-  const [contNumeroDistrito, setContNumeroDistrito] =
-    React.useState(newContDistrito);
+  const [contNumeroDistrito, setContNumeroDistrito] = React.useState(
+    newContDistrito - 1,
+  );
+
   const [contNumeroCoord, setContNumeroCoord] = React.useState(newContCoord);
   const [coordF, setCoordF] = React.useState('inicio');
-
   const distritosT = distritos?.filter((val) => val.Status);
   const distritoF = [];
   distritosT.map((val) => distritoF.push(val));
 
   React.useEffect(() => {
-    const coordT = coordenacoes?.filter(
+    const coordT = novaCoord?.filter(
       (val) =>
         val.Status &&
+        distritoF[contNumeroDistrito] &&
         Number(val.Distrito) ===
           Number(distritoF[contNumeroDistrito].Distrito) &&
         val.Status,
@@ -192,33 +204,67 @@ function RelCelula({
 
   React.useEffect(() => {
     if (coordF !== 'inicio') {
-      if (Number(coordF[contNumeroCoord].Coordenacao) !== 0) {
-        const celulasF = celulas?.filter(
-          (val) =>
-            Number(val.Distrito) === Number(coordF[contNumeroCoord].Distrito) &&
-            Number(val.Coordenacao) ===
-              Number(coordF[contNumeroCoord].Coordenacao),
-        );
+      if (
+        Number(
+          coordF[contNumeroCoord] && coordF[contNumeroCoord].Coordenacao,
+        ) !== 0
+      ) {
+        if (perfilUser.Funcao === 'Supervisor') {
+          const celulasF = celulas?.filter(
+            (val) =>
+              coordF[contNumeroCoord] &&
+              Number(val.Distrito) ===
+                Number(coordF[contNumeroCoord].Distrito) &&
+              Number(val.Coordenacao) ===
+                Number(coordF[contNumeroCoord].Coordenacao) &&
+              Number(val.Supervisao) === Number(perfilUser.Supervisao),
+          );
 
-        const superF = supervisoes?.filter(
-          (val) =>
-            Number(val.Distrito) === Number(coordF[contNumeroCoord].Distrito) &&
-            Number(val.Coordenacao) ===
-              Number(coordF[contNumeroCoord].Coordenacao),
-        );
-        setCelulaSetor(celulasF);
-        setSetor(superF);
+          const superF = supervisoes?.filter(
+            (val) =>
+              coordF[contNumeroCoord] &&
+              Number(val.Distrito) ===
+                Number(coordF[contNumeroCoord].Distrito) &&
+              Number(val.Coordenacao) ===
+                Number(coordF[contNumeroCoord].Coordenacao) &&
+              Number(val.Supervisao) === Number(perfilUser.Supervisao),
+          );
+
+          setCelulaSetor(celulasF);
+          setSetor(superF);
+        } else {
+          const celulasF = celulas?.filter(
+            (val) =>
+              Number(val.Distrito) ===
+                Number(coordF[contNumeroCoord].Distrito) &&
+              Number(val.Coordenacao) ===
+                Number(coordF[contNumeroCoord].Coordenacao),
+          );
+
+          const superF = supervisoes?.filter(
+            (val) =>
+              Number(val.Distrito) ===
+                Number(coordF[contNumeroCoord].Distrito) &&
+              Number(val.Coordenacao) ===
+                Number(coordF[contNumeroCoord].Coordenacao),
+          );
+
+          setCelulaSetor(celulasF);
+          setSetor(superF);
+        }
       } else {
         const celulasF = celulas?.filter(
           (val) =>
+            distritoF[contNumeroDistrito] &&
             Number(val.Distrito) ===
-            Number(distritoF[contNumeroDistrito].Distrito),
+              Number(distritoF[contNumeroDistrito].Distrito),
         );
 
         const superF = supervisoes?.filter(
           (val) =>
+            distritoF[contNumeroDistrito] &&
             Number(val.Distrito) ===
-            Number(distritoF[contNumeroDistrito].Distrito),
+              Number(distritoF[contNumeroDistrito].Distrito),
         );
         setSetor(superF);
         setCelulaSetor(celulasF);
@@ -348,20 +394,6 @@ function RelCelula({
     const diaSemana = dataAtual.getDay();
 
     if (diaSemana !== 1 && diaSemana !== 2) handleDecSemana();
-    const contSemanaAtual = contSemana;
-    const ano2 = contAno;
-    let simple = PegaSemanaMes(new Date(ano2, 0, 1 + contSemanaAtual * 7));
-
-    if (Number(simple) < 1) {
-      simple = 5;
-    }
-    const diaF = PegaQuarta(contSemanaAtual, ano2).getDate();
-    const mesF = PegaQuarta(contSemanaAtual, ano2).getMonth();
-    const anoF = PegaQuarta(contSemanaAtual, ano2).getFullYear();
-    const diaFF = diaF > 9 ? diaF : `0${diaF}`;
-    const mesFF = mesF + 1 > 9 ? mesF + 1 : `0${mesF + 1}`;
-    const dtFinal = `${diaFF}/${mesFF}/${anoF}`;
-    setDataEnviada(dtFinal);
   }, []);
 
   return (
@@ -488,7 +520,9 @@ function RelCelula({
                     >
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-start"
                         alignItems="center"
                       >
@@ -510,15 +544,29 @@ function RelCelula({
                         alignItems="center"
                         sx={{ fontSize: '14px', fontFamily: 'arial black' }}
                       >
-                        <ThemeProvider theme={theme}>
-                          <Typography variant="h4">
-                            {distritoF[contNumeroDistrito].Distrito_Nome}
-                          </Typography>
-                        </ThemeProvider>
+                        {perfilUser.Funcao === 'Supervisor' ? (
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="h4">
+                              {setor.length &&
+                                setor[0] &&
+                                setor[0].Supervisao_Nome.toLocaleUpperCase()}
+                            </Typography>
+                          </ThemeProvider>
+                        ) : (
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="h4">
+                              {distritoF.length &&
+                                distritoF[contNumeroDistrito] &&
+                                distritoF[contNumeroDistrito].Distrito_Nome}
+                            </Typography>
+                          </ThemeProvider>
+                        )}
                       </Box>
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-end"
                         alignItems="center"
                       >
@@ -548,11 +596,15 @@ function RelCelula({
                       height={40}
                       bgcolor="#c5cae9"
                       width="100%"
-                      display="flex"
+                      display={
+                        perfilUser.Funcao !== 'Supervisor' ? 'flex' : 'none'
+                      }
                     >
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-start"
                         alignItems="center"
                       >
@@ -576,13 +628,17 @@ function RelCelula({
                       >
                         <ThemeProvider theme={theme}>
                           <Typography variant="h4">
-                            {coordF[contNumeroCoord].Coordenacao_Nome}
+                            {coordF.length &&
+                              coordF[contNumeroCoord] &&
+                              coordF[contNumeroCoord].Coordenacao_Nome}
                           </Typography>
                         </ThemeProvider>
                       </Box>
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-end"
                         alignItems="center"
                       >

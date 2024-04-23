@@ -279,7 +279,7 @@ function PlanMembro({ perfilUser, lideranca }) {
                     fontSize: '14px',
                   }}
                 >
-                  PLANEJAMENTO DAS CÉLULAS
+                  PLANEJAMENTO DAS CÉLULA
                 </Box>
                 <Box
                   height="85%"

@@ -878,17 +878,17 @@ export default function TabCelula({
 
       <Dialog fullScreen open={openPontuacao} TransitionComponent={Transition}>
         <CalcularPontuacao
-          pontos={pontosF}
-          celula={celula}
+          pontos={pontosF} // pontos da célula
+          celula={celula} // célula selecionada
           setOpenPontuacao={setOpenPontuacao}
-          perfilUser={numeroCelula[0]}
+          perfilUser={numeroCelula[0]} // celula filtrada da lista de celula
           parametros={parametros}
           supervisoes={supervisoes}
           coordenacoes={coordenacoes}
           distritos={distritos}
-          dataEnviada={dataEnviada}
-          celulaEnviada={celulaEnviada}
-          semanaEnviada={contSemana2}
+          dataEnviada={dataEnviada} // dd/mm/aaaa
+          celulaEnviada={celulaEnviada} // mesmo que os pontos
+          semanaEnviada={contSemana2} // semana do ano
           ano={Ano}
         />
       </Dialog>

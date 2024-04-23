@@ -48,18 +48,12 @@ const Notificacao = async (req, res) => {
           await prisma.$disconnect();
         });
       if (inscrito) {
-        const mensagem = `Compra realizada no valor de ${inscrito[0].Total},00 Reais. Pago no ${inscrito[0].Fpagamento} com status de ${mercadoPago.response.status}. Ticket gerado no nome de ${inscrito[0].Nome} e codigo de compra de: ${inscrito[0].idPagamento}. Acesse o link: https://www.sistemaidpb.com.br/eventoIdpb DIGITE SEU CPF e pressione MinhaCredencial para verificar sua inscrição e gerar sua Credencial. Obrigado por participar conosco desse grande Evento. `;
+        const mensagem = `Compra realizada no valor de ${inscrito[0].Total},00 Reais. Pago no ${inscrito[0].Fpagamento} com status de ${mercadoPago.response.status}. Ticket gerado no nome de ${inscrito[0].Nome} e codigo de compra de: ${inscrito[0].idPagamento}.Acesse o link e click em MINHA INSCRIÇÃO e Digite seu CPF e pressione Gerar Credencial para verificar sua inscrição. Obrigado por participar conosco desse grande Evento. `;
 
         const dadosEmail = {
           enviadoPor: 'cafinpi@gmail.com',
           mensagem,
           para: inscrito[0].Email,
-          assunto: mercadoPago.response.description,
-        };
-        const dadosEmail2 = {
-          enviadoPor: 'cafinpi@gmail.com',
-          mensagem,
-          para: 'idpbcb.tesourreiro@gmail.com',
           assunto: mercadoPago.response.description,
         };
 
@@ -79,7 +73,6 @@ const Notificacao = async (req, res) => {
           inscrito[0].status !== 'approved'
         ) {
           SendEmail(dadosEmail);
-          SendEmail(dadosEmail2);
         }
       }
 

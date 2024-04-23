@@ -12,6 +12,8 @@ import Meses from 'src/utils/mesesAbrev';
 import TamanhoJanela from 'src/utils/getSize';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import MostrarRelatorioGeral from './mostrarRelSuper';
 import TabRelSuperGeral from './tabRelSuper';
 import TabRelCoordGeral from './tabRelCoord';
@@ -21,7 +23,46 @@ const Transition = React.forwardRef((props, ref) => (
 ));
 //------------------------------------------
 const janela = TamanhoJanela();
-
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '9px',
+  '@media (min-width:350px)': {
+    fontSize: '10px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '14px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '16px',
+  },
+};
 const OrdenarCoordenacoes = (coordenacoesF) => {
   if (coordenacoesF.length && coordenacoesF !== 'inicio') {
     coordenacoesF.sort((a, b) => {
@@ -66,7 +107,7 @@ function RelCelula({
   if (perfilUser.Funcao === 'PastorDistrito') {
     distritos.map((val, index) => {
       if (Number(val.Distrito) === Number(perfilUser.Distrito)) {
-        newContDistrito = index + 1;
+        newContDistrito = index;
       }
       return 0;
     });
@@ -354,8 +395,12 @@ function RelCelula({
                           fontSize="16px"
                           sx={{ fontFamily: 'Fugaz One' }}
                         >
-                          {mes[contMes].descricao.toLocaleUpperCase()} /{' '}
-                          {contAno}
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="hs2">
+                              {mes[contMes].descricao.toLocaleUpperCase()} /{' '}
+                              {contAno}
+                            </Typography>
+                          </ThemeProvider>
                         </Box>
                       </Box>
                       <Box
@@ -391,7 +436,9 @@ function RelCelula({
                     >
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-start"
                         alignItems="center"
                       >
@@ -413,11 +460,18 @@ function RelCelula({
                         alignItems="center"
                         sx={{ fontSize: '14px', fontFamily: 'arial black' }}
                       >
-                        {distritoF[contNumeroDistrito].Distrito_Nome}
+                        {' '}
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs2">
+                            {distritoF[contNumeroDistrito].Distrito_Nome}
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
                       <Box
                         width="10%"
-                        display="flex"
+                        display={
+                          perfilUser.Funcao === 'Presidente' ? 'flex' : 'none'
+                        }
                         justifyContent="flex-end"
                         alignItems="center"
                       >
@@ -473,7 +527,11 @@ function RelCelula({
                         alignItems="center"
                         sx={{ fontSize: '14px', fontFamily: 'arial black' }}
                       >
-                        {coordF[contNumeroCoord].Coordenacao_Nome}
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs2">
+                            {coordF[contNumeroCoord].Coordenacao_Nome}
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
                       <Box
                         width="10%"
@@ -533,7 +591,11 @@ function RelCelula({
                         alignItems="center"
                         sx={{ fontSize: '14px', fontFamily: 'arial black' }}
                       >
-                        {tipo[contTipoRel]}
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs2">
+                            {tipo[contTipoRel].toLocaleUpperCase()}
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
                       <Box
                         width="10%"

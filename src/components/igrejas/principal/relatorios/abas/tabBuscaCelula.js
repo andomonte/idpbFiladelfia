@@ -18,12 +18,11 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { weekNumber } from 'weeknumber';
 import 'react-toastify/dist/ReactToastify.css';
 import Slide from '@mui/material/Slide';
-import CalcularPontuacao from './calcularPontuacao';
+
+import CalcularPontuacao from 'src/components/igrejas/principal/relatorios/feitoPeloLider/calcularPontuacao';
 import MostrarRelatorioCelula from './mostrarRelatorioCelula';
 import MostrarRelatorioCelebracao from './mostrarRelatorioCelebracao';
 import MostrarRelatorioDiscipulado from './mostrarRelatorioDiscipulado';
-
-
 
 const PegaSemana = (mes, ano) => {
   const valor = weekNumber(new Date(ano, mes, 5, 12)); // o 6 é quarta
@@ -61,9 +60,14 @@ function createPontuacaoFinal(
 export default function TabCelula({
   Mes,
   Ano,
+  celulas,
+  distritos,
+  coordenacoes,
+  supervisoes,
   perfilUser,
   visitantes,
   rolMembros,
+  parametros,
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
   const anoAtual = new Date().getFullYear();
@@ -79,7 +83,12 @@ export default function TabCelula({
   const [pontos, setPontos] = React.useState([]);
 
   const [celula, setCelula] = React.useState([]);
-
+  const numeroCelula = celulas.filter(
+    (val) =>
+      val.Celula === Number(perfilUser.Celula) &&
+      val.Coordenacao === Number(perfilUser.Coordenacao) &&
+      val.Distrito === Number(perfilUser.Distrito),
+  );
   // para usar semanas
 
   //  const dataEventoRef = React.useRef();
@@ -1221,7 +1230,6 @@ export default function TabCelula({
                 if (dataSem1Celebracao.CriadoPor) setCelula(dataSem1Celebracao);
                 if (dataSem1Discipulado.CriadoPor)
                   setCelula(dataSem1Discipulado);
-
                 setPontos(dataRSem1[0]);
               }}
             >
@@ -3586,11 +3594,61 @@ export default function TabCelula({
       </Dialog>
       <Dialog fullScreen open={openPontuacao} TransitionComponent={Transition}>
         <CalcularPontuacao
-          pontos={pontos}
-          celula={celula}
+          pontos={pontos} // pontos da célula
+          celula={celula} // célula selecionada
           setOpenPontuacao={setOpenPontuacao}
-          perfilUser={perfilUser}
+          perfilUser={numeroCelula[0]} // celula filtrada da lista de celula
+          parametros={parametros}
+          supervisoes={supervisoes.filter(
+            (val) =>
+              val.Distrito === Number(perfilUser.Distrito) &&
+              val.Coordenacao === Number(perfilUser.Coordenacao) &&
+              val.Supervisao === Number(perfilUser.Supervisao),
+          )}
+          coordenacoes={
+            coordenacoes.filter(
+              (val) =>
+                val.Distrito === Number(perfilUser.Distrito) &&
+                val.Coordenacao === Number(perfilUser.Coordenacao),
+            )[0]
+          }
+          distritos={
+            distritos.filter(
+              (val) => val.Distrito === Number(perfilUser.Distrito),
+            )[0]
+          }
+          dataEnviada={ConverteData2(celula.Data)} // dd/mm/aaaa
+          celulaEnviada={celula} // mesmo que os pontos
+          semanaEnviada={pontos.Semana} // semana do ano
+          ano={Ano}
         />
+        {console.log(
+          'pontos',
+          pontos,
+          parametros,
+          pontos.Semana,
+          ConverteData2(celula.Data),
+          celulas.filter(
+            (val) =>
+              val.Celula === Number(perfilUser.Celula) &&
+              val.Coordenacao === Number(perfilUser.Coordenacao) &&
+              val.Distrito === Number(perfilUser.Distrito),
+          ),
+        )}
+        {/* <CalcularPontuacao
+          pontos={pontos} // pontos da célula
+          celula={celula} // célula selecionada
+          setOpenPontuacao={setOpenPontuacao}
+          perfilUser={numeroCelula[0]} // celula filtrada da lista de celula
+          parametros={parametros}
+          supervisoes={supervisoes}
+          coordenacoes={coordenacoes}
+          distritos={distritos}
+          dataEnviada={convData2(celula.Data)} // dd/mm/aaaa
+          celulaEnviada={pontos} // mesmo que os pontos
+          semanaEnviada={pontos.Semana} // semana do ano
+          ano={Ano}
+        /> */}
       </Dialog>
     </Box>
   );

@@ -59,6 +59,38 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
   const [openNovoEventoGeral, setOpenNovoEventoGeral] = React.useState(false);
   const [sendResumo, setSendResumo] = React.useState(false);
   const [dadosEvento, setDadosEvento] = React.useState(false);
+  const tipo = ['Igreja', 'Distrito', 'Coordenação', 'Supervisão', 'Célula'];
+  const [contTipo, setContTipo] = React.useState(0);
+  const [editar, setEditar] = React.useState(false);
+
+  React.useEffect(() => {
+    let newEdit = false;
+    if (perfilUser.Funcao === 'Supervisor' && tipo[contTipo] === 'Supervisão')
+      newEdit = true;
+    if (perfilUser.Funcao === 'Coordenador' && tipo[contTipo] === 'Coordenação')
+      newEdit = true;
+    if (perfilUser.Funcao === 'PastorDistrito' && tipo[contTipo] === 'Distrito')
+      newEdit = true;
+    setEditar(newEdit);
+    return 0;
+  }, [tipo]);
+
+  const handleIncTipo = () => {
+    let contTipoAtual = contTipo + 1;
+
+    if (contTipoAtual > tipo.length - 1) {
+      contTipoAtual = 0;
+    }
+    setContTipo(contTipoAtual);
+  };
+  const handleDecTipo = () => {
+    let contTipoAtual = contTipo - 1;
+
+    if (contTipoAtual < 0) {
+      contTipoAtual = tipo.length - 1;
+    }
+    setContTipo(contTipoAtual);
+  };
 
   const handleIncAno = () => {
     let contAnoAtual = contAno + 1;
@@ -114,7 +146,7 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
           bgcolor={corIgreja.principal} // cor principal tela inteira
         >
           {!sendResumo ? (
-            <Box height="100%" width="100%">
+            <Box height="96%" width="100%">
               <Box height="100%">
                 <Box
                   height="100%"
@@ -128,7 +160,58 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                   }}
                 >
                   <Box
-                    height="20%"
+                    borderRadius={5}
+                    height={40}
+                    bgcolor="white"
+                    width="96%"
+                    display="flex"
+                  >
+                    <Box
+                      width="20%"
+                      display="flex"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                    >
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                        onClick={() => {
+                          handleDecTipo();
+                        }}
+                      >
+                        <BiCaretLeft size={35} color={corIgreja.principal2} />
+                      </IconButton>
+                    </Box>
+                    <Box
+                      width="100%"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      sx={{ fontSize: '14px', fontFamily: 'arial black' }}
+                    >
+                      Eventos - {tipo[contTipo]}
+                    </Box>
+                    <Box
+                      width="10%"
+                      display="flex"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                        onClick={() => {
+                          handleIncTipo();
+                        }}
+                      >
+                        <BiCaretRight size={35} color={corIgreja.principal2} />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                  <Box
+                    height="15%"
                     width="100%"
                     minWidth={300}
                     display="flex"
@@ -139,10 +222,11 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                       <Box ml={2} color="white">
                         Selecione o Mês
                       </Box>
+                      {console.log('perfilUser', perfilUser)}
                       <Grid container item xs={12} spacing={1}>
-                        <Grid item xs={8}>
+                        <Grid item xs={perfilUser.Funcao !== 'Membro' ? 8 : 12}>
                           <Paper width="100%" className={classes.paper}>
-                            <Box width="100%" height={40} display="flex">
+                            <Box width="100%" height={25} display="flex">
                               <Box
                                 width="20%"
                                 display="flex"
@@ -200,7 +284,14 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                             </Box>
                           </Paper>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid
+                          style={{
+                            display:
+                              perfilUser.Funcao !== 'Membro' ? 'flex' : 'none',
+                          }}
+                          item
+                          xs={4}
+                        >
                           <Button
                             style={{
                               background: '#f0f0f0',
@@ -234,43 +325,12 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                     alignItems="center"
                     minHeight={390}
                     width="100%"
-                    bgcolor={corIgreja.principal}
                     borderTop="2px solid #fff"
                   >
                     <Box width="95%" height="100%">
                       <Box
-                        height="10%"
-                        minHeight={50}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{
-                          bgcolor: corIgreja.principal,
-                          color: '#ffff',
-                          fontFamily: 'Fugaz One',
-                          fontSize: '16px',
-                        }}
-                      >
-                        {perfilUser.Funcao === 'Supervisor' && (
-                          <Box>EVENTO DO SETOR {perfilUser.Supervisao}</Box>
-                        )}
-                        {perfilUser.Funcao === 'Coordenador' && (
-                          <Box>
-                            EVENTO DA COORDENAÇÃO {perfilUser.Coordenacao}
-                          </Box>
-                        )}
-                        {perfilUser.Funcao === 'PastorDistrito' && (
-                          <Box>EVENTO DO DISTRITO {perfilUser.Distrito}</Box>
-                        )}
-                        {(perfilUser.Funcao === 'Presidente' ||
-                          perfilUser.Funcao === 'Secretaria') && (
-                          <Box>EVENTO DA IGREJA</Box>
-                        )}
-                      </Box>
-                      <Box
-                        height="85%"
+                        height="100%"
                         minHeight={315}
-                        bgcolor="#fafafa"
                         width="100%"
                         borderRadius={16}
                       >
@@ -282,6 +342,10 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
                           setSendResumo={setSendResumo}
                           setDadosEvento={setDadosEvento}
                           celulas={celulas}
+                          tipo={tipo[contTipo]}
+                          dadosEvento={dadosEvento}
+                          editar={editar}
+                          setOpenNovoEventoGeral={setOpenNovoEventoGeral}
                         />
                       </Box>
                     </Box>
@@ -303,13 +367,28 @@ function PlanMembro({ perfilUser, lideranca, celulas }) {
           )}
         </Box>
       ) : (
-        <NovoEventoGeral
-          perfilUser={perfilUser}
-          setOpenNovoEventoGeral={setOpenNovoEventoGeral}
-          lideranca={lideranca}
-          Mes={contMes}
-          Ano={contAno}
-        />
+        <Box>
+          {editar ? (
+            <NovoEventoGeral
+              perfilUser={perfilUser}
+              setOpenNovoEventoGeral={setOpenNovoEventoGeral}
+              setSendResumo={setSendResumo}
+              lideranca={lideranca}
+              Mes={contMes}
+              Ano={contAno}
+              dadosEvento={dadosEvento}
+            />
+          ) : (
+            <NovoEventoGeral
+              perfilUser={perfilUser}
+              setOpenNovoEventoGeral={setOpenNovoEventoGeral}
+              setSendResumo={setSendResumo}
+              lideranca={lideranca}
+              Mes={contMes}
+              Ano={contAno}
+            />
+          )}
+        </Box>
       )}
     </Box>
   );

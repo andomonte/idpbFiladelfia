@@ -29,7 +29,7 @@ const handler = async (req, res) => {
 
   const paymentData = {
     transaction_amount: Number(req.body.transactionAmount),
-    notification_url: 'https://www.idpbfiladelfia.com.br/api/notification',
+    notification_url: 'https://www.idpbcastelo.com.br/api/notification',
     description: req.body.description,
     payment_method_id: req.body.paymentMethodId,
     date_of_expiration: expirationDate,
