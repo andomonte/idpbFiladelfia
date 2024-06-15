@@ -307,7 +307,7 @@ export default function Todos({
   cursosCadastrados,
 }) {
   const classes = useStyles();
-  const preRequisitos = cursosCadastrados.filter(
+  const preRequisitos = cursosCadastrados?.filter(
     (val) => val.codigoCurso === eventoEscolhido[0].Requisito,
   );
 
@@ -329,7 +329,7 @@ export default function Todos({
     label: 'Qual o seu Nome?',
     value: 'Informar',
   };
-  const listaNomes = rolMembros.map((rol) =>
+  const listaNomes = rolMembros?.map((rol) =>
     createListaNome(rol.RolMembro, rol.Nome),
   );
   const [info, setInfo] = React.useState('');
@@ -497,7 +497,7 @@ export default function Todos({
     // const nomesMembros = JSON.parse(RelCelulaFinal.NomesMembros);
   };
   React.useEffect(() => {
-    const dadosUser2 = rolMembros.filter(
+    const dadosUser2 = rolMembros?.filter(
       (val) => Number(val.RolMembro) === Number(nomeMembros.value),
     );
 

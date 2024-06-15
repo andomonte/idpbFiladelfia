@@ -22,6 +22,7 @@ import corIgreja from 'src/utils/coresIgreja';
 
 import Cursos from './cursos';
 import MeusCursos from './meusCursos';
+
 // const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   rootTopbarIcon: {
@@ -148,7 +149,6 @@ function CursosIndex({ title, rolMembros, perfilUser }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="content-language" content="pt-Br" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div>

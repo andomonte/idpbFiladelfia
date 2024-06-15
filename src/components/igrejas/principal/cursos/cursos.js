@@ -1,15 +1,55 @@
-import { Box, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import Paper from '@mui/material/Paper';
 import React from 'react';
 import corIgreja from 'src/utils/coresIgreja';
 import useSWR from 'swr';
 import axios from 'axios';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requer um carregador
-import { Carousel } from 'react-responsive-carousel';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
-import ConverterData from 'src/utils/convData2';
 import TableContainer from '@mui/material/TableContainer';
+import Avatar from '@mui/material/Avatar';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import Inscricoes from './inscricoes';
+
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '10px',
+  '@media (min-width:350px)': {
+    fontSize: '11px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '16px',
+  },
+};
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
@@ -19,7 +59,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data);
 function Eventos({ perfilUser, rolMembros }) {
   //  const eventoIni = consultaInscricoes.filter((val) => Number(val.id) === Number(0));
 
-  const [todos, setTodos] = React.useState('');
+  const [todos, setTodos] = React.useState([]);
   const [cursosCadastrados, setCursosCadastrados] = React.useState('');
   const [openPlan, setOpenPlan] = React.useState(false);
   const [eventoEscolhido, setEventoEscolhido] = React.useState('');
@@ -68,11 +108,12 @@ function Eventos({ perfilUser, rolMembros }) {
     return 0;
   }, [data2]);
 
-  const handleIncricao = (index) => {
+  const handleInscricao = (index) => {
     setOpenPlan(true);
     const evento = todos.filter(
       (val) => Number(val.codigoCurso) === Number(index),
     );
+
     setEventoEscolhido(evento);
   };
 
@@ -87,227 +128,100 @@ function Eventos({ perfilUser, rolMembros }) {
       bgcolor={corIgreja.principal2}
       height="calc(100vh - 56px)"
     >
-      <Box
-        height="97%"
-        width="100%"
-        bgcolor="white"
-        ml={1.2}
-        mr={1.2}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        borderRadius={16}
+      <Paper
+        sx={{
+          background: '#f0f0f0',
+          width: '100%',
+          height: 'calc(100%)',
+          marginTop: 0,
+          overflow: 'hidden',
+          borderRadius: 5,
+        }}
       >
-        <Box height="100%" width="96%">
-          {todos.length ? (
-            <Box height="100%" width="100%">
-              <Carousel showThumbs={false} showStatus={false}>
-                {todos.map((row) => (
-                  <Box key={row.idTurma} height="90vh" width="100%" mt={0}>
-                    <TableContainer
-                      style={{
-                        height: '100%',
-                        minHeight: 200,
-                        marginTop: 0,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box height="96%" width="100%">
-                        <Box
-                          height="100%"
-                          width="100%"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          flexDirection="column"
-                        >
-                          {row.imagemCurso && (
-                            <img
-                              style={{ borderRadius: '16px' }}
-                              src={row.imagemCurso}
-                              width="auto"
-                              alt="imagem"
-                            />
-                          )}
-
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            flexDirection="column"
-                            width="100%"
-                            bgcolor="black"
-                            mt={5}
-                            borderRadius={16}
-                          >
-                            <Box
-                              mt={3}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              width="100%"
-                              height="50%"
-                              fontSize="20px"
-                              color="black"
-                            >
-                              <Box
-                                width="30%"
-                                height="100%"
-                                fontSize="14px"
-                                color="yellow"
-                                textAlign="end"
-                              >
-                                Curso:
-                              </Box>
-                              <Box
-                                textAlign="start"
-                                width="70%"
-                                height="100%"
-                                fontSize="14px"
-                                color="white"
-                                ml={1}
-                              >
-                                {' '}
-                                {row.Curso}
-                              </Box>
+        <TableContainer sx={{ height: '100%' }}>
+          {todos?.map((row, index) => (
+            <Box
+              mt={3}
+              //            bgcolor={Object.keys(respostas).length && respostas[index]}
+              display="flex"
+              alignItems="center"
+              key={index}
+            >
+              <Box ml={0.5} display="flex" alignItems="center">
+                <Avatar
+                  alt="User"
+                  src={row.imagemCurso}
+                  sx={{
+                    width: '20vw',
+                    maxWidth: 100,
+                    height: '20vw',
+                    maxHeight: 100,
+                  }}
+                >
+                  {row.imagemCurso ? row.imagemCurso : index + 1}
+                </Avatar>
+              </Box>
+              <Box mt={index === 0 ? 2 : 1} ml={-2} mb={index === 0 ? 1 : 0}>
+                <Box mt={0} ml={2}>
+                  <Box fontFamily="Fugaz One" mt={0} ml={2} display="flex">
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="hs2">
+                        {row.Curso ? row.Curso.toLocaleUpperCase() : null}
+                      </Typography>
+                    </ThemeProvider>
+                  </Box>
+                  <Box ml={2} display="flex">
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="hs3">
+                        <Box>
+                          <Box display="flex" color={corIgreja.principal2}>
+                            <Box color="#1a237e" ml={0} fontFamily="Fugaz One">
+                              Valor:{' '}
+                              {Number(row.valor).toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL',
+                              })}
                             </Box>
-                            <Box
-                              mt={3}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              width="100%"
-                              height="50%"
-                              fontSize="20px"
-                            >
-                              <Box
-                                width="30%"
-                                height="100%"
-                                fontSize="14px"
-                                color="yellow"
-                                textAlign="end"
-                              >
-                                Início:
-                              </Box>
-                              <Box
-                                textAlign="start"
-                                width="30%"
-                                height="100%"
-                                fontSize="14px"
-                                color="white"
-                                ml={1}
-                              >
-                                {ConverterData(row.DataCurso)}
-                              </Box>
-                              <Box
-                                width="20%"
-                                height="100%"
-                                fontSize="14px"
-                                color="yellow"
-                                textAlign="end"
-                              >
-                                Turma:
-                              </Box>
-                              <Box
-                                textAlign="start"
-                                width="20%"
-                                height="100%"
-                                fontSize="14px"
-                                color="white"
-                                ml={1}
-                              >
-                                {row.idTurma}
-                              </Box>
-                            </Box>
-                            <Box
-                              mt={3}
-                              mb={3}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              width="100%"
-                              height="50%"
-                              fontSize="20px"
-                              color="black"
-                            >
-                              <Box
-                                width="30%"
-                                height="100%"
-                                fontSize="14px"
-                                color="yellow"
-                                textAlign="end"
-                              >
-                                Prof.:
-                              </Box>
-                              <Box
-                                textAlign="start"
-                                width="70%"
-                                height="100%"
-                                fontSize="14px"
-                                color="white"
-                                ml={1}
-                              >
-                                {row.Professor.length > 20
-                                  ? `${row.Professor.substring(
-                                      0,
-                                      row.Professor.lastIndexOf(' '),
-                                    )}...`
-                                  : row.Professor}
-                              </Box>
-                            </Box>
-                          </Box>
-                          <Box
-                            display="display"
-                            mt="2vh"
-                            width="100%"
-                            height="13%"
-                          >
-                            <Button
-                              style={{
-                                background: 'blue',
-                                color: 'white',
-                                fontFamily: 'Fugaz One',
-                                fontSize: '18px',
-                                width: '90%',
-                                maxWidth: 300,
-                                height: '70%',
-                                borderRadius: 16,
-                              }}
-                              component="a"
-                              variant="contained"
-                              onClick={() => {
-                                handleIncricao(row.codigoCurso);
-                              }}
-                            >
-                              FAZER INSCRIÇÃO
-                            </Button>
                           </Box>
                         </Box>
-                      </Box>
-                    </TableContainer>
+                      </Typography>
+                    </ThemeProvider>
                   </Box>
-                ))}
-              </Carousel>
+
+                  <Box
+                    width="100%"
+                    mt={1}
+                    mb={0}
+                    display="flex"
+                    justifyContent="flex-start"
+                    ml={0}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="hs2">
+                        <Box
+                          ml={2}
+                          mt={0}
+                          onClick={() => {
+                            handleInscricao(row.codigoCurso);
+                          }}
+                          style={{
+                            width: '100%',
+                            color: 'blue',
+                            fontFamily: 'Fugaz One',
+                          }}
+                          sx={{ cursor: 'pointer' }}
+                        >
+                          VER MINHA INSCRIÇÃO
+                        </Box>
+                      </Typography>
+                    </ThemeProvider>
+                  </Box>
+                </Box>
+              </Box>
             </Box>
-          ) : (
-            <Box
-              width="100%"
-              height="80%"
-              fontFamily="Fugaz One"
-              fontSize="18px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              color="black"
-            >
-              NENHUM CURSO NESSE PERÍODO
-            </Box>
-          )}
-        </Box>
-      </Box>
+          ))}
+        </TableContainer>
+      </Paper>
 
       <Dialog fullScreen open={openPlan} TransitionComponent={Transition}>
         <Inscricoes
