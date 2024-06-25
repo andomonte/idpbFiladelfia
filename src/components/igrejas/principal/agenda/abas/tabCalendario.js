@@ -4,14 +4,54 @@ import { Box, Button } from '@material-ui/core';
 import Espera from 'src/utils/espera';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
-
+// import Avatar from '@mui/material/Avatar';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import corIgreja from 'src/utils/coresIgreja';
 import IconButton from '@mui/material/IconButton';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
-import ConvData2 from 'src/utils/convData2';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+
+const theme = createTheme();
+theme.typography.hs4 = {
+  fontWeight: 'normal',
+  fontSize: '10px',
+  '@media (min-width:350px)': {
+    fontSize: '11px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '12px',
+  },
+};
+theme.typography.hs3 = {
+  fontWeight: 'normal',
+  fontSize: '12px',
+  '@media (min-width:350px)': {
+    fontSize: '13px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '14px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '15px',
+  },
+};
+theme.typography.hs2 = {
+  fontWeight: 'normal',
+  fontSize: '14px',
+  '@media (min-width:350px)': {
+    fontSize: '15px',
+  },
+  '@media (min-width:400px)': {
+    fontSize: '16px',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '18px',
+  },
+};
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
@@ -26,8 +66,54 @@ function createListaEventos(Dia, Quem, Numero) {
     Numero,
   };
 }
-export default function TabCelula({ Mes, Ano }) {
-  // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
+function createListaE(
+  Ano,
+  Data,
+  Distrito,
+  Evento,
+  Funcao,
+  Horario,
+  Local,
+  Mes,
+  Numero,
+  Objetivo,
+  Publico,
+  id,
+  Responsavel,
+  ordenar,
+) {
+  return {
+    Ano,
+    Data,
+    Distrito,
+    Evento,
+    Funcao,
+    Horario,
+    Local,
+    Mes,
+    Numero,
+    Objetivo,
+    Publico,
+    id,
+    Responsavel,
+    ordenar,
+  };
+}
+function compare2(a) {
+  const horarioA =
+    Number(a.Horario.slice(0, 2)) + Number(a.Horario.slice(3, 5)) / 60;
+
+  return horarioA;
+}
+
+export default function TabCelula({
+  Mes,
+  Ano,
+  distritos,
+  coordenacoes,
+  supervisoes,
+}) {
+  // const dados = nomesCelulas?.map((row) => createData(row.Nome, true));
 
   const [openShowPlan, setOpenShowPlan] = React.useState(false);
   const [eventoPlanejado, setEventoPlanejado] = React.useState('inicio');
@@ -36,6 +122,7 @@ export default function TabCelula({ Mes, Ano }) {
   const [listaEventos, setListaEventos] = React.useState('inicio');
 
   const [mostrarEvento, setMostrarEvento] = React.useState(false);
+  const [eventoOrdenado, setEventoOrdenado] = React.useState(false);
 
   const url1 = `/api/consultaEventos/${Mes}/${Ano}`;
 
@@ -49,12 +136,47 @@ export default function TabCelula({ Mes, Ano }) {
 
   const handleShow = (index) => {
     const diaParcial = Number(eventoPlanejado[index].Dia);
-    const diaMostrado = listaEventos.filter(
+    const diaMostrado = listaEventos?.filter(
       (val) => Number(val.Data.slice(8, 10)) === Number(diaParcial),
     );
     setOpenShowPlan(true);
     setMostrarEvento(diaMostrado);
   };
+
+  React.useEffect(() => {
+    if (mostrarEvento) {
+      const newArray = [];
+      mostrarEvento?.map((val) => {
+        newArray.push(
+          createListaE(
+            val.Ano,
+            val.Data,
+            val.Distrito,
+            val.Evento,
+            val.Funcao,
+            val.Horario,
+            val.Local,
+            val.Mes,
+            val.Numero,
+            val.Objetivo,
+            val.Publico,
+            val.id,
+            val.Responsavel,
+            compare2(val),
+          ),
+        );
+        return 0;
+      });
+
+      setEventoOrdenado(
+        newArray?.sort((a, b) => {
+          if (Number(a.ordenar) > Number(b.ordenar)) return 1;
+          if (Number(b.ordenar) > Number(a.ordenar)) return -1;
+          return 0;
+        }),
+      );
+    }
+  }, [mostrarEvento]);
 
   //= ========================================================================
 
@@ -71,20 +193,8 @@ export default function TabCelula({ Mes, Ano }) {
       bgcolor={corIgreja.principal}
     >
       <Box
-        width="100%"
-        height={50}
-        justifyContent="center"
-        display="flex"
-        alignItems="center"
-        color="white"
-        fontSize="16px"
-        fontFamily="arial black"
-      >
-        <img src={corIgreja.logo} alt="logo" height={60} />
-      </Box>
-      <Box
         mt={2}
-        height="70%"
+        height="100%"
         width="94%"
         display="flex"
         justifyContent="center"
@@ -94,7 +204,7 @@ export default function TabCelula({ Mes, Ano }) {
           borderRadius: '10px',
         }}
       >
-        {mostrarEvento && (
+        {eventoOrdenado && (
           <Box
             height="90vh"
             width="96%"
@@ -103,179 +213,261 @@ export default function TabCelula({ Mes, Ano }) {
             alignItems="center"
             flexDirection="column"
           >
-            <TableContainer sx={{ maxHeight: 410 }}>
-              {mostrarEvento.map((row, index) => (
+            <TableContainer sx={{ height: '100%' }}>
+              {eventoOrdenado?.map((row, index) => (
                 <Box
-                  width="100%"
-                  key={row.id}
-                  height={250}
-                  bgcolor={corIgreja.principal2}
-                  borderRadius={16}
-                  mt={2}
+                  mt={3}
+                  //            bgcolor={Object.keys(respostas).length && respostas[index]}
+                  display="flex"
+                  alignItems="center"
+                  key={index}
+                  color="white"
                 >
-                  <Box
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial black"
-                    fontSize="14px"
-                  >
+                  <Box ml={0} display="flex" alignItems="center">
                     <Box
+                      display="flex"
+                      alignItems="center"
                       justifyContent="center"
-                      width="100%"
-                      display="flex"
-                      alignItems="center"
-                      mt={2}
+                      borderRadius={16}
+                      alt="User"
+                      sx={{
+                        width: '20vw',
+                        maxWidth: 100,
+                        height: '15vw',
+                        maxHeight: 150,
+                        background: '#f0f0f0',
+                      }}
                     >
-                      <Box>EVENTO {index + 1}</Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    mt={0}
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="12px"
-                  >
-                    <Box
-                      width="100%"
-                      display="flex"
-                      alignItems="center"
-                      mt={2}
-                      ml={5}
-                    >
-                      <Box
-                        display="flex"
-                        justifyContent="flex-start"
-                        color="white"
-                      >
-                        Data do Evento:
-                      </Box>
-                    </Box>
-                    <Box width="100%" mt={2} mr="4vw">
-                      <Box
-                        display="flex"
-                        justifyContent="flex-end"
-                        color="white"
-                      >
-                        Horaário do Evento:
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="12px"
-                  >
-                    <Box width="100%" display="flex" alignItems="center" mt={2}>
-                      <Box
-                        display="flex"
-                        ml={5}
-                        mt={-1}
-                        justifyContent="flex-start"
-                        color="white"
-                        fontSize="16px"
-                      >
-                        {ConvData2(mostrarEvento[index].Data)}
-                      </Box>
-                    </Box>
-                    <Box width="100%" mt={2} mr="8vw">
-                      <Box
-                        display="flex"
-                        mt={-1}
-                        justifyContent="flex-end"
-                        color="white"
-                        fontSize="16px"
-                      >
-                        {mostrarEvento[index].Horario}
+                      <Box>
+                        <Box
+                          textAlign="center"
+                          color={corIgreja.principal}
+                          fontFamily="arial"
+                        >
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="hs2">Dia</Typography>
+                          </ThemeProvider>
+                        </Box>
+                        <Box
+                          textAlign="center"
+                          color={corIgreja.principal}
+                          fontFamily="arial black"
+                        >
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="hs2">
+                              {row.Data ? row.Data.substring(8, 10) : ''}
+                            </Typography>
+                          </ThemeProvider>
+                        </Box>
+
+                        <Box
+                          textAlign="center"
+                          color={corIgreja.principal}
+                          fontFamily="arial"
+                        >
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="hs3">Hora</Typography>
+                          </ThemeProvider>
+                        </Box>
+                        <Box
+                          mt={0}
+                          fontFamily="arial black"
+                          color={corIgreja.principal2}
+                        >
+                          <ThemeProvider theme={theme}>
+                            <Typography variant="hs3">
+                              {row.Horario ? row.Horario : ''}
+                            </Typography>
+                          </ThemeProvider>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                  <Box
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="12px"
-                  >
-                    <Box
-                      width="100%"
-                      height={50}
-                      bgcolor="white"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      mt={2}
-                    >
-                      <Box
-                        display="flex"
-                        mt={0}
-                        justifyContent="center"
-                        color="black"
-                        fontSize="18px"
-                        fontFamily="Fugaz One"
-                      >
-                        {mostrarEvento[index].Evento}
+                  <Box ml={1} height="100%">
+                    <Box mt={0} ml={0}>
+                      <Box display="flex">
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs3">
+                            <Box>
+                              <Box display="flex">
+                                <Box display="flex" color="#f0f0f0">
+                                  <Box mt={0.2} fontFamily="Fugaz One">
+                                    {row.Evento
+                                      ? row.Evento.toLocaleUpperCase()
+                                      : null}
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    mt={0}
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="12px"
-                  >
-                    <Box
-                      width="100%"
-                      display="flex"
-                      alignItems="center"
-                      mt={2}
-                      ml={5}
-                    >
-                      <Box
-                        display="flex"
-                        justifyContent="flex-start"
-                        color="white"
-                      >
-                        Para Quem:
+                      <Box ml={0} display="flex">
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs3">
+                            <Box>
+                              <Box display="flex">
+                                <Box
+                                  mt={0.5}
+                                  ml={0}
+                                  fontSize={10}
+                                  fontFamily="Fugaz One"
+                                  color={corIgreja.texto2}
+                                >
+                                  LOCAL:
+                                </Box>
+                                <Box display="flex" color="#f0f0f0">
+                                  <Box ml={1} mt={0.2} fontFamily="Fugaz One">
+                                    {row.Local.toLocaleUpperCase()}
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    mt={2}
-                    color="white"
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    fontFamily="arial "
-                    fontSize="16px"
-                  >
-                    <Box
-                      width="100%"
-                      display="flex"
-                      alignItems="center"
-                      mt={-1}
-                      justifyContent="center"
-                    >
-                      <Box
-                        fontFamily="arial black"
-                        display="flex"
-                        justifyContent="flex-start"
-                        color="white"
-                      >
-                        {mostrarEvento[index].Publico}{' '}
-                        {mostrarEvento[index].Numero !== 0
-                          ? mostrarEvento[index].Numero
-                          : ''}
+                      <Box ml={0} display="flex">
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs3">
+                            <Box>
+                              <Box display="flex">
+                                <Box
+                                  mt={0.5}
+                                  ml={0}
+                                  fontSize={10}
+                                  fontFamily="Fugaz One"
+                                  color={corIgreja.texto2}
+                                >
+                                  PÚBLICO:
+                                </Box>
+                                <Box
+                                  display={
+                                    row.Publico === 'Distrito' ? 'flex' : 'none'
+                                  }
+                                  color="#f0f0f0"
+                                >
+                                  <Box ml={1} mt={0.2} fontFamily="Fugaz One">
+                                    {row.Publico !== 'Igreja' ? (
+                                      <Box ml={0} fontFamily="Fugaz One">
+                                        {distritos?.filter(
+                                          (valD) =>
+                                            valD.Distrito === row.Numero,
+                                        ).length
+                                          ? distritos
+                                              .filter(
+                                                (valD) =>
+                                                  valD.Distrito === row.Numero,
+                                              )[0]
+                                              .Distrito_Nome.toLocaleUpperCase()
+                                          : row.Publico.toLocaleUpperCase()}
+                                      </Box>
+                                    ) : (
+                                      row.Publico.toLocaleUpperCase()
+                                    )}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  display={
+                                    row.Publico === 'Coordenação'
+                                      ? 'flex'
+                                      : 'none'
+                                  }
+                                  color="#f0f0f0"
+                                >
+                                  <Box ml={1} mt={0.2} fontFamily="Fugaz One">
+                                    {row.Publico !== 'Igreja' ? (
+                                      <Box ml={0} fontFamily="Fugaz One">
+                                        {coordenacoes?.filter(
+                                          (valD) =>
+                                            valD.Coordenacao === row.Numero,
+                                        ).length
+                                          ? coordenacoes
+                                              ?.filter(
+                                                (valD) =>
+                                                  valD.Coordenacao ===
+                                                  row.Numero,
+                                              )[0]
+                                              .Coordenacao_Nome.toLocaleUpperCase()
+                                          : row.Publico.toLocaleUpperCase()}
+                                      </Box>
+                                    ) : (
+                                      row.Publico.toLocaleUpperCase()
+                                    )}
+                                  </Box>
+                                </Box>
+
+                                <Box
+                                  display={
+                                    row.Publico === 'Supervisão'
+                                      ? 'flex'
+                                      : 'none'
+                                  }
+                                  color="#f0f0f0"
+                                >
+                                  <Box ml={1} mt={0.2} fontFamily="Fugaz One">
+                                    {row.Publico !== 'Igreja' ? (
+                                      <Box ml={0} fontFamily="Fugaz One">
+                                        {supervisoes?.filter(
+                                          (valD) =>
+                                            valD.Supervisao === row.Numero,
+                                        ).length
+                                          ? supervisoes
+                                              ?.filter(
+                                                (valD) =>
+                                                  valD.Supervisao ===
+                                                  row.Numero,
+                                              )[0]
+                                              .Supervisao_Nome.toLocaleUpperCase()
+                                          : row.Publico.toLocaleUpperCase()}
+                                      </Box>
+                                    ) : (
+                                      row.Publico.toLocaleUpperCase()
+                                    )}
+                                  </Box>
+                                </Box>
+
+                                <Box
+                                  ml={1}
+                                  mt={0.2}
+                                  display={
+                                    row.Publico === 'Igreja' ? 'flex' : 'none'
+                                  }
+                                  color="#f0f0f0"
+                                >
+                                  {row.Publico.toLocaleUpperCase()}
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Typography>
+                        </ThemeProvider>
+                      </Box>
+
+                      <Box ml={0} display="flex">
+                        <ThemeProvider theme={theme}>
+                          <Typography variant="hs3">
+                            <Box>
+                              <Box display="flex">
+                                <Box
+                                  mt={0.5}
+                                  ml={0}
+                                  fontSize={10}
+                                  fontFamily="Fugaz One"
+                                  color={corIgreja.texto2}
+                                >
+                                  RESP.:
+                                </Box>
+
+                                <Box display="flex" color="#f0f0f0">
+                                  <Box ml={1} mt={0.2} fontFamily="Fugaz One">
+                                    {row.Responsavel
+                                      ? row.Responsavel.toLocaleUpperCase()
+                                      : ''}
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Typography>
+                        </ThemeProvider>
                       </Box>
                     </Box>
                   </Box>
@@ -287,10 +479,11 @@ export default function TabCelula({ Mes, Ano }) {
       </Box>
       <Button
         style={{
-          background: 'green',
+          background: corIgreja.button2,
           color: 'white',
           marginTop: 20,
           width: '80%',
+          marginBottom: 20,
         }}
         onClick={() => setOpenShowPlan(false)}
         variant="contained"
@@ -327,7 +520,7 @@ export default function TabCelula({ Mes, Ano }) {
     contDias += 1;
   }
   React.useEffect(() => {
-    const eventoParcial = calendario.map((row) =>
+    const eventoParcial = calendario?.map((row) =>
       createListaEventos(row.Dia, '-', '-'),
     );
     setEventoPlanejadoParcial(eventoParcial);

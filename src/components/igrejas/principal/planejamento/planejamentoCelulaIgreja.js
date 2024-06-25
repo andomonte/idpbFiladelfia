@@ -10,8 +10,6 @@ import Meses from 'src/utils/mesesAbrev';
 
 import TabCelulaSuper from './abas/tabCelulaSuper';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,

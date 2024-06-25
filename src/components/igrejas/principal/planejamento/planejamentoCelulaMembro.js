@@ -9,8 +9,6 @@ import { BiCaretLeft, BiCaretRight } from 'react-icons/bi';
 import Meses from 'src/utils/meses';
 import TabCelula from './abas/tabCelula';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,

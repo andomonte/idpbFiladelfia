@@ -14,7 +14,7 @@ const handler = async (req, res) => {
           where: {
             AND: {
               RolMembro: dados.RolMembro,
-              idEvento: Number(dados.idEvento),
+              idTurma: Number(dados.idTurma),
               Documento: dados.Documento,
             },
           },
@@ -32,7 +32,7 @@ const handler = async (req, res) => {
     }
     if (id !== 0) {
       try {
-        await prisma.inscritosEventosGeral
+        await prisma.inscritosCursos
           .update({
             where: {
               id,
@@ -51,7 +51,7 @@ const handler = async (req, res) => {
       }
     } else {
       try {
-        await prisma.inscritosEventosGeral
+        await prisma.inscritosCursos
           .create({
             data: {
               ...dados,

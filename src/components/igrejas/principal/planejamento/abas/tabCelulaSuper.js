@@ -15,8 +15,6 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import ConverteData2 from 'src/utils/convData2';
 
-
-
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
 ));

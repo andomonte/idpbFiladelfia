@@ -21,8 +21,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Slide from '@mui/material/Slide';
 import FazerPlanCelula from './mostrarPlanCelulas';
 
-
-
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
 ));

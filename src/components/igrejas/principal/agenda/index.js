@@ -120,7 +120,14 @@ function TabPanel(props) {
   );
 }
 
-function AtualizarDados({ title, rolMembros, perfilUser }) {
+function AtualizarDados({
+  title,
+  rolMembros,
+  perfilUser,
+  distritos,
+  coordenacoes,
+  supervisoes,
+}) {
   const classes = useStyles();
   const [value] = React.useState(0);
 
@@ -184,6 +191,9 @@ function AtualizarDados({ title, rolMembros, perfilUser }) {
               perfilUser={perfilUser}
               secao={session}
               rolMembros={rolMembros}
+              distritos={distritos}
+              coordenacoes={coordenacoes}
+              supervisoes={supervisoes}
             />
           </TabPanel>
         </main>

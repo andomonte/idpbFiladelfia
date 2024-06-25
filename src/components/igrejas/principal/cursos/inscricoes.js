@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@mui/material/Typography';
 import api from 'src/components/services/api';
 import moment from 'moment';
+import FormatarData from 'src/utils/formatoData';
 import dataMask from 'src/components/mascaras/datas';
 import celularMask from 'src/components/mascaras/celular';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -271,16 +272,6 @@ const customStyles2 = {
   }),
 };
 
-const tipos = [
-  {
-    value: 'Participante',
-    label: 'Participar do Evento',
-  },
-  {
-    value: 'Apoio',
-    label: 'Apoiar ao Evento',
-  },
-];
 const quem = [
   {
     value: 'eu',
@@ -317,10 +308,6 @@ export default function Todos({
       )
     : '';
 
-  const valorInicialTipo = {
-    label: 'O que irá fazer no Evento?',
-    value: 'Informar',
-  };
   const valorInicialInscrito = {
     label: 'Para quem é a Inscrição?',
     value: 'Informar',
@@ -344,7 +331,6 @@ export default function Todos({
   const [validarCPF, setValidarCPF] = React.useState('sim');
   const [igreja, setIgreja] = React.useState('');
   const [validarIgreja, setValidarIgreja] = React.useState('sim');
-  const [tipo, setTipo] = React.useState(valorInicialTipo);
   const [celular, setCelular] = React.useState('');
   const [validarCelular, setValidarCelular] = React.useState('sim');
   const [dataNascimento, setDataNascimento] = React.useState('');
@@ -363,7 +349,7 @@ export default function Todos({
   const estadoCivilRef = React.useRef();
   const url = `/api/consultaHistoricoCursos`;
   const { data, error } = useSWR(url, fetcher);
-
+  console.log('eventoEscolhido[0]', eventoEscolhido[0]);
   React.useEffect(() => {
     if (data) {
       //      const evento = data.filter((val) => val.Tipo === 'curso');
@@ -391,13 +377,7 @@ export default function Todos({
       send = false;
       tipoRef.current.focus();
     }
-    if (tipo.value === 'Informar') {
-      toast.error('Preencha o campo Tipo de Inscrição!', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      send = false;
-      tipoRef.current.focus();
-    }
+
     if (celular === '') {
       toast.error('Informe seu Telefone!', {
         position: toast.POSITION.TOP_CENTER,
@@ -435,12 +415,14 @@ export default function Todos({
       send = false;
       igrejaRef.current.focus();
     }
+
     if (send) {
       setLoading(true);
 
       const dataInscicao = new Date();
-      const dateObject = moment(dataNascimento).format('DD/MM/YYYY');
+      const dateObject = FormatarData(dataNascimento);
       const newDateNacimento = new Date(dateObject);
+
       const newValorParticipante =
         inscrito.value === 'eu' || inscrito.value === 'membro'
           ? 'membro'
@@ -456,24 +438,24 @@ export default function Todos({
         newValorRolMembro = Number(perfilUser.RolMembro);
 
       const DadosInscritos = {
-        idEvento: Number(eventoEscolhido[0].codigoCurso),
-        Evento: eventoEscolhido[0].Curso,
-        Identificador: tipo.value,
+        codigoCurso: Number(eventoEscolhido[0].codigoCurso),
+        idTurma: Number(eventoEscolhido[0].idTurma),
+        Curso: eventoEscolhido[0].Curso,
         Nome: inscrito.value === 'membro' ? nome.label : nome,
         Nascimento: newDateNacimento,
         Contato: celular,
         Email: email,
+        DataCurso: eventoEscolhido[0].DataCurso,
         Igreja: igreja,
         Status: 'preInscrito',
         participante: newValorParticipante,
         RolMembro: newValorRolMembro,
         Documento: newValorDocumento,
-        Distrito: Number(perfilUser.Distrito),
         CreatedAt: dataInscicao,
       };
 
       api
-        .post('/api/inserirInscritos', {
+        .post('/api/inserirInscritosCursos', {
           dados: DadosInscritos,
         })
         .then((response) => {
@@ -483,7 +465,7 @@ export default function Todos({
 
             if (response.data === 'atualizado')
               setInfo('Inscrição atualizada com Sucesso');
-            else setInfo('Inscrição realizada com Sucesso');
+            else setInfo('Erro ao fazer inscrição tente mais tarde');
           }
         })
         .catch(() => {
@@ -501,21 +483,24 @@ export default function Todos({
       (val) => Number(val.RolMembro) === Number(nomeMembros.value),
     );
 
-    // if (tipo.value === 'Informar') setTipo(valorInicialTipo);
     // if (nomeMembros.value === 'Informar') setNomeMembros(valorInicialMembro);
     if (inscrito.value === 'eu' && dadosUser) {
       setNome(dadosUser[0].Nome);
       setCelular(dadosUser[0].TelCelular);
       setCPF(perfilUser.RolMembro);
-      setDataNascimento(moment(dadosUser[0].Nascimento).format('DD/MM/YYYY'));
+      setDataNascimento(
+        moment(dadosUser[0].Nascimento.substring(0, 10)).format('DD/MM/YYYY'),
+      );
       setEmail(dadosUser[0].Email);
       setIgreja(dadosUser[0].Igreja);
     } else if (inscrito.value === 'membro' && dadosUser2.length) {
       setCelular(dadosUser2[0].TelCelular ? dadosUser2[0].TelCelular : '');
       setCPF(dadosUser2[0].RolMembro);
       setDataNascimento(
-        moment(dadosUser2[0].Nascimento).format('DD/MM/YYYY')
-          ? moment(dadosUser2[0].Nascimento).format('DD/MM/YYYY')
+        moment(dadosUser[0].Nascimento.substring(0, 10)).format('DD/MM/YYYY')
+          ? moment(dadosUser[0].Nascimento.substring(0, 10)).format(
+              'DD/MM/YYYY',
+            )
           : '',
       );
       setEmail(dadosUser2[0].Email ? dadosUser2[0].Email : '');
@@ -551,7 +536,6 @@ export default function Todos({
     setOpenPlan(false);
     setOpenInfo(false);
   };
-
   return (
     <Box
       display="flex"
@@ -599,7 +583,6 @@ export default function Todos({
                       onChange={(e) => {
                         setNomeMembros(valorInicialMembro);
                         setNome(valorInicialMembro);
-                        setTipo(valorInicialTipo);
                         setInscrito(e);
                       }}
                       options={quem}
@@ -659,44 +642,9 @@ export default function Todos({
                 </Box>
               </Box>
             ) : (
-              <Box width="100%" display="flex" justifyContent="center">
+              <Box mt="2vh" width="100%" display="flex" justifyContent="center">
                 <Box width="90%">
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
-                      <Box
-                        mt={-0}
-                        ml={2}
-                        color="white"
-                        sx={{ fontSize: 'bold' }}
-                      >
-                        <Typography
-                          variant="caption"
-                          display="block"
-                          gutterBottom
-                        >
-                          Tipo de Inscrição
-                        </Typography>
-                      </Box>
-                      <Box className={classes.novoBox} mt={-2} mb="2vh">
-                        <Select
-                          id="Tipo" // não precisa pois uso o onChange
-                          ref={tipoRef}
-                          value={tipo}
-                          styles={
-                            tipo.value === 'Informar'
-                              ? customStyles2
-                              : customStyles
-                          }
-                          isSearchable={false}
-                          onChange={(e) => {
-                            setTipo(e);
-                            // celularRef.current.focus();
-                          }}
-                          options={tipos}
-                        />
-                      </Box>
-                    </Grid>
-
                     <Grid item xs={12} md={12}>
                       <Box
                         display={inscrito.value !== 'membro' ? '' : 'none'}

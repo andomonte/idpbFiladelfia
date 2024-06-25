@@ -99,11 +99,10 @@ export default function TabCelula({
   Ano,
   perfilUser,
   lideranca,
-  dadosEvento,
 }) {
   // const dados = nomesCelulas.map((row) => createData(row.Nome, true));
   const classes = useStyles();
-  console.log('dadosEventos', dadosEvento);
+
   const nomesCel = lideranca.filter((val) => val);
 
   const numberCelulas = nomesCel.map((itens) => itens.Nome);
@@ -471,6 +470,7 @@ export default function TabCelula({
                     </Box>
                     <Box className={classes.novoBox} mt={-2}>
                       <TextField
+                        autoComplete="off"
                         className={classes.tf_m}
                         inputProps={{
                           style: {
@@ -844,6 +844,7 @@ export default function TabCelula({
                       <Box className={classes.novoBox} mt={-2}>
                         <TextField
                           className={classes.tf_m}
+                          autoComplete="off"
                           inputProps={{
                             style: {
                               height: 28,
@@ -899,7 +900,7 @@ export default function TabCelula({
                             <Stack spacing={2} sx={{ width: '100%' }}>
                               <TextField
                                 className={classes.tf_m}
-                                autoComplete="false"
+                                autoComplete="off"
                                 inputProps={{
                                   style: {
                                     height: 28,

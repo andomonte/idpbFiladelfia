@@ -111,15 +111,16 @@ export default function TabCelula({
 
     if (sem1) {
       setRel(sem1);
+
       if (sem1 && sem1.length && sem1[0].Data) {
-        if (tipo === 'Supervisao') {
+        if (tipo === 'Supervisão') {
           listaEveSuper = sem1.filter(
             (val) =>
               val.Funcao === 'Supervisor' &&
               Number(val.Numero) === Number(perfilUser.Supervisao),
           );
         }
-        if (tipo === 'Coordenacao') {
+        if (tipo === 'Coordenação') {
           listaEveSuper = sem1.filter(
             (val) =>
               val.Funcao === 'Coordenador' &&

@@ -4,7 +4,14 @@ import prisma from 'src/lib/prisma';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 
-function Planejar({ rolMembros, lideranca, celulas }) {
+function Planejar({
+  rolMembros,
+  lideranca,
+  celulas,
+  distritos,
+  coordenacoes,
+  supervisoes,
+}) {
   const router = useRouter();
   const perfilUser = router.query;
   const [session] = useSession();
@@ -29,9 +36,8 @@ function Planejar({ rolMembros, lideranca, celulas }) {
   }, []);
 
   if (typeof window !== 'undefined') {
-    window.history.replaceState(null, '', '/planejamento');
+    window.history.replaceState(null, '', '/agenda');
   }
-
   return (
     <div>
       {perfilUserF && (
@@ -41,6 +47,9 @@ function Planejar({ rolMembros, lideranca, celulas }) {
           lideranca={lideranca}
           perfilUser={perfilUserF}
           celulas={celulas}
+          distritos={distritos}
+          coordenacoes={coordenacoes}
+          supervisoes={supervisoes}
         />
       )}
     </div>
@@ -85,11 +94,39 @@ export const getStaticProps = async () => {
     .finally(async () => {
       await prisma.$disconnect();
     });
-
+  const distritos = await prisma.distrito.findMany().finally(async () => {
+    await prisma.$disconnect();
+  });
+  const supervisoes = await prisma.supervisao
+    .findMany({
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+  const coordenacoes = await prisma.cordenacao
+    .findMany({
+      where: {
+        Status: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
   return {
     props: {
       celulas: JSON.parse(JSON.stringify(celulas)),
-
+      supervisoes: JSON.parse(JSON.stringify(supervisoes)),
+      coordenacoes: JSON.parse(JSON.stringify(coordenacoes)),
+      distritos: JSON.parse(
+        JSON.stringify(
+          distritos,
+          (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
       rolMembros: JSON.parse(
         JSON.stringify(
           rolMembros,
